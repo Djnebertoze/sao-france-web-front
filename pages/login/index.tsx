@@ -58,7 +58,7 @@ const LoginPage: NextPage = () => {
     const toastDuration = 5000;
 
     useEffect(() => {
-        if(auth?.accessToken){
+        /*if(auth?.accessToken){
             router.push('/')
             toast({
                 title: t('register.LOGIN_USER_SUCCESS_TOAST_TITLE'),
@@ -68,7 +68,7 @@ const LoginPage: NextPage = () => {
                 isClosable: true,
                 position: 'bottom-right',
             });
-        }
+        }*/
     }, [dispatch, auth, toast, router, userLoginError, userInfos?._id]);
 
 
@@ -80,28 +80,28 @@ const LoginPage: NextPage = () => {
                          mt={140}
                          mx={18}
                          mb={150}>
-                        <Text maxW={'full'} textAlign={'center'} fontFamily={'Bebas Neue'} fontSize={30} letterSpacing={3}>
+                        <Text maxW={'full'} textAlign={'center'} fontFamily={'Bebas Neue'} fontSize={30} letterSpacing={3} color={'white'}>
                             {t('globals.LOGIN_LABEL')}
                         </Text>
-                        <Box h={'1px'} w={'full'} bgColor={'black'} mx={0} my={3}/>
+                        <Box h={'1px'} w={'full'} bgColor={'rgb(255,255,255,.2)'} mx={0} my={3}/>
                         <Flex flex={1} justify={'center'} w={'full'} align={'center'}>
-                            <Link className={'clickable-link'} color={'black!important'} onClick={() => router.push('/register')}>Je n&apos;ai pas encore de compte</Link>
+                            <Link className={'clickable-link'} color={'rgb(255,255,255,.8)!important'} onClick={() => router.push('/register')}>Je n&apos;ai pas encore de compte</Link>
                         </Flex>
 
                         <Box w={'full'} px={10}>
-                            <Box borderLeft={'black 1px solid'} pl={5}>
-                                <Text fontSize={19} mb={2} mt={5}>{t('register.USERNAME_LABEL')}</Text>
+                            <Box borderLeft={'rgb(255,255,255,.5) 1px solid'} pl={5}>
+                                <Text fontSize={19} mb={2} mt={5} color={'white'}>{t('register.USERNAME_LABEL')}</Text>
                                 <InputGroup w={'full'}>
-                                    <Input w={'full'} placeholder={t('register.FILL_THE_FIELD_LABEL')} variant='flushed' value={usernameValue} onChange={handleUsernameChange}></Input>
+                                    <Input w={'full'} placeholder={t('register.FILL_THE_FIELD_LABEL')} variant='flushed' value={usernameValue} color={'white'} onChange={handleUsernameChange}></Input>
                                 </InputGroup>
                             </Box>
-                            <Box borderLeft={!passwordIsInvalid ? 'black 1px solid' : 'red 3px solid'} pl={5}>
-                                <Text fontSize={19} mb={2} mt={5}>{t('register.PASSWORD_LABEL')} <Text color={'red'} as={'a'}>{passwordIsInvalid ? "Le mot de passe doit contenir au moins 8 caractères !":""}</Text></Text>
+                            <Box borderLeft={!passwordIsInvalid ? 'rgb(255,255,255,.5) 1px solid' : 'red 2px solid'} pl={5}>
+                                <Text fontSize={19} mb={2} mt={5} color={'white'}>{t('register.PASSWORD_LABEL')} <Text color={'red'} fontSize={15} as={'a'}>{passwordIsInvalid ? "Le mot de passe doit contenir au moins 8 caractères !":""}</Text></Text>
                                 <InputGroup w={'full'}>
-                                    <Input w={'full'} placeholder={t('register.FILL_THE_FIELD_LABEL')} variant='flushed' type={'password'} value={passwordValue} onChange={handlePasswordChange}></Input>
+                                    <Input w={'full'} placeholder={t('register.FILL_THE_FIELD_LABEL')} variant='flushed' type={'password'} color={'white'} value={passwordValue} onChange={handlePasswordChange}></Input>
                                 </InputGroup>
                             </Box>
-                            <Box borderLeft={'black 1px solid'} pl={5} mt={5} display={'none'}>
+                            <Box borderLeft={'rgb(255,255,255,.5) 1px solid'} pl={5} mt={5} display={'none'}>
                                 <Checkbox checked={stayConnectedValue} onChange={handleStayConnectedChange}>
                                     {t('register.LOGIN_STAY_CONNECTED_LABEL')}
                                 </Checkbox>
@@ -121,8 +121,8 @@ const LoginPage: NextPage = () => {
                                 </Button>
                             </Flex>
                         </Box>
-                        <Box h={'1px'} w={'full'} bgColor={'black'} mx={0} my={10} />
-                        <Text fontSize={12} textAlign={'justify'} maxW={900}>{t('register.REGISTER_LAW_TEXT')}</Text>
+                        <Box h={'1px'} w={'full'} bgColor={'rgb(255,255,255,.2)'} mx={0} my={10} />
+                        <Text fontSize={12} textAlign={'justify'} maxW={900} color={'rgb(255,255,255,.5)'}>{t('register.REGISTER_LAW_TEXT')}</Text>
                     </Box>
                 </Flex>
             </Container>
