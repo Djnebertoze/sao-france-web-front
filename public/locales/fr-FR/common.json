@@ -1,0 +1,57 @@
+{
+  "name": "SaoFrance",
+  "globals": {
+    "REGISTER_LABEL": "Inscription",
+    "LOGIN_LABEL": "Connexion"
+  },
+  "register": {
+    "USERNAME_LABEL": "Pseudo",
+    "LAST_NAME_LABEL": "Nom",
+    "FIRST_NAME_LABEL": "Prénom",
+    "EMAIL_LABEL": "Email",
+    "PASSWORD_LABEL": "Mot de passe",
+    "VERIFICATION_PASSWORD_LABEL": "Vérification du mot de passe",
+    "PHONE_NUMBER_LABEL": "Numéro de téléphone",
+    "BIRTHDAY_LABEL": "Date de naissance",
+    "ACCEPT_EMAILS_LABEL": "J'accepte de recevoir des e-mails relatifs aux nouveautés et offres commerciales de SaoFrance-MC",
+    "ACCEPT_CGU_LABEL": "Je confirme avoir lu et accepté les ",
+    "CGU_LABEL": "Conditions générales d'utilisation ",
+    "IS_OPTIONAL_LABEL": "(facultatif)",
+    "REQUIRED_FOR_STAFF_LABEL": "(requis pour postuler dans le staff)",
+    "FILL_THE_FIELD_LABEL": "Veuillez remplir le champ",
+    "REQUIRED_LABEL": "Obligatoire",
+
+    "REGISTER_USER_CREATION_SUCCESS_TOAST_TITLE": "Création de votre compte réussie",
+    "REGISTER_USER_CREATION_SUCCESS_TOAST_DESCRIPTION": "Veuillez vous connecter pour pouvoir accéder au site librement !",
+    "REGISTER_USER_CREATION_FAILED_TOAST_TITLE": "Création de compte échouée !",
+
+    "LOGIN_USER_SUCCESS_TOAST_TITLE": "Connexion à votre compte réussie",
+    "LOGIN_USER_SUCCESS_TOAST_DESCRIPTION": "Vous pouvez désormais accéder librement au site !",
+    "LOGIN_USER_FAILED_TOAST_TITLE": "Connexion à compte échouée !",
+
+    "REGISTER_BUTTON_LABEL": "M'inscrire",
+    "LOGIN_BUTTON_LABEL": "Me connecter",
+
+    "LOGIN_STAY_CONNECTED_LABEL": "Rester connecté",
+
+    "REGISTER_LAW_TEXT": "Les données communiquées via ce formulaire sont collectées avec votre consentement et sont destinées à SaoFrance-MC. en sa qualité de responsable du traitement. Elles pourront être transmises à ses sous-traitants agissant sur strictes instructions de SaoFrance-MC. Dans cette seconde hypothèse, et sous réserve que l’entité SaoFrance-MC ait signé des règles d’entreprise contraignantes, les données pourront faire l’objet d’un transfert en dehors de l’Union Européenne. Les données de ce formulaire sont collectées à des fins de gestion de la relation client, de sollicitations commerciales et de respect de la règlementation applicable à SaoFrance-MC. Les données de votre compte client sont conservées jusqu’à la suppression de votre compte client, puis durant trente-six (36) mois. Certaines données traitées à des fins de gestion (exemple : facture) peuvent être conservées plus longtemps conformément à la règlementation applicable. Vous disposez de la faculté d’introduire une réclamation auprès de l’autorité de contrôle compétente ainsi qu’un droit d'accès, de rectification, d’effacement, de limitation, de portabilité et d’opposition pour motif légitime aux données personnelles vous concernant. Pour exercer ce droit, merci d’effectuer votre demande par mail: contact@saofrance-mc.fr."
+  },
+  "navbar": {
+    "NAVBAR_HOME_LABEL": "Accueil",
+    "NAVBAR_FORUM_LABEL": "Forum",
+    "NAVBAR_VOTES_LABEL": "Votes",
+    "NAVBAR_WIKI_LABEL": "Wiki",
+    "NAVBAR_JOIN_US_LABEL": "Nous rejoindre",
+    "NAVBAR_SHOP_LABEL": "Boutique"
+  },
+  "home": {
+    "HOME_ON_MINECRAFT": "Sur Minecraft",
+    "HOME_DESCRIPTION": " SAOFrance est un serveur Minecraft s'inspirant de l'animé Sword Art Online pour vous offrir une expérience de jeu unique et diversifié.\nDécouvrez nos maps complétement personnalisé, nos intrigues et nos mécaniques uniques.",
+    "HOME_PLAY_NOW": "Jouer maintenant"
+  },
+  "profile": {
+    "MEMBER_SINCE": "Membre depuis",
+    "UPDATE_USER_SUCCESS_TOAST_TITLE" : "Modifications enregistrées",
+    "UPDATE_USER_SUCCESS_TOAST_DESCRIPTION": "Vos modifications ont été enregistrées avec succès!"
+  }
+}
