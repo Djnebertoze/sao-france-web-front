@@ -48,6 +48,7 @@ const CGVPage: NextPage = () => {
                             Les présentes Conditions Générales de Vente ont pour but de
                             fixer les dispositions contractuelles entre https://saofrance-mc.net et le Joueur,
                             et les conditions applicables à tout achat effectué sur le site.
+                            {/* eslint-disable-next-line react/no-unescaped-entities */}
                             L’acquisition d'un bien ou d'un service à travers le présent site
                             implique une acceptation sans réserve par le Joueur des présentes
                             conditions de vente.
@@ -62,6 +63,7 @@ const CGVPage: NextPage = () => {
                             sont présentés sur notre boutique virtuelle sur le site https://saofrance-mc.net.<br/>
                             En échange, de chaque paiement effectué sur le site https://saofrance-mc.net, le
                             Joueur recevra des points virtuels sur le compte du joueur concerné. Les Joueurs
+                            {/* eslint-disable-next-line react/no-unescaped-entities */}
                             peuvent ensuite utiliser leur droit de rétractation à partir du moment où ils n'utilisent
                             pas ces points. De plus, ces points peuvent être échangés entre chaque joueur.<br/>
                             Chaque produit est accompagné d’un descriptif, ainsi que de son prix.
@@ -92,6 +94,7 @@ const CGVPage: NextPage = () => {
 
                             Choisir le(s) article(s)<br/><br/>
 
+                            {/* eslint-disable-next-line react/no-unescaped-entities */}
                             Valider l'achat, et recevoir l’achat<br/><br/>
 
                             SaoFrance se réserve le droit d’annuler ou de refuser toute commande qui
@@ -120,6 +123,7 @@ const CGVPage: NextPage = () => {
                             La confirmation vaudra signature et acceptation des
                             opérations effectuées.<br/><br/>
 
+                            {/* eslint-disable-next-line react/no-unescaped-entities */}
                             Tout achat entraîne l'acceptation des conditions générales de vente de ces sociétés :<br/><br/>
 
 
@@ -168,11 +172,14 @@ const CGVPage: NextPage = () => {
                             conclure le présent contrat. Il ne peut pas nous être exigé de vérifier
                             l’âge des acheteurs du site.<br/><br/>
 
+                            {/* eslint-disable-next-line react/no-unescaped-entities */}
                             Si l’acheteur est une personne physique mineure, il se doit d'obtenir
                             le consentement de ses parents/tuteurs avant de passer commande.
+                            {/* eslint-disable-next-line react/no-unescaped-entities */}
                             L'autorité parentale reconnaît quant à elle avoir accepté les conditions
                             générales et se porte garant du Joueur mineur. Toute utilisation du site
                             https://saofrance-mc.net et de ses services par le Joueur mineur est réalisée
+                            {/* eslint-disable-next-line react/no-unescaped-entities */}
                             sous l'entière responsabilité des titulaires de l'autorité parentale.<br/>
                         </Text>
                     </Box>
@@ -185,9 +192,11 @@ const CGVPage: NextPage = () => {
                             créditera sous un délai de 72 heures maximum en points, selon le
                             montant commandé, le compte du Joueur concerné.<br/><br/>
 
+                            {/* eslint-disable-next-line react/no-unescaped-entities */}
                             Les délais d'accréditation des points dépendent du service de paiement choisi.<br/><br/>
 
                             Toute commande passée sur le site https://saofrance-mc.net est livrée sous un
+                            {/* eslint-disable-next-line react/no-unescaped-entities */}
                             délai maximum d'1 heure à compter du moment où les points ont été débités
                             du compte du Joueur concerné.<br/><br/>
 
@@ -257,6 +266,7 @@ const CGVPage: NextPage = () => {
                             demande écrite et signée, accompagnée d’une copie du titre
                             d’identité avec signature du titulaire de la pièce, en
                             précisant l’adresse à laquelle la réponse doit être envoyée.<br/>
+                            {/* eslint-disable-next-line react/no-unescaped-entities */}
                             Le site SaoFrance n'est pas enregistré à la CNIL.<br/>
                         </Text>
                     </Box>
@@ -274,6 +284,7 @@ const CGVPage: NextPage = () => {
                         </Text>
                         <Text>
                             Site : Le Site désigne le site Internet SaoFrance.<br/>
+                            {/* eslint-disable-next-line react/no-unescaped-entities */}
                             Joueur : Le joueur est toute personne physique ou morale qui utilise le Site ou l'un des services proposés par SaoFrance.
                         </Text>
                     </Box>
