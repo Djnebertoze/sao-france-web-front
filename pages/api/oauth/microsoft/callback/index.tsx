@@ -8,9 +8,9 @@ const MicrosoftCallbackPage = (req: NextApiRequest, res: NextApiResponse) => {
     //console.log("Code:", code);
 
 
-    //res.redirect('http://localhost:3000/callback/microsoft/access-token/request?code=' + code)
+    //res.redirect(process.env.BASE_URL+'/callback/microsoft/access-token/request?code=' + code)
 
-    res.redirect('http://localhost:3000/profile')
+    res.redirect(process.env.BASE_URL+'/profile')
 
     //res.status(200).json({ message: "Success" });
 };

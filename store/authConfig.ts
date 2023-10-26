@@ -4,7 +4,7 @@ export const msalConfig = {
     auth: {
         clientId: "26b12d6c-de49-4979-b639-b90f6bedf6cc",
         authority: "https://login.microsoftonline.com/consumers",
-        redirectUri: "http://localhost:3000/api/oauth/microsoft/callback",
+        redirectUri: process.env.BASE_URL+"/api/oauth/microsoft/callback",
         //redirectUri: "https://login.microsoftonline.com/common/oauth2/nativeclient",
 
     },
