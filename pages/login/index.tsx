@@ -58,7 +58,7 @@ const LoginPage: NextPage = () => {
     const toastDuration = 5000;
 
     useEffect(() => {
-        /*if(auth?.accessToken){
+        if(auth?.accessToken){
             router.push('/')
             toast({
                 title: t('register.LOGIN_USER_SUCCESS_TOAST_TITLE'),
@@ -68,7 +68,7 @@ const LoginPage: NextPage = () => {
                 isClosable: true,
                 position: 'bottom-right',
             });
-        }*/
+        }
     }, [dispatch, auth, toast, router, userLoginError, userInfos?._id]);
 
 
