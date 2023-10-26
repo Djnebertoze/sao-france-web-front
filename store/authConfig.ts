@@ -4,7 +4,7 @@ export const msalConfig = {
     auth: {
         clientId: "26b12d6c-de49-4979-b639-b90f6bedf6cc",
         authority: "https://login.microsoftonline.com/consumers",
-        redirectUri: process.env.BASE_URL+"/api/oauth/microsoft/callback",
+        redirectUri: "https://sao-france-web-front.vercel.app//api/oauth/microsoft/callback",
         //redirectUri: "https://login.microsoftonline.com/common/oauth2/nativeclient",
 
     },
