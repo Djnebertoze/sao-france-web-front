@@ -17,7 +17,7 @@ const WikiPage: NextPage = () => {
 
     return (
         <Container maxW={'full'} margin={0} padding={0}>
-            <Container maxW={'full'} minH={800} mx={0} className={'main-background'} mt={'80px'}>
+            <Container maxW={'full'} minH={800} mx={0} className={'main-background'}>
                 <Flex  w={'full'}>
                     <Spacer />
                     <Box>

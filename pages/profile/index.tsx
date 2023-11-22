@@ -215,7 +215,7 @@ const ProfilePage: NextPage = () => {
     let tagsMargin = 4;
 
     return (
-        <Container maxW={'full'} margin={0} padding={0} mt={'80px'}>
+        <Container maxW={'full'} margin={0} padding={0}>
             <Container bg={'rgb(55,56,58,1)'} h={1000} maxW={'full'} color={'white'} p={0}>
                 <Flex w={'full'}>
                     <Box marginRight={10} borderRight={'1px solid white'} py={5} px={10}>

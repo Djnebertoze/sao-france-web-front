@@ -144,7 +144,7 @@ const Navbar: FC = () => {
                 bg={/*useColorModeValue('white', 'gray.800')*/'rgb(255,255,255,1)'}
                 boxShadow={'0 0px 50px rgb(255,255,255,.3)'}
                 color={useColorModeValue('gray.600', 'white')}
-                minH={'80px'}
+                minH={{lg:'80px',base: '45px'}}
                 py={{ base: 2 }}
                 px={{ base: 4 }}
                 w={'full'}

@@ -17,8 +17,8 @@ const ForumPage: NextPage = () => {
 
     return (
         <Container maxW={'full'} margin={0} padding={0}>
-            <Container maxW={'full'} minH={800} mx={0} className={'main-background'} mt={'80px'}>
-                <Flex  w={'full'}>
+            <Container maxW={'full'} minH={800} mx={0} className={'main-background'}>
+                <Flex  w={'full'} >
                     <Box maxW={100}>
                     </Box>
                     <Spacer />
@@ -29,7 +29,7 @@ const ForumPage: NextPage = () => {
                               fontFamily={'Bebas Neue'}
                               letterSpacing={8}
                               color={"whiteAlpha.600"}
-                              mt={50}
+                              mt={100}
                               mx={10}
                               fontStyle={'italic'}>
                             Forum en cours de développement...

@@ -20,7 +20,7 @@ const CGUPage: NextPage = () => {
 
     return (
         <Container maxW={'full'} margin={0} padding={0}>
-            <Container maxW={'full'} minH={800} mx={0} className={'main-background'} mt={'80px'} px={200}>
+            <Container maxW={'full'} minH={800} mx={0} className={'main-background'} px={200}>
                 <Flex  w={'full'}>
                     <Spacer />
                     <Box>

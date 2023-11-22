@@ -17,23 +17,23 @@ const HomePage: NextPage = () => {
 
     return (
         <Container maxW={'full'} margin={0} padding={0}>
-            <Flex maxW={'full'} py={5} mx={0} className={'main-background'} flexDirection={"column"} mt={'80px'}>
-                <Flex h={{sm:260, base: 180}} mt={{sm:73, base:81}}>
+            <Flex maxW={'full'} py={5} mx={0} className={'main-background'} flexDirection={"column"}>
+                <Flex h={{sm:260, vsm: 180, base: 123}} mt={{sm:101, base:55}}>
                     <Spacer/>
                     <Box>
                         <Text textAlign={"center"}
-                              fontSize={{sm:100, base:70}}
+                              fontSize={{sm:100, vsm:60, base:39}}
                               fontFamily={'Bebas Neue'}
                               letterSpacing={8}
                               className={'colored-title-text'}>
                             {t('name')}
                         </Text>
                         <Text textAlign={"center"}
-                              fontSize={{sm:50, base:30}}
+                              fontSize={{sm:50, vsm:25, base:15}}
                               fontFamily={'Bebas Neue'}
-                              letterSpacing={8}
+                              letterSpacing={{sm:8, vsm: 5, base:2}}
                               color={"white"}
-                              mt={-30}
+                              mt={{sm:-30, vsm:-21, base:-3}}
                               fontStyle={'italic'}>
                             {t('home.HOME_ON_MINECRAFT')}
                         </Text>
@@ -45,9 +45,9 @@ const HomePage: NextPage = () => {
                     <Box>
                         <Text maxW={1000}
                               textAlign={"center"}
-                              fontSize={{sm:22, base: 20}}
+                              fontSize={{sm:22, vsm: 20, base:17}}
                               fontFamily={'Bebas Neue'}
-                              letterSpacing={8}
+                              letterSpacing={{sm:8, vsm:5, base:1}}
                               color={"whiteAlpha.600"}
                               mt={-30}
                               mx={10}
@@ -57,16 +57,16 @@ const HomePage: NextPage = () => {
                     </Box>
                     <Spacer />
                 </Flex>
-                <Flex h={130} w={'full'} mt={20}>
+                <Flex h={130} w={'full'} mt={{vsm:41, base: 21}}>
                     <Box/>
                     <Spacer />
                     <Box>
                         <Button colorScheme={'blue'}
                                 fontFamily={'Bebas Neue'}
-                                letterSpacing={7}
-                                fontSize={{md:30, sm:20, base: 18}}
-                                py={{md:8, sm:7, base:6}}
-                                px={{md:70, sm:61, base: 50}}>
+                                letterSpacing={{sm:7, vsm: 5, base: 3}}
+                                fontSize={{md:30, sm:20, vsm: 18, base:13}}
+                                py={{md:8, sm:7, vsm:6, base:0}}
+                                px={{md:70, sm:61, vsm: 50, base: 35}}>
                             {t('home.HOME_PLAY_NOW')}
                         </Button>
 
@@ -75,26 +75,28 @@ const HomePage: NextPage = () => {
                     <Box />
 
                 </Flex>
-                <Center mt={100}><img width="64" height="64" src="https://saofrance.net/images/icons8-minecraft.svg" alt="minecraft-grass-cube"/></Center>
+                <Center mt={{sm: 100,base:0}}><img width="64" height="64" src="https://saofrance.net/images/icons8-minecraft.svg" alt="minecraft-grass-cube"/></Center>
                 <Center>
                     <Text textAlign={"center"}
-                          fontSize={{sm:40, base:30}}
+                          fontSize={{sm:40, vsm:30, base:19}}
                           fontFamily={'Bebas Neue'}
                           letterSpacing={8}
                           color={"white"}
-                          px={{md:100, sm:30}}
-                          borderLeft={{md:'1px solid rgb(255,255,255,.3)', sm:'none'}}
-                          borderRight={{md:'1px solid rgb(255,255,255,.3)', sm:'none'}}
-                          mt={100}>
+                          px={{md:100, vsm:30, base:3}}
+                          mx={{vsm:0, base:5}}
+                          borderLeft={{md:'1px solid rgb(255,255,255,.3)', vsm:'none', base:'1px solid rgb(255,255,255,.3)'}}
+                          borderRight={{md:'1px solid rgb(255,255,255,.3)', vsm:'none', base:'1px solid rgb(255,255,255,.3)'}}
+                          mt={{sm:100, base:65}}>
                         Une aventure <u>magnifique</u>
                     </Text>
                 </Center>
-                <Flex color={'white'} m={10} mt={20} flexDirection={{lg: 'row', base: 'column', }}>
+                <Flex color={'white'} m={10} mt={{vsm:61, base:35}} flexDirection={{lg: 'row', base: 'column', }}>
                     <Flex>
                         <Spacer/>
                         <Image src={'https://saofrance.net/images/wallpaper/plan4.png'}
-                               h={400}
-                               minW={400}
+                               h={{sm:400, vsm: 200}}
+                               minW={{base:200}}
+
                                boxShadow={'10px 10px 30px 0px rgb(255,255,255,.1)'}
                                objectFit={'cover'}
                                borderRadius={7}/>
@@ -111,12 +113,12 @@ const HomePage: NextPage = () => {
                               mt={{lg:0, base:5}}
                               borderBottom={{lg: 'none', base: '2px solid rgb(255,255,255,.6)'}}
                               pb={{lg:0, base: 50}}>
-                            <Text fontSize={25} fontWeight={'bold'} mb={8}>Commencez votre Aventure !</Text>
-                            <Text fontSize={20}>
+                            <Text fontSize={{vsm:25, base:21}} fontWeight={'bold'} mb={8}>Commencez votre Aventure !</Text>
+                            <Text fontSize={{vsm:20, base:15}}>
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                                 sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                                 Nisl purus in mollis nunc sed id semper risus. </Text>
-                            <Button colorScheme={'blue'} w={200} mt={50} h={45}>Commencer à jouer</Button>
+                            <Button colorScheme={'blue'} w={{vsm:200, base:150}} mt={50} h={{vsm:45, base:35}} fontSize={{vsm:15, base:12}}>Commencer à jouer</Button>
                         </Flex>
                         <Spacer/>
                     </Flex>
@@ -133,8 +135,8 @@ const HomePage: NextPage = () => {
                               mt={{lg:0, base:5}}
                               borderBottom={{lg: 'none', base: '2px solid rgb(255,255,255,.6)'}}
                               pb={{lg:0, base: 50}}>
-                            <Text fontSize={25} fontWeight={'bold'} mb={8}>Lorem ipsum dolor sit amet !</Text>
-                            <Text fontSize={20}>
+                            <Text fontSize={{vsm:25, base:21}} fontWeight={'bold'} mb={8}>Lorem ipsum dolor sit amet !</Text>
+                            <Text fontSize={{vsm:20, base:15}}>
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                                 sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                                 Nisl purus in mollis nunc sed id semper risus. </Text>
@@ -145,34 +147,36 @@ const HomePage: NextPage = () => {
                     <Flex>
                         <Spacer/>
                         <Image src={'https://saofrance.net/images/wallpaper/plan3.png'}
-                               h={400}
-                               minW={400}
+                               h={{sm:400, vsm: 200}}
+                               minW={{base:200}}
                                boxShadow={'10px 10px 30px 0px rgb(255,255,255,.1)'}
                                objectFit={'cover'}
                                borderRadius={7}/>
                         <Spacer/>
                     </Flex>
                 </Flex>
-                <Center mt={100}><img width="64" height="64" src="https://saofrance.net/images/icons8-minecraft.svg" alt="minecraft-grass-cube"/></Center>
+                <Center mt={{sm: 100,base:0}}><img width="64" height="64" src="https://saofrance.net/images/icons8-minecraft.svg" alt="minecraft-grass-cube"/></Center>
                 <Center>
                     <Text textAlign={"center"}
                           fontSize={{sm:20, base:20}}
                           color={"rgb(255,255,255,.7)"}
                           px={{md:100, sm:30}}
-                          mt={100} mb={4}>
+                          mt={{sm:100, base:51}} mb={4}>
                         {/* eslint-disable-next-line react/no-unescaped-entities */}
                         Vous avez besoin d'aide ?
                     </Text>
                 </Center>
                 <Center>
                     <Text textAlign={"center"}
-                          fontSize={{sm:40, base:30}}
+                          fontSize={{sm:40, vsm:30, base:19}}
                           fontFamily={'Bebas Neue'}
                           letterSpacing={8}
                           color={"white"}
-                          px={{md:100, sm:30}}
-                          borderLeft={{md:'1px solid rgb(255,255,255,.3)', sm:'none'}}
-                          borderRight={{md:'1px solid rgb(255,255,255,.3)', sm:'none'}}
+                          px={{md:100, vsm:30, base:3}}
+                          mx={{vsm:0, base:5}}
+                          borderLeft={{md:'1px solid rgb(255,255,255,.3)', vsm:'none', base:'1px solid rgb(255,255,255,.3)'}}
+                          borderRight={{md:'1px solid rgb(255,255,255,.3)', vsm:'none', base:'1px solid rgb(255,255,255,.3)'}}
+                          mb={{base:10}}
                           >
                         Une communauté <u>incroyable</u>
                     </Text>
