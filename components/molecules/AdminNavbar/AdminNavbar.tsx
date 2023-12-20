@@ -25,7 +25,6 @@ import {useTranslation} from "next-i18next";
 import {LinkItemProps} from "./types";
 import {CloseIcon, HamburgerIcon} from "@chakra-ui/icons";
 import {Simulate} from "react-dom/test-utils";
-import toggle = Simulate.toggle;
 import {getUserState} from "../../../store/user/userSlice";
 import { useDispatch, useSelector } from "../../../store/store";
 import {checkLogin, getUserProfile} from "../../../store/user/userActions";
@@ -59,7 +58,7 @@ function abbreviateRoles(roles: string[]) {
         admin: "Admin"
     };
 
-    const filteredRoles = roles.filter(role => !["user", "staff"].includes(role));
+    const filteredRoles = roles.filter(role => ["developer", "moderator", "responsable", "admin"].includes(role));
 
 
     // @ts-ignore
@@ -97,16 +96,16 @@ const AdminNavbar: FC<SidebarWithHeaderProps> = (props) => {
     const router: NextRouter = useRouter();
 
     useEffect(() => {
+        console.log('haha')
         if (!auth?.accessToken) {
             dispatch(checkLogin());
-
         }
 
         if(auth?.accessToken && userInfos && !(userInfos?.roles?.includes('admin') || userInfos?.roles?.includes('moderator') || userInfos?.roles?.includes('responsable') || userInfos?.roles?.includes('developer'))){
             router.push('/')
         }
 
-        if(auth?.accessToken){
+        if(auth?.accessToken && !userInfos){
             dispatch(getUserProfile(auth?.accessToken))
         }
 

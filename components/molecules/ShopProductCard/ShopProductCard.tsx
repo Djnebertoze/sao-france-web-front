@@ -1,6 +1,7 @@
 import React, {FC, useEffect, useState} from "react";
 import {Simulate} from "react-dom/test-utils";
 import {
+    Box,
     Button,
     Card,
     CardBody,
@@ -23,6 +24,7 @@ import {DeleteIcon} from "@chakra-ui/icons";
 import {IconButton, MainButton} from "../../atoms/Buttons/Buttons";
 import {getShopState} from "../../../store/shop/shopSlice";
 import {removeShopProduct} from "../../../store/shop/shopActions";
+import {transformDescription} from "../../../store/helper";
 
 
 interface ShopProductCardProps{
@@ -30,7 +32,6 @@ interface ShopProductCardProps{
     isEditing: boolean
     isPreview?: boolean
 }
-
 
 
 const ShopProductCard: FC<ShopProductCardProps> = (props) => {
@@ -66,12 +67,13 @@ const ShopProductCard: FC<ShopProductCardProps> = (props) => {
 
 
     const handleBuy = (event: any) => {
-
+        router.push('/shop/product/'+product._id)
     }
 
     const handleModify = (event: any) => {
         router.push('/admin/shop-manager/edit/'+product._id)
     }
+
     return(
         <>
             <Card direction={'column'} variant={'outline'} marginBottom={10} marginRight={15} maxW={300}>
@@ -80,7 +82,8 @@ const ShopProductCard: FC<ShopProductCardProps> = (props) => {
                     <Stack mt={1} spacing={3}>
                         <Heading size={'md'}>{product.name}</Heading>
                         <Text py={2} mt={-4}>
-                            {product.description}
+                            {transformDescription(product.description)}
+
                         </Text>
                     </Stack>
                 </CardBody>

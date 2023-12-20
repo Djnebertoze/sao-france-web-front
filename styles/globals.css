@@ -94,3 +94,7 @@ a:hover{
 .clickable-link:hover{
     text-decoration: underline!important;
 }
+
+.custom-tr:nth-of-type(even){
+    background: rgb(255,255,255,.05);
+}

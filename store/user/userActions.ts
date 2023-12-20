@@ -3,7 +3,7 @@ import {
     getMinecraftProfileError,
     getMinecraftProfileRequest, getMinecraftProfileSuccess, getUserProfileError,
     getUserProfileRequest,
-    getUserProfileSuccess,
+    getUserProfileSuccess, getUsersListError, getUsersListRequest, getUsersListSuccess,
     updateUserProfileError,
     updateUserProfileRequest,
     updateUserProfileSuccess,
@@ -17,6 +17,7 @@ import {
 import {getAPIUrl} from "../helper";
 import {UpdateUserDto} from "./dtos/updateUserDto";
 import {NextRouter, useRouter} from "next/router";
+
 
 const STANDARD_HEADERS = {
     'Content-Type': 'application/json',
@@ -83,6 +84,8 @@ export const register =
     }
 
 export const emptyAct = () => async (dispatch: any) => {
+
+    const router: NextRouter = useRouter();
     localStorage.removeItem('act');
     localStorage.removeItem('scp');
 
@@ -92,6 +95,8 @@ export const emptyAct = () => async (dispatch: any) => {
             scope: undefined,
         })
     );
+    await router.push('/login')
+
 };
 
 export const login = (username: string, password: string) => async (dispatch: any) => {
@@ -142,7 +147,26 @@ export const getUserProfile = (accessToken: string | null) => async (dispatch: a
     } catch (error: any) {
         dispatch(getUserProfileError(error.message));
         console.log(error)
-        if (error.response.status === 401) {
+        if (/*error.response && */error.response.status === 401) {
+            dispatch(emptyAct());
+        }
+    }
+};
+
+export const getUsersList = (accessToken: string | null | undefined) => async (dispatch: any) => {
+    dispatch(getUsersListRequest());
+    try {
+        const response = await axios.get(`${getAPIUrl()}/users`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+        dispatch(getUsersListSuccess(response.data));
+        console.log(response.data)
+    } catch (error: any) {
+        dispatch(getUsersListError(error.message));
+        console.log(error)
+        if (/*error.response && */error.response.status === 401) {
             dispatch(emptyAct());
         }
     }

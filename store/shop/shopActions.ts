@@ -38,7 +38,7 @@ export const createShopProduct = (accessToken: string | undefined, createShopPro
     }
 }
 
-export const editShopProduct = (accessToken: string | undefined, createShopProductDto : CreateShopProductDto, productId: string) => async (dispatch: any) => {
+export const editShopProduct = (accessToken: string | undefined, createShopProductDto : CreateShopProductDto, productId: string | string[] | undefined) => async (dispatch: any) => {
     dispatch(editShopProductRequest())
 
     try {
@@ -107,7 +107,7 @@ export const getShopProducts = (accessToken: string | undefined) => async (dispa
     }
 }
 
-export const getShopProduct = (accessToken: string | undefined, productId: string) => async (dispatch: any) => {
+export const getShopProduct = (accessToken: string | undefined, productId: string | string[] | undefined) => async (dispatch: any) => {
     dispatch(getShopProductRequest())
 
     try {

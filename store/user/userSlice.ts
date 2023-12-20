@@ -1,5 +1,5 @@
 import { createSlice, Draft } from "@reduxjs/toolkit";
-import {Auth, MinecraftProfile, User} from "../../common/types/types";
+import {Auth, MinecraftProfile, User, UsersList} from "../../common/types/types";
 
 export interface UserState {
     userLoginLoading: boolean;
@@ -17,6 +17,10 @@ export interface UserState {
     getUserInfosLoading: boolean;
     userInfos?: User;
     getUserInfosError?: string;
+
+    getUsersListLoading: boolean;
+    usersList?: UsersList;
+    getUsersListError?: string;
 
     updateUserProfileLoading: boolean;
     updateUserProfileSuccess?: User;
@@ -44,6 +48,10 @@ const initialState: UserState = {
     getUserInfosLoading: false,
     userInfos: undefined,
     getUserInfosError: undefined,
+
+    getUsersListLoading: false,
+    usersList: undefined,
+    getUsersListError: undefined,
 
     updateUserProfileLoading: false,
     updateUserProfileSuccess: undefined,
@@ -139,6 +147,22 @@ export const userSlice = createSlice({
             state.getUserInfosError = payload;
         },
 
+        getUsersListRequest: (state: Draft<typeof initialState>) => {
+            state.getUsersListLoading = true;
+            state.usersList = undefined;
+            state.getUsersListError = undefined;
+        },
+        getUsersListSuccess: (state: Draft<typeof initialState>, { payload }) => {
+            state.getUsersListLoading = false;
+            state.usersList = payload;
+            state.getUsersListError = undefined;
+        },
+        getUsersListError: (state: Draft<typeof initialState>, { payload }) => {
+            state.getUsersListLoading = false;
+            state.usersList = undefined;
+            state.getUsersListError = payload;
+        },
+
 
         updateUserProfileRequest: (state: Draft<typeof initialState>) => {
             state.updateUserProfileLoading = true;
@@ -190,6 +214,10 @@ export const {
     userLogoutRequest,
     userLogoutSuccess,
     userLogoutError,
+
+    getUsersListRequest,
+    getUsersListSuccess,
+    getUsersListError,
 
     getUserProfileRequest,
     getUserProfileSuccess,

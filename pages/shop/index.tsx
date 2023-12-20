@@ -3,52 +3,20 @@ import {NextRouter, useRouter} from "next/router";
 import {useTranslation} from "next-i18next";
 import {
     Box,
-    Button,
     Container,
     Flex,
-    HStack,
-    Image,
-    Spacer,
     Text,
-    VStack,
-    Input,
-    InputGroup,
-    InputLeftElement,
-    Checkbox,
-    Link as ChakraLink,
-    Link,
     useToast,
     Skeleton,
-    InputLeftAddon,
-    InputRightElement,
     Wrap,
-    SkeletonText
 } from "@chakra-ui/react";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {Form} from "@chakra-ui/theme/dist/components";
-import {AtSignIcon, CalendarIcon, EmailIcon, ExternalLinkIcon, PhoneIcon} from "@chakra-ui/icons";
 import {useEffect, useState} from "react";
 import {
-    getMinecraftProfileRequest,
-    getMinecraftProfileSuccess,
     getUserState,
-    updateUserProfileRequest
 } from "../../store/user/userSlice";
 import {getUserProfile, login, register, requestXboxServices, updateUserProfile} from "../../store/user/userActions";
 import {useDispatch, useSelector} from "../../store/store";
-import {use} from "i18next";
-import {Tags} from "../../components/atoms/Tags/Tags";
-
-import {getRoleById} from '../../common/roles/roles'
-
-import {faEdit, faCheck} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useIsAuthenticated, useMsal} from "@azure/msal-react";
-import {loginRequest} from "../../store/authConfig";
-import {callMsGraph} from "../../common/oauth/microsoft/graph";
-import axios from "axios";
-import parseJson from "parse-json";
-import {getAPIUrl} from "../../store/helper";
 import ShopProductCard from "../../components/molecules/ShopProductCard/ShopProductCard";
 import {ShopCategorie, ShopProduct} from "../../common/types/types";
 import {shopCategories} from "../../common/shop/shopCategories";
@@ -66,15 +34,11 @@ const ShopPage: NextPage = () => {
     const {
         auth,
         userInfos,
-        getUserInfosLoading,
         userLoginLoading,
-        userLoginError, updateUserProfileSuccess, updateUserProfileError,
-        getMinecraftProfileLoading, minecraftProfile, getMinecraftProfileError
+        userLoginError, minecraftProfile, getMinecraftProfileError
     } = useSelector(getUserState)
     const {
-        shopProducts,
-        getShopProductsLoading,
-        getShopProductsError,
+        shopProducts
     } = useSelector(getShopState)
 
 
@@ -105,7 +69,7 @@ const ShopPage: NextPage = () => {
     }
 
     useEffect(() => {
-        console.log('usss')
+        /*console.log('usss')*/
 
         if (auth?.accessToken) {
             dispatch(getUserProfile(auth.accessToken))
@@ -115,15 +79,16 @@ const ShopPage: NextPage = () => {
         }
 
         if(auth?.accessToken && shopProducts){
-            console.log('usss1')
-            console.log(shopProducts)
+            /*console.log('usss1')
+            console.log(shopProducts)*/
+            console.log('Got products')
             temporaryCategories.sort((a, b) => a.place - b.place);
 
 
 
             setCurrentShopCategories(temporaryCategories)
 
-            console.log("cat", temporaryCategories)
+            /*console.log("cat", temporaryCategories)*/
 
             const exEvent = {
                 target: {
@@ -135,6 +100,7 @@ const ShopPage: NextPage = () => {
         }
 
         if(auth?.accessToken && !shopProducts){
+            console.log('Getting products')
             dispatch(getShopProducts(auth.accessToken))
         }
 
@@ -200,9 +166,12 @@ const ShopPage: NextPage = () => {
                             {shopProducts ? (
                                 <Wrap justify={'center'}>
                                     {
-                                        selectedProducts?.map((product) => {
-                                            return <ShopProductCard product={product} key={product._id} isEditing={false}/>
-                                        })
+                                        selectedProducts?.length != 0 ? ( selectedProducts?.map((product) => {
+                                                return <li key={product._id}><ShopProductCard product={product} isEditing={false}/></li>
+                                            })
+                                        ) : (
+                                            <Text color={'white'} fontSize={19}>Section '{currentShopCategories?.filter((shopCategorie) => shopCategorie._id === selectedCategorie)[0].name}' encore indisponible ! Revenez plus tard ! :D</Text>
+                                        )
                                     }
                                 </Wrap>
                             ) : (

@@ -30,7 +30,7 @@ const CGVPage: NextPage = () => {
                               fontFamily={'Bebas Neue'}
                               letterSpacing={8}
                               color={"rgb(255,255,255)"}
-                              mt={50}
+                              mt={100}
                               mx={10}>
                             {/* eslint-disable-next-line react/no-unescaped-entities */}
                             Conditions Générales de Vente

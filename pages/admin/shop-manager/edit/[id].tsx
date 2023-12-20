@@ -26,7 +26,10 @@ import ShopProductCard from "../../../../components/molecules/ShopProductCard/Sh
 import MainLogo from '../../../../public/images/MainLogo.png';
 import {createShopProduct, editShopProduct, getShopProduct, getShopProducts} from "../../../../store/shop/shopActions";
 import {getShopState} from "../../../../store/shop/shopSlice";
+import {getActiveStripePricesRequest, getActiveStripePricesSuccess, getStripeState} from "../../../../store/stripe/stripeSlice";
 import {CreateShopProductDto} from "../../../../store/shop/dtos/createShopProductDto";
+import {getActiveStripePrices, getStripeProducts} from "../../../../store/stripe/stripeActions";
+import {roles} from "../../../../common/roles/roles";
 
 
 const ShopManagerEditPage: NextPage = () => {
@@ -51,6 +54,16 @@ const ShopManagerEditPage: NextPage = () => {
         editShopProductError
     } = useSelector(getShopState)
 
+    const {
+        getStripeProductsLoading,
+        stripeProducts,
+        getStripeProductsError,
+
+        getActiveStripePricesLoading,
+        activeStripePrices,
+        getActiveStripePricesError
+    } = useSelector(getStripeState)
+
     const temporaryCategories: Array<ShopCategorie> = shopCategories;
 
     const [currentShopCategories, setCurrentShopCategories] = useState<Array<ShopCategorie>>()
@@ -62,43 +75,87 @@ const ShopManagerEditPage: NextPage = () => {
 
     const [productName, setProductName] = useState<string>();
     const [productDescription, setProductDescription] = useState<string>();
+    const [productDescriptionDetails, setProductDescriptionDetails] = useState<string>();
     const [productPrice, setProductPrice] = useState<number>();
     const [productIsRealMoney, setProductIsRealPrice] = useState<boolean>();
     const [productImageUrl, setProductImageUrl] = useState<string>()
     const [productCategorie, setProductCategorie] = useState<string>()
+    const [productStripeLink, setProductStripeLink] = useState<string>()
+    const [productPointsToGive, setProductPointsToGive] = useState<number>()
+    const [productRoleToGive, setProductRoleToGive] = useState<string>()
     const [errorMessage, setErrorMessage] = useState<string>()
 
 
     const handleChangeProductName = (event: any) => setProductName(event.target.value);
     const handleChangeProductDescription = (event: any) => setProductDescription(event.target.value);
+    const handleChangeProductDescriptionDetails = (event: any) => setProductDescriptionDetails(event.target.value);
     const handleChangeProductPrice = (event: any) => setProductPrice(event.target.value);
     const handleChangeProductImageUrl = (event: any) => setProductImageUrl(event.target.value);
     const handleChangeProductMonneyType = (event: any) => event.target.value === "true" ? setProductIsRealPrice(true) : setProductIsRealPrice(false);
     const handleChangeProductCategorie = (event: any) => setProductCategorie(event.target.value);
+    const handleChangeProductStripeLink = (event: any) => {
+        setProductStripeLink(event.target.value);
+        if (activeStripePrices) {
+            setProductPrice(activeStripePrices?.filter((stripePrice) => stripePrice.id === stripeProducts?.filter((stripeProduct) => stripeProduct.id === event.target.value)[0].default_price)[0].unit_amount / 100)
+        }
+    };
 
-    const productId = router.query.id;
+    const handleChangeProductPointsToGive = (event: any) => setProductPointsToGive(event.target.value);
+    const handleChangeProductRoleToGive = (event: any) => setProductRoleToGive(event.target.value);
 
+
+    const productUrlId = router.query.id;
+
+    const toastError = (error : string) => {
+        setErrorMessage(error)
+        toast({
+            title: "Erreur",
+            description: error,
+            status: 'error',
+            duration: toastDuration,
+            isClosable: true,
+            position: 'bottom-right',
+        });
+    }
 
     const handleEdit = (event: any) => {
         setErrorMessage('')
         if(!productName){
-            setErrorMessage('Le nom du produit est obligatoire !')
+            toastError('Le nom du produit est obligatoire !')
             return;
         }
         if(!productPrice || productPrice <= 0){
-            setErrorMessage('Le prix ne peut pas être égal ou inférieur à 0 !')
+            toastError('Le prix ne peut pas être égal ou inférieur à 0 !')
             return;
         }
         if(!productCategorie){
-            setErrorMessage('Le produit doit faire forcémment parti d\'une catégorie !')
+            toastError('Le produit doit faire forcémment parti d\'une catégorie !')
             return;
         }
         if(!productDescription){
-            setErrorMessage('La description du produit est obligatoire !')
+            toastError('La description du produit est obligatoire !')
+            return;
+        }
+        if(!productDescriptionDetails){
+            toastError('La description détaillée du produit est obligatoire !')
             return;
         }
         if(!productImageUrl){
-            setErrorMessage('L\'image est obligatoire !')
+            toastError('L\'image est obligatoire !')
+            return;
+        }
+        if(productIsRealMoney && !productStripeLink){
+            toastError('Veuillez lier le produit à un produit stripe pour pouvoir utiliser de la vraie monnaie !')
+            return;
+        }
+
+        if (productCategorie == 'points' && !productPointsToGive){
+            toastError('Veuillez préciser le montant de points boutiques à donner !')
+            return;
+        }
+
+        if (productCategorie == 'grades' && !productRoleToGive){
+            toastError('Veuillez préciser le grade à donner !')
             return;
         }
 
@@ -106,18 +163,24 @@ const ShopManagerEditPage: NextPage = () => {
             name: productName,
             description: productDescription,
             categorieId: productCategorie,
-            price: productPrice,
+            // @ts-ignore
+            price: productIsRealMoney ? activeStripePrices?.filter((stripePrice) => stripePrice.id ===
+                stripeProducts?.filter((stripeProduct) => stripeProduct.id === productStripeLink)[0].default_price)[0].unit_amount / 100
+                : productPrice,
             isRealMoney:productIsRealMoney,
-            imageUrl:productImageUrl
+            imageUrl:productImageUrl,
+            stripeLink: productStripeLink,
+            descriptionDetails: productDescriptionDetails,
+            pointsToGive: productPointsToGive,
+            roleToGive: productRoleToGive
         }
 
         console.log("a", shopProductDto)
-        // @ts-ignore
-        dispatch(editShopProduct(auth?.accessToken, shopProductDto, productId));
+        dispatch(editShopProduct(auth?.accessToken, shopProductDto, productUrlId));
     }
 
     const toast = useToast();
-    const toastDuration = 10000;
+    const toastDuration = 3000;
 
 
     useEffect(() => {
@@ -132,7 +195,7 @@ const ShopManagerEditPage: NextPage = () => {
 
         console.log(currentShopCategories)
 
-        if(auth?.accessToken && currentShopCategories === undefined && productId){
+        if(auth?.accessToken && currentShopCategories === undefined && productUrlId){
 
 
             temporaryCategories.sort((a, b) => a.place - b.place);
@@ -141,10 +204,58 @@ const ShopManagerEditPage: NextPage = () => {
 
 
             // @ts-ignore
-            dispatch(getShopProduct(auth.accessToken, productId))
+            dispatch(getShopProduct(auth.accessToken, productUrlId))
         }
 
     }, [dispatch, auth?.accessToken, router, userInfos?._id, userLoginError, getUserInfosError]);
+
+    useEffect(() => {
+        if (auth?.accessToken){
+            if(!stripeProducts) {
+                console.log('Getting stripe products')
+                dispatch(getStripeProducts(auth.accessToken))
+            }
+            if (stripeProducts) {
+                console.log('Got stripe products:', stripeProducts)
+            }
+            if (getStripeProductsError){
+                toast({
+                    title: "Erreur",
+                    description: "Les produits stripe n'ont pas été récupérés. Contactez un développeur web. ",
+                    status: 'error',
+                    duration: toastDuration,
+                    isClosable: true,
+                    position: 'bottom-right',
+                });
+                console.log(getStripeProductsError)
+            }
+        }
+
+    }, [dispatch, auth?.accessToken, router, stripeProducts, getStripeProductsLoading, getStripeProductsError])
+
+    useEffect(() => {
+        if (auth?.accessToken){
+            if(!activeStripePrices) {
+                console.log('Getting stripe prices')
+                dispatch(getActiveStripePrices(auth.accessToken))
+            }
+            if (activeStripePrices) {
+                console.log('Got stripe prices:', activeStripePrices)
+            }
+            if (getActiveStripePricesError){
+                toast({
+                    title: "Erreur",
+                    description: "Les prix stripe n'ont pas été récupérés. Contactez un développeur web. ",
+                    status: 'error',
+                    duration: toastDuration,
+                    isClosable: true,
+                    position: 'bottom-right',
+                });
+                console.log(getActiveStripePricesError)
+            }
+        }
+
+    }, [dispatch, auth?.accessToken, router, activeStripePrices, getActiveStripePricesLoading, getActiveStripePricesError])
 
     useEffect(() => {
         if(currentShopCategories) {
@@ -186,6 +297,14 @@ const ShopManagerEditPage: NextPage = () => {
             setProductPrice(shopProduct.price);
             setProductIsRealPrice(shopProduct.isRealMoney);
             setProductImageUrl(shopProduct.imageUrl)
+            setProductDescriptionDetails(shopProduct.descriptionDetails)
+            setProductStripeLink(shopProduct.stripeLink)
+            if(shopProduct.categorieId == 'points'){
+                setProductPointsToGive(shopProduct.pointsToGive)
+            }
+            if(shopProduct.categorieId == 'grades'){
+                setProductRoleToGive(shopProduct.roleToGive)
+            }
         }
         if(getShopProductError) {
             toast({
@@ -202,9 +321,10 @@ const ShopManagerEditPage: NextPage = () => {
 
 
 
+
     return (
         <AdminNavbar selected={'/shop-manager'}>
-            <Flex w={'full'} h={1000} bgColor={'rgb(76,78,82,1)'} borderRadius={5} color={'white'} p={10} direction={'column'}>
+            <Flex w={'full'} minH={1000} bgColor={'rgb(76,78,82,1)'} borderRadius={5} color={'white'} p={10} direction={'column'}>
                 <Heading fontSize={21} mb={3} textTransform={'uppercase'}>Éditer un Produit</Heading>
                 <Box>
                     <Flex direction={'row'}>
@@ -217,7 +337,14 @@ const ShopManagerEditPage: NextPage = () => {
                         <Box marginLeft={5}>
                             <Text fontSize={19} mb={2} mt={5}>Prix</Text>
                             <InputGroup w={'full'}>
-                                <Input w={'full'} placeholder={'Prix du produit'} variant={'flushed'} type={'number'} value={productPrice} onChange={handleChangeProductPrice}></Input>
+                                <Input w={'full'} disabled={productIsRealMoney} placeholder={'Prix du produit'} variant={'flushed'} type={'number'}
+                                       value={
+                                    productIsRealMoney ?
+                                        !productStripeLink ? 0 :
+                                            // @ts-ignore
+                                            activeStripePrices?.filter((stripePrice) => stripePrice.id === stripeProducts?.filter((stripeProduct) => stripeProduct.id === productStripeLink)[0].default_price)[0]?.unit_amount / 100
+                                        : productPrice}
+                                       onChange={handleChangeProductPrice}></Input>
                             </InputGroup>
                         </Box>
                         <Box marginLeft={5}>
@@ -237,7 +364,16 @@ const ShopManagerEditPage: NextPage = () => {
                                 }
                             </Select>
                         </Box>
-
+                        <Box marginLeft={5} display={productIsRealMoney ? 'block' : 'none'}>
+                            <Text fontSize={19} mb={2} mt={5}>Liaison Stripe</Text>
+                            <Select placeholder='- Liaison stripe -' cursor={'pointer'} bgColor={'rgb(76,78,82,1)'} value={productStripeLink} onChange={handleChangeProductStripeLink}>
+                                {
+                                    stripeProducts?.map((stripeProduct) => {
+                                        return <option value={stripeProduct.id} key={stripeProduct.id}>Produit - {stripeProduct.name}</option>
+                                    })
+                                }
+                            </Select>
+                        </Box>
                     </Flex>
                     <Box>
                         <Box >
@@ -247,6 +383,38 @@ const ShopManagerEditPage: NextPage = () => {
                             </InputGroup>
                         </Box>
                     </Box>
+                    <Box>
+                        <Box >
+                            <Text fontSize={19} mb={2} mt={5}>Description détaillée</Text>
+                            <InputGroup w={'full'}>
+                                <Input w={'full'} placeholder={'Description du produit détaillée'} variant={'flushed'} type={'text'} value={productDescriptionDetails} onChange={handleChangeProductDescriptionDetails}></Input>
+                            </InputGroup>
+                        </Box>
+                    </Box>
+                    {productCategorie == 'points' && (
+                        <Box>
+                            <Box >
+                                <Text fontSize={19} mb={2} mt={5}>Points à donner</Text>
+                                <InputGroup w={'full'}>
+                                    <Input w={'full'} maxW={300} placeholder={'Points à donner après paiement'} variant={'flushed'} type={"number"} value={productPointsToGive} onChange={handleChangeProductPointsToGive}></Input>
+                                </InputGroup>
+                            </Box>
+                        </Box>
+                    )}
+                    {productCategorie == 'grades' && (
+                        <Box>
+                            <Box >
+                                <Text fontSize={19} mb={2} mt={5}>Grade à donner</Text>
+                                <Select placeholder='- Grade à donner -' cursor={'pointer'} bgColor={'rgb(76,78,82,1)'} value={productRoleToGive} onChange={handleChangeProductRoleToGive}>
+                                    {
+                                        roles?.map((role) => {
+                                            return <option value={role._id} key={role._id}>{role.name}</option>
+                                        })
+                                    }
+                                </Select>
+                            </Box>
+                        </Box>
+                    )}
                     <Box >
                         <Box >
                             <Text fontSize={19} mb={2} mt={5}>URL image (temporaire) - priviligier les images basse résolution</Text>
@@ -267,7 +435,8 @@ const ShopManagerEditPage: NextPage = () => {
                             isRealMoney:productIsRealMoney ? productIsRealMoney : false,
                             categorieId:"points",
                             imageUrl: productImageUrl ? productImageUrl : MainLogo.src,
-                            place:0
+                            place:0,
+                            descriptionDetails: productDescriptionDetails ? productDescriptionDetails : ""
                         }}
                         isEditing={false} isPreview={true}/>
                 </Box>

@@ -27,7 +27,7 @@ const VotesPage: NextPage = () => {
                               fontFamily={'Bebas Neue'}
                               letterSpacing={8}
                               color={"whiteAlpha.600"}
-                              mt={50}
+                              mt={100}
                               mx={10}
                               fontStyle={'italic'}>
                             Page des votes en cours de développement...

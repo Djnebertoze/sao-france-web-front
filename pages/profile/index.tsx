@@ -40,6 +40,7 @@ import {callMsGraph} from "../../common/oauth/microsoft/graph";
 import axios from "axios";
 import parseJson from "parse-json";
 import {getAPIUrl} from "../../store/helper";
+import {Role} from "../../common/types/types";
 
 
 const ProfilePage: NextPage = () => {
@@ -99,6 +100,8 @@ const ProfilePage: NextPage = () => {
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
 
+    const [userRoles, setUserRoles] = useState<Role[]>()
+
     const [showPhoneNumber, setShowPhoneNumber] = useState<boolean>(false);
     const handleShowPhoneNumberChange = () => {
         setShowPhoneNumber(!showPhoneNumber);
@@ -155,10 +158,19 @@ const ProfilePage: NextPage = () => {
                 setLastNameValue(userInfos.lastName);
                 setEmailValue(userInfos.email);
                 setBirthdayValue(userInfos.birthday ? userInfos.birthday : "");
-                setPhoneNumberValue(userInfos.phoneNumber ? userInfos.phoneNumber : "")
+                setPhoneNumberValue(userInfos.phoneNumber ? userInfos.phoneNumber : "");
+                if(userInfos.roles) {
+                    const roles_filtered: Role[] = [];
+                    userInfos.roles.map((role_id) => {
+                        // @ts-ignore
+                        if (getRoleById(role_id) && (role_id != 'user' && userInfos.roles.length > 1)) {
+                            roles_filtered.push(getRoleById(role_id) as Role)
+                        }
+                    })
+                    console.log('roles', roles_filtered)
+                    setUserRoles(roles_filtered.sort((a, b) => a.power - b.power))
+                }
             }
-
-
         }
 
         if (!auth?.accessToken && userLoginError !== undefined) {
@@ -216,8 +228,8 @@ const ProfilePage: NextPage = () => {
 
     return (
         <Container maxW={'full'} margin={0} padding={0}>
-            <Container bg={'rgb(55,56,58,1)'} h={1000} maxW={'full'} color={'white'} p={0}>
-                <Flex w={'full'}>
+            <Container bg={'rgb(55,56,58,1)'} minH={1000} maxW={'full'} color={'white'} p={0}>
+                <Flex w={'full'} pt={100}>
                     <Box marginRight={10} borderRight={'1px solid white'} py={5} px={10}>
                         <Image src={userInfos?.mcProfile ? "https://skins.danielraybone.com/v1/head/"+userInfos.mcProfile.name+"?overlay=true" : userInfos?.profilePicture} borderRadius={'50%'} maxW={200} maxH={200}
                                mx={1} mb={5} border={'5px solid white'} boxShadow={'0px 0px 20px 2px rgb(0,0,0,.15)'}/>
@@ -226,7 +238,7 @@ const ProfilePage: NextPage = () => {
                                 <Text textAlign={'center'} mt={2} fontStyle={'italic'}>{userInfos.mcProfile.name}</Text>
                             </>
                         )}
-                        <Text textAlign={'center'} mt={2}>{userInfos?.shopPoints} Points Boutique</Text>
+                        <Text textAlign={'center'} mt={2}>{userInfos?.shopPoints.toLocaleString(undefined)} Points Boutique</Text>
 
                     </Box>
                     <Box w={'full'}>
@@ -245,32 +257,15 @@ const ProfilePage: NextPage = () => {
                                         <Text fontSize={35} ml={10}>{userInfos?.username}</Text>
                                     )}
 
-
-
-                                    {userInfos?.roles?.includes('admin') ? (
-                                        <Tags mt={tagsMargin} ml={5}
-                                              bgColor={'#df6a6a'}>{getRoleById('admin')?.name}</Tags>
-
-                                    ) : userInfos?.roles?.includes('responsable') ? (
-                                        <Tags mt={tagsMargin} ml={5}
-                                              bgColor={'blue'}>{getRoleById('responsable')?.name}</Tags>
-
-                                    ) : userInfos?.roles?.includes('moderator') ? (
-                                        <Tags mt={tagsMargin} ml={5} bgColor={'cyan.300'}
-                                              color={'black'}>{getRoleById('moderator')?.name}</Tags>
-
-                                    ) : userInfos?.roles?.includes('staff') ? (
-                                        <Tags mt={tagsMargin} ml={5} bgColor={'yellow.300'}
-                                              color={'black'}>{getRoleById('staff')?.name}</Tags>
-
-                                    ) : (<Tags mt={tagsMargin} ml={5}
-                                               bgColor={'gray'}>{getRoleById('user')?.name}</Tags>
-                                    )}
-                                    {userInfos?.roles?.includes('developer') && (
-                                        <Tags mt={tagsMargin} ml={5}
-                                              bgColor={'#81cc83'}>{getRoleById('developer')?.name}</Tags>
-                                    )}
-
+                                    {
+                                        userRoles?.map((role) => {
+                                            return <Tags key={role._id} mt={tagsMargin} ml={5}
+                                                         bgColor={role?.color}
+                                                         textColor={role?.textColor}>
+                                                {role?.name}
+                                            </Tags>
+                                        })
+                                    }
 
                                 </Flex>
                                 {isEditing ? (

@@ -27,7 +27,7 @@ import ShopProductCard from "../../../components/molecules/ShopProductCard/ShopP
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
 
-const AdminStatsPage: NextPage = () => {
+const ApplyManagerPage: NextPage = () => {
 
     const router: NextRouter = useRouter();
     const dispatch = useDispatch();
@@ -58,7 +58,7 @@ const AdminStatsPage: NextPage = () => {
 
 
     return (
-        <AdminNavbar selected={'/stats'}>
+        <AdminNavbar selected={'/apply-manager'}>
             En cours de dev...
         </AdminNavbar>
     );
@@ -72,4 +72,4 @@ export async function getServerSideProps({locale}: { locale: any }) {
     };
 }
 
-export default AdminStatsPage;
+export default ApplyManagerPage;

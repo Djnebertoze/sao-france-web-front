@@ -27,7 +27,7 @@ import ShopProductCard from "../../../components/molecules/ShopProductCard/ShopP
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
 
-const ShopManager: NextPage = () => {
+const SettingsPage: NextPage = () => {
 
     const router: NextRouter = useRouter();
     const dispatch = useDispatch();
@@ -72,4 +72,4 @@ export async function getServerSideProps({locale}: { locale: any }) {
     };
 }
 
-export default ShopManager;
+export default SettingsPage;

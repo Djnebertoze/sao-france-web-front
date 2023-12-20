@@ -5,6 +5,15 @@ import {useEffect, useState} from "react";
 import {
     getUserState,
 } from "../../store/user/userSlice";
+import {
+    Box,
+    Container,
+    Flex,
+    Text,
+    useToast,
+    Skeleton,
+    Wrap,
+} from "@chakra-ui/react";
 import {useDispatch, useSelector} from "../../store/store";
 import AdminNavbar from "../../components/molecules/AdminNavbar/AdminNavbar";
 import {getShopState} from "../../store/shop/shopSlice";
@@ -44,7 +53,9 @@ const AdminPage: NextPage = () => {
 
     return (
         <AdminNavbar selected={''}>
-            En cours de dev...
+            <Text fontSize={25} mb={0}>Bienvenue {userInfos?.username} sur votre nouveau <Text color={'cyan.400'} as={'span'}>tableau de bord</Text> !</Text>
+            <Text fontSize={16} pb={17} color={'rgb(255,255,255,.5)'}>Vous retrouverez ici tous les outils nécéssaires afin de vous aider dans votre travail quotidien.</Text>
+            <Box h={'1px'} w={'full'} backgroundColor={'rgb(255,255,255,.2)'}/>
         </AdminNavbar>
     );
 }

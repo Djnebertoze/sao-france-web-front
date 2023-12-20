@@ -184,10 +184,12 @@ const HomePage: NextPage = () => {
                 <Flex color={'white'} m={10} mt={{lg:20, base:0}} flexDirection={{lg: 'row', base: 'column', }}>
                     <Spacer/>
                     <Flex>
-                        <Spacer/>
+                        <Spacer display={{lg:'flex', base:'none'}}/>
+                        <Box display={{sm:'block', base: 'none'}}>
                         <iframe src="https://discord.com/widget?id=583776836325081090&theme=dark" width="350" height="500"
                                 frameBorder="0"
                                 sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+                        </Box>
                     </Flex>
                     <Flex textAlign={"left"}
                           mx={{lg: 70, base: 0}}
@@ -198,11 +200,11 @@ const HomePage: NextPage = () => {
                               mt={{lg:0, base:5}}
                               borderBottom={{lg: 'none', base: '2px solid rgb(255,255,255,.6)'}}
                               pb={{lg:0, base: 50}}>
-                            <Text fontSize={25} fontWeight={'bold'} mb={8}>Rejoins notre discord !</Text>
-                            <Text fontSize={20}>
+                            <Text fontSize={{vsm:25, base:18}} fontWeight={'bold'} mb={8}>Rejoins notre discord !</Text>
+                            <Text fontSize={{vsm:20, base:13}}>
                                 {/* eslint-disable-next-line react/no-unescaped-entities */}
                                 Rejoins notre discord pour être à l'affût de  toutes les nouveautées et ne louper aucune annonce !</Text>
-                            <Button colorScheme={'blue'} w={200} mt={50} h={45} onClick={() => window.open('https://discord.gg/saofrance', "_blank")}>
+                            <Button colorScheme={'blue'} w={{vsm:200, base:140}} mt={50} h={{vsm:45, base:30}} fontSize={{vsm:16, base:12}} onClick={() => window.open('https://discord.gg/saofrance', "_blank")}>
                                 Rejoindre
                             </Button>
                         </Flex>

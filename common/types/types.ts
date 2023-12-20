@@ -10,16 +10,21 @@ export interface User {
     firstName: string;
     lastName: string;
     profilePicture: string;
-    roles?: string;
+    roles?: string[];
     phoneNumber?: string;
     createdAt: Date;
     updatedAt?: Date;
-    acceptEmail: boolean;
+    acceptEmails: boolean;
     username: string;
     bio?: string;
     birthday?: string;
     shopPoints: number;
     mcProfile?: McProfile
+}
+
+export interface UsersList {
+    users: User[];
+    mcProfiles: McProfile[]
 }
 
 
@@ -28,6 +33,7 @@ export interface McProfile {
     name: string;
     skinUrl: string;
     skinVariant: string;
+    user: User
 }
 
 export interface MinecraftProfile {
@@ -60,4 +66,42 @@ export interface ShopProduct {
     isRealMoney: boolean
     categorieId: string
     place:number
+    stripeLink?: string
+    descriptionDetails: string
+    pointsToGive?: number,
+    roleToGive?: string,
+}
+
+export interface StripeProduct {
+    id: string
+    object: string
+    active: boolean
+    created: number
+    default_price: string
+    description: string
+    images: []
+    features: []
+    livemode: boolean
+    metadata: {}
+    name: string
+    package_dimensions: unknown
+    shippable: unknown
+    statement_descriptor: unknown
+    tax_code: unknown
+    unit_label: unknown
+    updated: number
+    url: string
+}
+
+export interface StripePrice {
+    id: string,
+    object: string,
+    active: boolean,
+    billing_scheme: string,
+    created: number,
+    currency: string,
+    product: string,
+    type: string,
+    unit_amount: number,
+    unit_amount_decimal: string
 }

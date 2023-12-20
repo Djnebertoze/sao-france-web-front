@@ -5,4 +5,8 @@ export class CreateShopProductDto {
     isRealMoney?: boolean;
     imageUrl?: string;
     categorieId?: string;
+    stripeLink?: string;
+    descriptionDetails?: string;
+    pointsToGive?: number;
+    roleToGive?: string;
 }

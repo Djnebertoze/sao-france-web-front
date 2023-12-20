@@ -3,6 +3,7 @@ import { useDispatch as useDispatchBase, useSelector as useSelectorBase } from "
 import userSlice from "./user/userSlice";
 import membersSlice from "./members/membersSlice";
 import shopSlice from "./shop/shopSlice";
+import stripeSlice from "./stripe/stripeSlice";
 
 
 /**
@@ -13,6 +14,7 @@ export const store = configureStore({
         user: userSlice,
         members: membersSlice,
         shop: shopSlice,
+        stripe: stripeSlice,
     },
     devTools: false,
 });

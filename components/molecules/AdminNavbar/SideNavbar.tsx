@@ -32,7 +32,7 @@ import {
     FiSettings,
     FiMenu,
     FiBell,
-    FiChevronDown, FiShoppingCart,
+    FiChevronDown, FiShoppingCart, FiBriefcase, FiUsers,
 } from 'react-icons/fi'
 import { IconType } from 'react-icons'
 import React from "react";
@@ -74,8 +74,10 @@ interface SidebarWithHeaderProps extends FlexProps{
 }
 
 const LinkItems: Array<LinkItemProps> = [
-    { name: 'Panel', icon: FiHome, href: '', powerRequired: 4 },
-    { name: 'Statistiques', icon: FiTrendingUp, href: '/stats', powerRequired: 4 },
+    { name: 'Panel', icon: FiHome, href: '', powerRequired: 3 },
+    { name: 'Statistiques', icon: FiTrendingUp, href: '/stats', powerRequired: 3 },
+    { name: 'Utilisateurs', icon: FiUsers, href: '/users', powerRequired: 3},
+    { name: 'Recrutements', icon: FiBriefcase, href: '/apply-manager', powerRequired: 5},
     { name: 'Boutique', icon: FiShoppingCart, href: '/shop-manager', powerRequired: 6},
     { name: 'Paramètres', icon: FiSettings, href: '/settings', powerRequired: 6},
 ]

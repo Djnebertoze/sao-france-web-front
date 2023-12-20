@@ -261,7 +261,7 @@ const ShopManager: NextPage = () => {
                     <Wrap>
                     {
                         selectedProducts?.map((product) => {
-                            return <ShopProductCard product={product} key={product._id} isEditing={true}/>
+                            return (<li key={product._id}><ShopProductCard product={product} isEditing={true}/></li>)
                         })
                     }
                     </Wrap>

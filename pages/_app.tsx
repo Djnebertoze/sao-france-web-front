@@ -24,25 +24,18 @@ config.autoAddCss = false;
 
 const msalInstance = new PublicClientApplication(msalConfig);
 
-// STRIPE TEST !!!!
-const stripeTest = loadStripe(
-    "pk_test_51NT4ruCwZ6NoH3zKks2f5qlDPHZ4spkvjtVe6D8PdWOErFCgl2Ag1WAZZvBnCqo4iG2MaqCZSaFesMuGgcbe99Ao00szvkZnwK"
-);
-
-// STRIPE LIVE !!!!
-const stripeLive = loadStripe(
-    "pk_live_51NT4ruCwZ6NoH3zKboEEKbKpGaWgDWB78O1WQkHozVOJ6n94GOquIbAnFrO9ZE7MQnlAtPKa8xXZ15CzZRzUiCY200HEGykgnL"
+const stripePromise = loadStripe(
+    process.env.STRIPE_PUBLIC_KEY ? process.env.STRIPE_PUBLIC_KEY : "error"
 );
 
 function MyApp({Component, pageProps}: AppProps) {
-
 
 
     return (
         <Provider store={store}>
             <ChakraProvider theme={theme}>
                 <MsalProvider instance={msalInstance}>
-                    <Elements stripe={stripeTest}>
+                    <Elements stripe={stripePromise}>
                         <ErrorBoundary>
                             <NextTopLoader height={10}/>
                             <Navbar/>
