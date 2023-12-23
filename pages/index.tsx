@@ -75,7 +75,7 @@ const HomePage: NextPage = () => {
                     <Box />
 
                 </Flex>
-                <Center mt={{sm: 100,base:0}}><img width="64" height="64" src="https://saofrance.net/images/icons8-minecraft.svg" alt="minecraft-grass-cube"/></Center>
+                <Center mt={{sm: 100,base:0}}><Image width={"64"} height={"64"} src={"https://saofrance.net/images/icons8-minecraft.svg"} alt={"minecraft-grass-cube"}/></Center>
                 <Center>
                     <Text textAlign={"center"}
                           fontSize={{sm:40, vsm:30, base:19}}
@@ -96,7 +96,7 @@ const HomePage: NextPage = () => {
                         <Image src={'https://saofrance.net/images/wallpaper/plan4.png'}
                                h={{sm:400, vsm: 200}}
                                minW={{base:200}}
-
+                                alt={'Wal paper image'}
                                boxShadow={'10px 10px 30px 0px rgb(255,255,255,.1)'}
                                objectFit={'cover'}
                                borderRadius={7}/>
@@ -149,13 +149,14 @@ const HomePage: NextPage = () => {
                         <Image src={'https://saofrance.net/images/wallpaper/plan3.png'}
                                h={{sm:400, vsm: 200}}
                                minW={{base:200}}
+                               alt={'Wallpaper image'}
                                boxShadow={'10px 10px 30px 0px rgb(255,255,255,.1)'}
                                objectFit={'cover'}
                                borderRadius={7}/>
                         <Spacer/>
                     </Flex>
                 </Flex>
-                <Center mt={{sm: 100,base:0}}><img width="64" height="64" src="https://saofrance.net/images/icons8-minecraft.svg" alt="minecraft-grass-cube"/></Center>
+                <Center mt={{sm: 100,base:0}}><Image width={"64"} height={"64"} src={"https://saofrance.net/images/icons8-minecraft.svg"} alt={"minecraft-grass-cube"}/></Center>
                 <Center>
                     <Text textAlign={"center"}
                           fontSize={{sm:20, base:20}}

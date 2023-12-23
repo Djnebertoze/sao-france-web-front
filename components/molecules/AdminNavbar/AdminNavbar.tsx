@@ -118,7 +118,7 @@ const AdminNavbar: FC<SidebarWithHeaderProps> = (props) => {
             setUserPower(getMaxPowerFromUserRoles(userInfos.roles))
 
         }
-    }, [router, auth, userInfos]);
+    }, [router, auth, userInfos, dispatch]);
 
     return(
         // eslint-disable-next-line react/no-children-prop

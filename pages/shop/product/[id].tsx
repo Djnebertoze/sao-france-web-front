@@ -92,7 +92,7 @@ const ProductPage: NextPage = () => {
             router.push('/login');
         }
 
-    }, [dispatch, auth, toast, router, userInfos?._id, userLoginLoading, userLoginError, minecraftProfile, shopProduct]);
+    }, [dispatch, auth, toast, router, userInfos, userLoginLoading, userLoginError, minecraftProfile, shopProduct]);
 
     useEffect(() => {
         if(getMinecraftProfileError !== undefined){
@@ -115,7 +115,7 @@ const ProductPage: NextPage = () => {
                 position: 'bottom-right',
             });
         }
-    }, [getMinecraftProfileError, getShopProductError])
+    }, [getMinecraftProfileError, getShopProductError, toast])
 
     useEffect(() => {
         if (getStripePaymentLinkSuccess){
@@ -130,7 +130,7 @@ const ProductPage: NextPage = () => {
                 position: 'bottom-right',
             });
         }
-    }, [getStripePaymentLinkLoading])
+    }, [getStripePaymentLinkLoading, getStripePaymentLinkError, getStripePaymentLinkSuccess, router, toast])
 
     const handleBuy = () => {
         if(shopProduct?.isRealMoney) {
@@ -156,7 +156,7 @@ const ProductPage: NextPage = () => {
                             <Text color={'white'} fontSize={25}>{shopProduct?.price}{shopProduct?.isRealMoney ? '€' : ' Points Boutique'}</Text>
                         </Center>
                         <Center>
-                            <Image src={ImageSecurised.src} w={250} py={11}/>
+                            <Image src={ImageSecurised.src} w={250} py={11} alt={'Secured payment image'}/>
                         </Center>
                         <Center>
                             <Text color={'rgb(255,255,255,.7)'}>Comtpe Minecraft connecté: {userInfos?.mcProfile?.name}</Text>
@@ -167,7 +167,7 @@ const ProductPage: NextPage = () => {
                         </Button>
                     </Flex>
                     <Spacer/>
-                    <Image src={shopProduct?.imageUrl} maxW={500} objectFit={'cover'}/>
+                    <Image src={shopProduct?.imageUrl} maxW={500} objectFit={'cover'} alt={'Shop product image'}/>
                 </Flex>
             </Flex>
         </Container>

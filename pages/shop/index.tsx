@@ -88,15 +88,14 @@ const ShopPage: NextPage = () => {
 
             setCurrentShopCategories(temporaryCategories)
 
-            /*console.log("cat", temporaryCategories)*/
+            setSelectedProducts([])
+            setSelectedCategorie(temporaryCategories[0]._id)
 
-            const exEvent = {
-                target: {
-                    id: temporaryCategories[0]._id
-                }
+            if (shopProducts) {
+                const categorieProducts = shopProducts.filter(product => product.categorieId === temporaryCategories[0]._id);
+                categorieProducts.sort((a, b) => a.place - b.place)
+                setSelectedProducts(categorieProducts)
             }
-
-            handleSelectCategorie(exEvent)
         }
 
         if(auth?.accessToken && !shopProducts){
@@ -109,7 +108,7 @@ const ShopPage: NextPage = () => {
             router.push('/login');
         }
 
-    }, [dispatch, auth, toast, router, userInfos?._id, userLoginLoading, userLoginError, minecraftProfile, shopProducts]);
+    }, [dispatch, auth, toast, router, userInfos, userLoginLoading, userLoginError, minecraftProfile, shopProducts, temporaryCategories]);
 
     useEffect(() => {
         if(getMinecraftProfileError !== undefined){
@@ -122,7 +121,7 @@ const ShopPage: NextPage = () => {
                 position: 'bottom-right',
             });
         }
-    }, [getMinecraftProfileError])
+    }, [getMinecraftProfileError, toast])
 
     let tagsMargin = 4;
 
@@ -170,7 +169,7 @@ const ShopPage: NextPage = () => {
                                                 return <li key={product._id}><ShopProductCard product={product} isEditing={false}/></li>
                                             })
                                         ) : (
-                                            <Text color={'white'} fontSize={19}>Section '{currentShopCategories?.filter((shopCategorie) => shopCategorie._id === selectedCategorie)[0].name}' encore indisponible ! Revenez plus tard ! :D</Text>
+                                            <Text color={'white'} fontSize={19}>Section &apos;{currentShopCategories?.filter((shopCategorie) => shopCategorie._id === selectedCategorie)[0].name}&apos; encore indisponible ! Revenez plus tard ! :D</Text>
                                         )
                                     }
                                 </Wrap>

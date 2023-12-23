@@ -54,7 +54,7 @@ const AdminStatsPage: NextPage = () => {
             router.push('/login');
         }
 
-    }, [dispatch, auth?.accessToken, router, userInfos?._id, userLoginError, getUserInfosError]);
+    }, [dispatch, auth?.accessToken, router, userInfos, userLoginError, getUserInfosError]);
 
 
     return (

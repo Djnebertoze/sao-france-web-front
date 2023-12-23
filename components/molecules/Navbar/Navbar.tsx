@@ -26,7 +26,6 @@ import {CloseIcon, HamburgerIcon} from "@chakra-ui/icons";
 import DesktopNavbar from "./DesktopNavbar";
 import MobileNavbar from "./MobileNavbar";
 import {Simulate} from "react-dom/test-utils";
-import toggle = Simulate.toggle;
 import {getUserState} from "../../../store/user/userSlice";
 import { useDispatch, useSelector } from "../../../store/store";
 import { checkLogin } from "../../../store/user/userActions";
@@ -97,30 +96,6 @@ const Navbar: FC = () => {
         const handleScroll = () => {
             setScrollY(window.scrollY);
 
-            /*if (window.innerWidth > 480) {
-                if (window.scrollY > 50) {
-                    // @ts-ignore
-                    document.getElementById("navbar").style.top = "0";
-                } else {
-                    // @ts-ignore
-                    document.getElementById("navbar").style.top = "-80px";
-                }
-            } else {
-                // @ts-ignore
-                document.getElementById("navbar").style.top = "0";
-            }*/
-
-            /*if (window.innerWidth > 992) {
-                if (window.scrollY > 50 && isOpen) {
-                    onToggle();
-                }
-            }*/
-
-            /*if(isOpen){
-                onToggle()
-            }*/
-
-            // @ts-ignore
             // @ts-ignore
             if(document.getElementById("collapse").style.display === "block"){
                 console.log('passed')
@@ -136,7 +111,7 @@ const Navbar: FC = () => {
         };
 
 
-    }, [router]);
+    }, [router, auth?.accessToken, dispatch, onToggle]);
 
     return(
         <>

@@ -55,16 +55,7 @@ const AdminUsersManagerPage: NextPage = () => {
     const toast = useToast();
     const toastDuration = 3000;
 
-    const toastError = (error : string) => {
-        toast({
-            title: "Erreur",
-            description: error,
-            status: 'error',
-            duration: toastDuration,
-            isClosable: true,
-            position: 'bottom-right',
-        });
-    }
+
 
     useEffect(() => {
         console.log('1')
@@ -77,9 +68,20 @@ const AdminUsersManagerPage: NextPage = () => {
             router.push('/login');
         }
 
-    }, [dispatch, auth?.accessToken, router, userInfos?._id, userLoginError, getUserInfosError]);
+    }, [dispatch, auth?.accessToken, router, userInfos, userLoginError, getUserInfosError]);
 
     useEffect(() => {
+        const toastError = (error : string) => {
+            toast({
+                title: "Erreur",
+                description: error,
+                status: 'error',
+                duration: toastDuration,
+                isClosable: true,
+                position: 'bottom-right',
+            });
+        }
+
         if (auth?.accessToken && !usersList && !getUsersListLoading && !getUsersListError){
             dispatch(getUsersList(auth.accessToken))
         }
@@ -87,16 +89,16 @@ const AdminUsersManagerPage: NextPage = () => {
             console.log(getUsersListError)
             toastError('Impossible de récupérer la liste des joueurs.')
         }
-    },[usersList, getUsersListLoading, getUsersListError])
+    },[usersList, getUsersListLoading, getUsersListError, auth?.accessToken, dispatch, toast])
 
     const th_parameters = {color:'rgb(255,255,255,.6)', textTransform: 'none'}
 
     return (
         <AdminNavbar selected={'/users'}>
-            <Text fontSize={25} mb={0}>Bienvenue sur votre onglet '<Text color={'cyan.400'} as={'span'}>Utilisateurs</Text>'  !</Text>
+            <Text fontSize={25} mb={0}>Bienvenue sur votre onglet &apos;<Text color={'cyan.400'} as={'span'}>Utilisateurs</Text>&apos;  !</Text>
             <Flex>
                 <Flex direction={"column"}>
-                    <Text fontSize={16} color={'rgb(255,255,255,.5)'}>Vous retrouverez ici la liste de tous les utilisateurs. Selon votre degré d'accréditation, vous aurez accès à certaines informations sensibles.</Text>
+                    <Text fontSize={16} color={'rgb(255,255,255,.5)'}>Vous retrouverez ici la liste de tous les utilisateurs. Selon votre degré d&apos;accréditation, vous aurez accès à certaines informations sensibles.</Text>
                     <Text fontSize={16} pb={17} color={'rgb(255,255,255,.5)'} fontWeight={'bold'}>IMPORTANT: Veillez à partager aucune information !</Text>
                 </Flex>
                 <Spacer/>
@@ -113,7 +115,7 @@ const AdminUsersManagerPage: NextPage = () => {
                     <Table variant={'striped'} colorScheme={'whiteAlpha'} size='sm'>
                         <Thead>
                             <Tr backgroundColor={'rgb(255,255,255,.05)'} h={9}>
-                                <Th color={'white'}>Nom d'utilisateur</Th>
+                                <Th color={'white'}>Nom d&apos;utilisateur</Th>
                                 <Th color={'white'}>Email</Th>
                                 <Th color={'white'}>Grades</Th>
                                 <Th color={'white'}>Date de création</Th>

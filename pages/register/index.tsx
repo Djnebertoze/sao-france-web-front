@@ -115,7 +115,7 @@ const RegisterPage: NextPage = () => {
                 position: 'bottom-right',
             });
         }
-    }, [dispatch, auth, toast, router, userRegisterError, userInfos?._id]);
+    }, [dispatch, auth, toast, router, userRegisterError, t]);
 
 
     return (

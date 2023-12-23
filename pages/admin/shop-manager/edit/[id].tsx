@@ -207,7 +207,8 @@ const ShopManagerEditPage: NextPage = () => {
             dispatch(getShopProduct(auth.accessToken, productUrlId))
         }
 
-    }, [dispatch, auth?.accessToken, router, userInfos?._id, userLoginError, getUserInfosError]);
+    }, [dispatch, auth?.accessToken, router, userInfos, userLoginError, getUserInfosError, currentShopCategories,
+        productUrlId,temporaryCategories]);
 
     useEffect(() => {
         if (auth?.accessToken){
@@ -231,7 +232,7 @@ const ShopManagerEditPage: NextPage = () => {
             }
         }
 
-    }, [dispatch, auth?.accessToken, router, stripeProducts, getStripeProductsLoading, getStripeProductsError])
+    }, [dispatch, auth?.accessToken, router, stripeProducts, getStripeProductsLoading, getStripeProductsError, toast])
 
     useEffect(() => {
         if (auth?.accessToken){
@@ -255,7 +256,7 @@ const ShopManagerEditPage: NextPage = () => {
             }
         }
 
-    }, [dispatch, auth?.accessToken, router, activeStripePrices, getActiveStripePricesLoading, getActiveStripePricesError])
+    }, [dispatch, auth?.accessToken, router, activeStripePrices, getActiveStripePricesLoading, getActiveStripePricesError, toast])
 
     useEffect(() => {
         if(currentShopCategories) {
@@ -284,7 +285,7 @@ const ShopManagerEditPage: NextPage = () => {
                 console.log(editShopProductError)
             }
         }
-    }, [editShopProductLoading])
+    }, [editShopProductLoading, toast, currentShopCategories, editShopProductError, editShopProductSuccess, router])
 
 
 
@@ -317,7 +318,7 @@ const ShopManagerEditPage: NextPage = () => {
             });
             console.log(getShopProductError)
         }
-    }, [shopProduct, getShopProductLoading, getShopProductError])
+    }, [shopProduct, getShopProductLoading, getShopProductError, toast])
 
 
 

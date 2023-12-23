@@ -6,7 +6,7 @@ import {getUserState} from "../../../store/user/userSlice";
 import {getShopState} from "../../../store/shop/shopSlice";
 import {ShopCategorie, ShopProduct} from "../../../common/types/types";
 import {shopCategories} from "../../../common/shop/shopCategories";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {
     Box,
     Button,
@@ -134,6 +134,7 @@ const ShopManager: NextPage = () => {
         }
     }
 
+
     const toast = useToast();
     const toastDuration = 10000;
 
@@ -160,13 +161,14 @@ const ShopManager: NextPage = () => {
 
             console.log("cat", temporaryCategories)
 
-            const exEvent = {
-                target: {
-                    id: temporaryCategories[0]._id
-                }
-            }
+            setSelectedProducts([])
+            setSelectedCategorie(temporaryCategories[0]._id)
 
-            handleSelectCategorie(exEvent)
+            if (shopProducts) {
+                const categorieProducts = shopProducts.filter(product => product.categorieId === temporaryCategories[0]._id);
+                categorieProducts.sort((a, b) => a.place - b.place)
+                setSelectedProducts(categorieProducts)
+            }
         }
 
         if(auth?.accessToken && !shopProducts){
@@ -184,14 +186,15 @@ const ShopManager: NextPage = () => {
             });
             console.log(getShopProductsError)
         }
-    }, [dispatch, auth?.accessToken, router, userInfos?._id, userLoginError, getUserInfosError, shopProducts, getShopProductsError, getShopProductsLoading]);
+    }, [dispatch, auth?.accessToken, router, userInfos, userLoginError, getUserInfosError, shopProducts, getShopProductsError, getShopProductsLoading,
+        temporaryCategories, toast]);
 
     useEffect(() => {
         if(auth?.accessToken){
             console.log("GETTING PRODUCTS")
             dispatch(getShopProducts(auth.accessToken))
         }
-    }, [dispatch, router, removeShopProductSuccess])
+    }, [dispatch, router, removeShopProductSuccess, auth?.accessToken])
 
     useEffect(() => {
         if(auth?.accessToken && currentShopCategories){
@@ -217,7 +220,7 @@ const ShopManager: NextPage = () => {
                 });
             }
         }
-    }, [removeShopProductLoading]);
+    }, [removeShopProductLoading, auth?.accessToken, currentShopCategories, removeShopProductError, removeShopProductSuccess, toast]);
 
 
     return (

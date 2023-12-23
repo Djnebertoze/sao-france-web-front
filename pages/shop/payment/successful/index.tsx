@@ -70,7 +70,8 @@ const SuccessPaymentPage: NextPage = () => {
             router.push('/login');
         }
 
-    }, [dispatch, auth, toast, router, userInfos?._id, userLoginLoading, userLoginError, minecraftProfile]);
+    }, [dispatch, auth, toast, router, userInfos, userLoginLoading, userLoginError, minecraftProfile, getStripePaymentSuccessError,
+        getStripePaymentSuccessLoading, getStripePaymentSuccessSuccess]);
 
 
     return (

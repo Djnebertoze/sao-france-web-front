@@ -19,7 +19,6 @@ import {FC, useEffect} from "react";
 import { Link } from "../../atoms/Links/Links";
 import { GenericNavbarProps, NavItem } from "./types";
 import {Simulate} from "react-dom/test-utils";
-import toggle = Simulate.toggle;
 
 const MobileNavbar: FC<GenericNavbarProps> = (props) => {
 	return (

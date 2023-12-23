@@ -61,7 +61,7 @@ const CancelPaymentPage: NextPage = () => {
             router.push('/login');
         }
 
-    }, [dispatch, auth, toast, router, userInfos?._id, userLoginLoading, userLoginError, minecraftProfile]);
+    }, [dispatch, auth, toast, router, userInfos, userLoginLoading, userLoginError, minecraftProfile]);
 
 
     return (
@@ -78,7 +78,7 @@ const CancelPaymentPage: NextPage = () => {
                     <Spacer/>
                     <Flex flexDirection={"column"} mt={50}>
 
-                        <Center><Text fontSize={25}>Vous avez changé d'avis {userInfos?.username} ?..</Text></Center>
+                        <Center><Text fontSize={25}>Vous avez changé d&apos;avis {userInfos?.username} ?..</Text></Center>
                         <Box h={'1px'} w={'full'} my={3} background={'rgb(255,255,255,.3)'}/>
                         <Center><Text fontSize={19} mb={5}>Ça sera pour une prochaine fois alors !</Text></Center>
                         <Center><Button colorScheme={'blue'} w={300} onClick={() => router.push('/profile')}>Voir mon profil</Button></Center>

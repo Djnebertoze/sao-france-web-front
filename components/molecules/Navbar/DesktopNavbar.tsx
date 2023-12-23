@@ -37,7 +37,7 @@ const DesktopNavbar: FC<GenericNavbarProps> = (props) => {
             dispatch(getUserProfile(auth.accessToken));
         }
 
-    }, [])
+    }, [auth?.accessToken, dispatch])
 
     let count=0;
 
@@ -55,7 +55,7 @@ const DesktopNavbar: FC<GenericNavbarProps> = (props) => {
                                     </Link>
                                 ) : (
                                     <ChakraLink onClick={() => router.push(navItem.href)} className={"navItem"}>
-                                        <Image src={MainLogo.src} maxW={90}/>
+                                        <Image src={MainLogo.src} maxW={90} alt={'Logo image'}/>
                                     </ChakraLink>
                                 )}
                             </Box>

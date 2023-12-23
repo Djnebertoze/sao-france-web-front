@@ -222,7 +222,8 @@ const ShopManagerCreatePage: NextPage = () => {
             });
             console.log(createShopProductError)
         }
-    }, [dispatch, auth?.accessToken, router, userInfos?._id, userLoginError, getUserInfosError, createShopProductLoading, createShopProductSuccess, createShopProductError]);
+    }, [dispatch, auth?.accessToken, router, userInfos, userLoginError, getUserInfosError, createShopProductLoading, createShopProductSuccess, createShopProductError,
+        temporaryCategories, currentShopCategories, toast]);
 
     useEffect(() => {
         if (auth?.accessToken){
@@ -246,7 +247,7 @@ const ShopManagerCreatePage: NextPage = () => {
             }
         }
 
-    }, [dispatch, auth?.accessToken, router, stripeProducts, getStripeProductsLoading, getStripeProductsError])
+    }, [dispatch, auth?.accessToken, router, stripeProducts, getStripeProductsLoading, getStripeProductsError, toast])
 
     useEffect(() => {
         if (auth?.accessToken){
@@ -270,7 +271,7 @@ const ShopManagerCreatePage: NextPage = () => {
             }
         }
 
-    }, [dispatch, auth?.accessToken, router, activeStripePrices, getActiveStripePricesLoading, getActiveStripePricesError])
+    }, [dispatch, auth?.accessToken, router, activeStripePrices, getActiveStripePricesLoading, getActiveStripePricesError, toast])
 
 
     return (

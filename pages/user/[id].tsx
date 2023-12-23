@@ -78,7 +78,7 @@ const ProfilePage: NextPage = () => {
                             <Flex w={'full'}>
                                 <Box borderRight={'black 1px solid'} mt={50} pb={30}>
                                     <Image src={getMemberInfos?.mcProfile ? "https://skins.danielraybone.com/v1/head/"+getMemberInfos.mcProfile.name+"?overlay=true" : getMemberInfos?.profilePicture} borderRadius={'50%'} maxW={200} maxH={200}
-                                           mx={50} mb={5} border={'5px solid white'} boxShadow={'0px 0px 20px 2px rgb(0,0,0,.15)'}/>
+                                           mx={50} mb={5} border={'5px solid white'} boxShadow={'0px 0px 20px 2px rgb(0,0,0,.15)'} alt={'User image profile'}/>
                                     <Text textAlign={'center'}>{t('profile.MEMBER_SINCE')} {
                                         // @ts-ignore
                                         new Date(getMemberInfos?.createdAt).toLocaleDateString()
@@ -87,7 +87,7 @@ const ProfilePage: NextPage = () => {
                                         <>
 
                                             <Flex flex={1} justify={'center'} w={'full'} align={'center'} mt={2}>
-                                                <Image width={150} src={"https://skins.danielraybone.com/v1/render/body/" + getMemberInfos.mcProfile.name}/>
+                                                <Image width={150} src={"https://skins.danielraybone.com/v1/render/body/" + getMemberInfos.mcProfile.name} alt={'User Minecraft profile head'}/>
                                             </Flex>
                                             <Text textAlign={'center'} mt={2} fontStyle={'italic'}>{getMemberInfos.mcProfile.name}</Text>
                                         </>

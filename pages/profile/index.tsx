@@ -196,7 +196,8 @@ const ProfilePage: NextPage = () => {
             });
         }
 
-    }, [dispatch, auth, toast, router, userInfos?._id, userLoginLoading, userLoginError, isEditing, isAuthenticated, minecraftProfile]);
+    }, [dispatch, auth, toast, router, userInfos, userLoginLoading, userLoginError, isEditing, isAuthenticated, minecraftProfile,
+        accounts, instance]);
 
     useEffect(() => {
         if (updateUserProfileSuccess && !isEditing) {
@@ -209,7 +210,7 @@ const ProfilePage: NextPage = () => {
                 position: 'bottom-right',
             });
         }
-    }, [updateUserProfileSuccess, updateUserProfileError]);
+    }, [updateUserProfileSuccess, updateUserProfileError, isEditing, t, toast]);
 
     useEffect(() => {
         if(getMinecraftProfileError !== undefined){
@@ -222,7 +223,7 @@ const ProfilePage: NextPage = () => {
                 position: 'bottom-right',
             });
         }
-    }, [getMinecraftProfileError])
+    }, [getMinecraftProfileError, toast])
 
     let tagsMargin = 4;
 
@@ -232,7 +233,7 @@ const ProfilePage: NextPage = () => {
                 <Flex w={'full'} pt={100}>
                     <Box marginRight={10} borderRight={'1px solid white'} py={5} px={10}>
                         <Image src={userInfos?.mcProfile ? "https://skins.danielraybone.com/v1/head/"+userInfos.mcProfile.name+"?overlay=true" : userInfos?.profilePicture} borderRadius={'50%'} maxW={200} maxH={200}
-                               mx={1} mb={5} border={'5px solid white'} boxShadow={'0px 0px 20px 2px rgb(0,0,0,.15)'}/>
+                               mx={1} mb={5} border={'5px solid white'} boxShadow={'0px 0px 20px 2px rgb(0,0,0,.15)'} alt={'User image profile'}/>
                         {userInfos?.mcProfile && (
                             <>
                                 <Text textAlign={'center'} mt={2} fontStyle={'italic'}>{userInfos.mcProfile.name}</Text>

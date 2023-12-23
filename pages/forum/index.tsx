@@ -42,7 +42,7 @@ const ForumPage: NextPage = () => {
                 <Flex  w={'full'} my={200}>
                     <Spacer />
                     <Box>
-                        <Image src={'https://saofrance.net/images/undraw/reading.svg'} w={400}/>
+                        <Image src={'https://saofrance.net/images/undraw/reading.svg'} alt={'Undraw reading image'} w={400}/>
                     </Box>
                     <Spacer />
                 </Flex>

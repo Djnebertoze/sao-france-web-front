@@ -77,7 +77,7 @@ const ShopProductCard: FC<ShopProductCardProps> = (props) => {
     return(
         <>
             <Card direction={'column'} variant={'outline'} marginBottom={10} marginRight={15} maxW={300}>
-                <Image objectFit={'cover'} minW={'280px'} maxH={180} src={product.imageUrl != "" ? product.imageUrl : MainLogo.src}/>
+                <Image objectFit={'cover'} minW={'280px'} maxH={180} src={product.imageUrl != "" ? product.imageUrl : MainLogo.src} alt={'Shop product image'}/>
                 <CardBody>
                     <Stack mt={1} spacing={3}>
                         <Heading size={'md'}>{product.name}</Heading>
@@ -133,7 +133,7 @@ const RemoveProductModal: FC<RemoveProductModalProps> = (props) => {
         if (auth?.accessToken && !removeShopProductLoading){
             onClose();
         }
-    }, [removeShopProductLoading])
+    }, [removeShopProductLoading, auth?.accessToken, onClose])
 
 
     return (

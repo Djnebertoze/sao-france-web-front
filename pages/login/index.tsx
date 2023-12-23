@@ -69,7 +69,7 @@ const LoginPage: NextPage = () => {
                 position: 'bottom-right',
             });
         }
-    }, [dispatch, auth, toast, router, userLoginError, userInfos?._id]);
+    }, [dispatch, auth, toast, router, userLoginError, t]);
 
 
     return (
