@@ -16,8 +16,6 @@ import {
 } from "./userSlice";
 import {getAPIUrl} from "../helper";
 import {UpdateUserDto} from "./dtos/updateUserDto";
-import {NextRouter, useRouter} from "next/router";
-import {router} from "next/client";
 
 
 const STANDARD_HEADERS = {
@@ -146,10 +144,6 @@ export const getUserProfile = (accessToken: string | null) => async (dispatch: a
     } catch (error: any) {
         dispatch(getUserProfileError(error.message));
         console.log(error)
-        if (/*error.response && */error.response.status === 401) {
-            dispatch(emptyAct());
-            router.push('/login')
-        }
     }
 };
 
@@ -166,10 +160,6 @@ export const getUsersList = (accessToken: string | null | undefined) => async (d
     } catch (error: any) {
         dispatch(getUsersListError(error.message));
         console.log(error)
-        if (/*error.response && */error.response.status === 401) {
-            dispatch(emptyAct());
-            router.push('/login')
-        }
     }
 };
 

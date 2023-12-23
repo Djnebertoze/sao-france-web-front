@@ -29,7 +29,7 @@ const DesktopNavbar: FC<GenericNavbarProps> = (props) => {
     const dispatch = useDispatch();
     const { t, i18n } = useTranslation();
 
-    const { auth , userInfos, getUserInfosLoading} = useSelector(getUserState);
+    const { auth , userInfos, getUserInfosLoading,getUserInfosError} = useSelector(getUserState);
 
     useEffect(() => {
 
@@ -38,6 +38,12 @@ const DesktopNavbar: FC<GenericNavbarProps> = (props) => {
         }
 
     }, [auth?.accessToken, dispatch])
+
+    useEffect(() => {
+        if(getUserInfosError){
+            router.push('/login')
+        }
+    }, [getUserInfosError, router])
 
     let count=0;
 
