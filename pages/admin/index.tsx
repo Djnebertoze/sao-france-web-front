@@ -18,6 +18,7 @@ import {useDispatch, useSelector} from "../../store/store";
 import AdminNavbar from "../../components/molecules/AdminNavbar/AdminNavbar";
 import {getShopState} from "../../store/shop/shopSlice";
 import {getShopProducts} from "../../store/shop/shopActions";
+import {emptyAct} from "../../store/user/userActions";
 
 
 const AdminPage: NextPage = () => {
@@ -46,6 +47,10 @@ const AdminPage: NextPage = () => {
             router.push('/login');
         }
 
+        if(getUserInfosError){
+            dispatch(emptyAct())
+            router.push('/login')
+        }
 
 
     }, [dispatch, auth?.accessToken, router, userInfos, userLoginError, getUserInfosError]);

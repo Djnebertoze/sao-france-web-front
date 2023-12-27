@@ -38,7 +38,8 @@ const ShopPage: NextPage = () => {
         userLoginError, minecraftProfile, getMinecraftProfileError
     } = useSelector(getUserState)
     const {
-        shopProducts
+        shopProducts,
+        getShopProductsLoading
     } = useSelector(getShopState)
 
 
@@ -72,13 +73,15 @@ const ShopPage: NextPage = () => {
         /*console.log('usss')*/
 
         if (auth?.accessToken) {
-            dispatch(getUserProfile(auth.accessToken))
+            if (!userInfos){
+                dispatch(getUserProfile(auth.accessToken))
+            }
             if (userInfos) {
 
             }
         }
 
-        if(auth?.accessToken && shopProducts){
+        if(auth?.accessToken && shopProducts && !getShopProductsLoading){
             /*console.log('usss1')
             console.log(shopProducts)*/
             console.log('Got products')
@@ -98,7 +101,7 @@ const ShopPage: NextPage = () => {
             }
         }
 
-        if(auth?.accessToken && !shopProducts){
+        if(auth?.accessToken && !shopProducts && !getShopProductsLoading){
             console.log('Getting products')
             dispatch(getShopProducts(auth.accessToken))
         }
@@ -108,7 +111,7 @@ const ShopPage: NextPage = () => {
             router.push('/login');
         }
 
-    }, [dispatch, auth, toast, router, userInfos, userLoginLoading, userLoginError, minecraftProfile, shopProducts, temporaryCategories]);
+    }, [dispatch, auth, toast, router, userInfos, userLoginLoading, userLoginError, minecraftProfile, shopProducts, temporaryCategories, getShopProductsLoading]);
 
     useEffect(() => {
         if(getMinecraftProfileError !== undefined){
@@ -137,7 +140,6 @@ const ShopPage: NextPage = () => {
                             {shopProducts ? (
                                 currentShopCategories?.map((categorie) => {
                                     return (
-                                        <>
                                             <Flex w={200}
                                                   marginTop={2}
                                                   key={categorie._id}
@@ -154,7 +156,6 @@ const ShopPage: NextPage = () => {
                                                   _hover={{bgColor: 'rgb(255,255,255,1)', color: 'black'}}>
                                                 {categorie.name}
                                             </Flex>
-                                        </>
                                     );
                                 })
                             ) : (

@@ -24,9 +24,6 @@ import {login, register} from "../../store/user/userActions";
 import { useDispatch, useSelector } from "../../store/store";
 
 
-
-
-
 const LoginPage: NextPage = () => {
 
     const router: NextRouter = useRouter();
@@ -69,6 +66,18 @@ const LoginPage: NextPage = () => {
                 position: 'bottom-right',
             });
         }
+
+        if(userLoginError){
+            toast({
+                title: 'Impossible de se connecter',
+                description: userLoginError,
+                status: 'error',
+                duration: toastDuration,
+                isClosable: true,
+                position: 'bottom-right',
+            });
+        }
+
     }, [dispatch, auth, toast, router, userLoginError, t]);
 
 

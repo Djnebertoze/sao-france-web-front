@@ -137,38 +137,38 @@ const RegisterPage: NextPage = () => {
                         <Box w={'full'} px={10}>
                             <Text fontSize={15} mb={2} mt={5} color={'white'}><Text color={'red'} as={'a'}>*</Text> = {t('register.REQUIRED_LABEL')}</Text>
                             <Box borderLeft={'rgb(255,255,255,.4) 1px solid'} pl={5}>
-                                <Text fontSize={19} mb={2} mt={5} color={'white'}>{t('register.USERNAME_LABEL')} <Text color={'red'} as={'a'}>*</Text></Text>
+                                <Text fontSize={19} mb={2} mt={5} color={'white'}>{t('register.USERNAME_LABEL')} <Text color={'red'} as={'a'} fontSize={16}>*</Text></Text>
                                 <InputGroup w={'full'}>
                                     <Input w={'full'} color={'white'} placeholder={t('register.FILL_THE_FIELD_LABEL')} variant='flushed' value={usernameValue} onChange={handleUsernameChange}></Input>
                                 </InputGroup>
                             </Box>
 
                             <Box borderLeft={'rgb(255,255,255,.4) 1px solid'} pl={5}>
-                                <Text fontSize={19} color={'white'} mb={2} mt={5}>{t('register.LAST_NAME_LABEL')} <Text color={'red'} as={'a'}>*</Text></Text>
+                                <Text fontSize={19} color={'white'} mb={2} mt={5}>{t('register.LAST_NAME_LABEL')} <Text color={'red'} as={'a'} fontSize={16}>*</Text></Text>
                                 <InputGroup w={'full'}>
                                     <Input w={'full'} color={'white'} placeholder={t('register.FILL_THE_FIELD_LABEL')} variant='flushed' value={lastNameValue} onChange={handleLastNameChange}></Input>
                                 </InputGroup>
                             </Box>
                             <Box borderLeft={'rgb(255,255,255,.4) 1px solid'} pl={5}>
-                                <Text fontSize={19} color={'white'} mb={2} mt={5}>{t('register.FIRST_NAME_LABEL')} <Text color={'red'} as={'a'}>*</Text></Text>
+                                <Text fontSize={19} color={'white'} mb={2} mt={5}>{t('register.FIRST_NAME_LABEL')} <Text color={'red'} as={'a'} fontSize={16}>*</Text></Text>
                                 <InputGroup w={'full'}>
                                     <Input w={'full'} color={'white'} placeholder={t('register.FILL_THE_FIELD_LABEL')} variant='flushed' value={firstNameValue} onChange={handleFirstNameChange}></Input>
                                 </InputGroup>
                             </Box>
                             <Box borderLeft={!emailIsInvalid ? 'rgb(255,255,255,.4) 1px solid' : 'red 3px solid'} pl={5}>
-                                <Text fontSize={19} color={'white'} mb={2} mt={5}>{t('register.EMAIL_LABEL')} <Text color={'red'} as={'a'}>* {emailIsInvalid ? "Veuillez rentrer une adresse email valide !":""}</Text></Text>
+                                <Text fontSize={19} color={'white'} mb={2} mt={5}>{t('register.EMAIL_LABEL')} <Text color={'red'} as={'a'} fontSize={16}>* {emailIsInvalid ? "Veuillez rentrer une adresse email valide !":""}</Text></Text>
                                 <InputGroup w={'full'}>
                                     <Input w={'full'} color={'white'} placeholder={t('register.FILL_THE_FIELD_LABEL')} variant='flushed' type={'email'} value={emailValue} onChange={handleEmailChange}></Input>
                                 </InputGroup>
                             </Box>
                             <Box borderLeft={!passwordIsInvalid ? 'rgb(255,255,255,.4) 1px solid' : 'red 3px solid'} pl={5}>
-                                <Text fontSize={19} color={'white'} mb={2} mt={5}>{t('register.PASSWORD_LABEL')} <Text color={'red'} as={'a'}>* {passwordIsInvalid ? "Le mot de passe doit contenir au moins 8 caractères !":""}</Text></Text>
+                                <Text fontSize={19} color={'white'} mb={2} mt={5}>{t('register.PASSWORD_LABEL')} <Text color={'red'} as={'a'} fontSize={16}>* {passwordIsInvalid ? "Le mot de passe doit contenir au moins 8 caractères !":""}</Text></Text>
                                 <InputGroup w={'full'}>
                                     <Input w={'full'} color={'white'} placeholder={t('register.FILL_THE_FIELD_LABEL')} variant='flushed' type={'password'} value={passwordValue} onChange={handlePasswordChange}></Input>
                                 </InputGroup>
                             </Box>
                             <Box borderLeft={!passwordConfirmationIsInvalid ? 'rgb(255,255,255,.4) 1px solid' : 'red 3px solid'} pl={5}>
-                                <Text fontSize={19} color={'white'} mb={2} mt={5}>{t('register.VERIFICATION_PASSWORD_LABEL')} <Text color={'red'} as={'a'}>* {passwordConfirmationIsInvalid ? "Les deux mots de passes de correspondent pas !":""}</Text></Text>
+                                <Text fontSize={19} color={'white'} mb={2} mt={5}>{t('register.VERIFICATION_PASSWORD_LABEL')} <Text color={'red'} as={'a'} fontSize={16}>* {passwordConfirmationIsInvalid ? "Les deux mots de passes de correspondent pas !":""}</Text></Text>
                                 <InputGroup w={'full'}>
                                     <Input w={'full'} color={'white'} placeholder={t('register.FILL_THE_FIELD_LABEL')} variant='flushed' type={'password'} value={verificationPasswordValue} onChange={handleVerificationPasswordChange}></Input>
                                 </InputGroup>

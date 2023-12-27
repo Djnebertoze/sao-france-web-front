@@ -21,11 +21,18 @@ import {AtSignIcon, CalendarIcon, EmailIcon, ExternalLinkIcon, PhoneIcon} from "
 import {useEffect, useState} from "react";
 import {
     getMinecraftProfileRequest,
-    getMinecraftProfileSuccess,
+    getMinecraftProfileSuccess, getUserProfileError,
     getUserState,
     updateUserProfileRequest
 } from "../../store/user/userSlice";
-import {getUserProfile, login, register, requestXboxServices, updateUserProfile} from "../../store/user/userActions";
+import {
+    emptyAct,
+    getUserProfile,
+    login,
+    register,
+    requestXboxServices,
+    updateUserProfile
+} from "../../store/user/userActions";
 import {useDispatch, useSelector} from "../../store/store";
 import {use} from "i18next";
 import {Tags} from "../../components/atoms/Tags/Tags";
@@ -54,7 +61,8 @@ const ProfilePage: NextPage = () => {
         getUserInfosLoading,
         userLoginLoading,
         userLoginError, updateUserProfileSuccess, updateUserProfileError,
-        getMinecraftProfileLoading, minecraftProfile, getMinecraftProfileError
+        getMinecraftProfileLoading, minecraftProfile, getMinecraftProfileError,
+        getUserInfosError
     } = useSelector(getUserState)
 
     const {t} = useTranslation();
@@ -150,7 +158,9 @@ const ProfilePage: NextPage = () => {
 
     useEffect(() => {
         if (auth?.accessToken) {
-            dispatch(getUserProfile(auth.accessToken))
+            if (!userInfos && !getUserInfosLoading){
+                dispatch(getUserProfile(auth.accessToken))
+            }
             if (userInfos) {
                 setUsernameValue(userInfos.username)
                 setBioValue(userInfos.bio ? userInfos.bio : "")
@@ -173,9 +183,14 @@ const ProfilePage: NextPage = () => {
             }
         }
 
-        if (!auth?.accessToken && userLoginError !== undefined) {
+        if (userLoginError !== undefined) {
             console.log('userLoginError', userLoginError)
             router.push('/login');
+        }
+
+        if(!getUserInfosLoading && getUserInfosError){
+            dispatch(emptyAct())
+            router.push('/login')
         }
 
         if(isAuthenticated && !userInfos?.mcProfile){
@@ -197,7 +212,7 @@ const ProfilePage: NextPage = () => {
         }
 
     }, [dispatch, auth, toast, router, userInfos, userLoginLoading, userLoginError, isEditing, isAuthenticated, minecraftProfile,
-        accounts, instance]);
+        accounts, instance, getUserInfosError, getUserInfosLoading]);
 
     useEffect(() => {
         if (updateUserProfileSuccess && !isEditing) {

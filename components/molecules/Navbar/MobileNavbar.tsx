@@ -24,7 +24,7 @@ const MobileNavbar: FC<GenericNavbarProps> = (props) => {
 	return (
 		<Stack bg={useColorModeValue('white', 'gray.800')} p={4} display={{ lg: 'none' }}>
 			{props.navItems.map((navItem) => (
-				<MobileNavItem key={navItem.label} {...navItem} />
+				<MobileNavItem key={navItem.numberKey} {...navItem} />
 			))}
 		</Stack>
 	);

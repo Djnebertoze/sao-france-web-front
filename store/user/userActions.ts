@@ -100,14 +100,30 @@ export const login = (username: string, password: string) => async (dispatch: an
     dispatch(userLoginRequest());
     try {
         const response = await axios.post(`${getAPIUrl()}/auth/login`, {username: username, password: password});
-        localStorage.setItem('act', response.data.accessToken);
-        dispatch(
-            userLoginSuccess({
-                _id: response.data.userId,
-                accessToken: response.data.accessToken,
-            })
-        );
+        console.log(response)
+        if (response.data.status) {
+            switch (response.data.status) {
+                case 404:
+                    console.log('haha')
+                    dispatch(userLoginError('Aucun utilisateur avec ce pseudo trouvé.'));
+                    break;
+                case 401:
+                    dispatch(userLoginError('Mot de passe incorrect.'));
+                    break;
+
+            }
+        } else {
+            localStorage.setItem('act', response.data.accessToken);
+            dispatch(
+                userLoginSuccess({
+                    _id: response.data.userId,
+                    accessToken: response.data.accessToken,
+                })
+            );
+        }
+
     } catch (error: any) {
+        console.log(error)
         if (error.response.status === 401) {
             dispatch(userLoginError('Vérifiez vos identifiants'));
         } else if (error.response.status === 404) {
@@ -133,6 +149,7 @@ export const checkLogin = () => async (dispatch: any) => {
 };
 
 export const getUserProfile = (accessToken: string | null) => async (dispatch: any) => {
+    console.log('getting user profile')
     dispatch(getUserProfileRequest());
     try {
         const response = await axios.get(`${getAPIUrl()}/users/profile`, {

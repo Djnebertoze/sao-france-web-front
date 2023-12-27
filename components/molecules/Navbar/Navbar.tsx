@@ -52,30 +52,37 @@ const Navbar: FC = () => {
         {
             label: t('navbar.NAVBAR_HOME_LABEL'),
             href: '/',
+            numberKey:'1'
         },
         {
             label: t('navbar.NAVBAR_FORUM_LABEL'),
             href: '/forum',
+            numberKey:'2'
         },
         {
             label: t('navbar.NAVBAR_VOTES_LABEL'),
             href: '/votes',
+            numberKey:'3'
         },
         {
             label: "LOGO",
             href: '/',
+            numberKey:'4'
         },
         {
             label: t('navbar.NAVBAR_WIKI_LABEL'),
-            href: '/wiki'
+            href: '/wiki',
+            numberKey:'5'
         },
         {
             label: t('navbar.NAVBAR_JOIN_US_LABEL'),
-            href: '/join-us'
+            href: '/join-us',
+            numberKey:'6'
         },
         {
             label: t('navbar.NAVBAR_SHOP_LABEL'),
-            href: '/shop'
+            href: '/shop',
+            numberKey:'8'
         }
     ];
 

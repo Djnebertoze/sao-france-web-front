@@ -190,13 +190,6 @@ const ShopManager: NextPage = () => {
         temporaryCategories, toast]);
 
     useEffect(() => {
-        if(auth?.accessToken){
-            console.log("GETTING PRODUCTS")
-            dispatch(getShopProducts(auth.accessToken))
-        }
-    }, [dispatch, router, removeShopProductSuccess, auth?.accessToken])
-
-    useEffect(() => {
         if(auth?.accessToken && currentShopCategories){
             if (removeShopProductSuccess) {
                 toast({

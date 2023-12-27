@@ -111,10 +111,8 @@ const AdminNavbar: FC<SidebarWithHeaderProps> = (props) => {
 
         if(auth?.accessToken && userInfos?.roles){
 
-            // @ts-ignore # Ça fonctionne car c'est bien un string[] !!
             setUserRolesStr(abbreviateRoles(userInfos.roles))
 
-            // @ts-ignore # Ça fonctionne car c'est bien un string[] !!
             setUserPower(getMaxPowerFromUserRoles(userInfos.roles))
 
         }

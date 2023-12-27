@@ -3,6 +3,7 @@ export interface NavItem {
     subLabel?: string;
     children?: Array<NavItem>;
     href: string;
+    numberKey: string;
 }
 
 export interface GenericNavbarProps {

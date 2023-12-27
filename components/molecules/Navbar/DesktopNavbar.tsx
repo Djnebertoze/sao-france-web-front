@@ -32,18 +32,10 @@ const DesktopNavbar: FC<GenericNavbarProps> = (props) => {
     const { auth , userInfos, getUserInfosLoading,getUserInfosError} = useSelector(getUserState);
 
     useEffect(() => {
-
-        if(auth?.accessToken){
+        /*if(auth?.accessToken && !userInfos){
             dispatch(getUserProfile(auth.accessToken));
-        }
-
-    }, [auth?.accessToken, dispatch])
-
-    useEffect(() => {
-        if(getUserInfosError){
-            router.push('/login')
-        }
-    }, [getUserInfosError, router])
+        }*/
+    }, [auth?.accessToken, dispatch, userInfos])
 
     let count=0;
 
@@ -52,9 +44,7 @@ const DesktopNavbar: FC<GenericNavbarProps> = (props) => {
             <Flex direction={'row'} align={'center'} justify={'center'} flex={1} w={'full'} className={'flex'}>
                 {props.navItems.map((navItem) => {
                     return (
-                        <>
-
-                            <Box key={navItem.href} mx={{xl:41, lg:21}}>
+                            <Box key={navItem.numberKey} mx={{xl:41, lg:21}}>
                                 {navItem.label !== "LOGO" ? (
                                     <Link onClick={() => router.push(navItem.href)} className={navItem.href === "/shop" ? "navItem shop-label" : "navItem"} fontSize={20} id={'navItem'}>
                                         {navItem.label}
@@ -65,7 +55,6 @@ const DesktopNavbar: FC<GenericNavbarProps> = (props) => {
                                     </ChakraLink>
                                 )}
                             </Box>
-                        </>
                     );
 
                 })}
