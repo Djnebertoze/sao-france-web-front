@@ -6,47 +6,29 @@ import {
     Button,
     Container,
     Flex,
-    HStack,
     Image,
-    Spacer,
-    Text,
-    VStack,
     Input,
     InputGroup,
-    InputLeftElement, Checkbox, Link as ChakraLink, Link, useToast, Skeleton, InputLeftAddon, InputRightElement
+    InputLeftAddon,
+    InputLeftElement,
+    InputRightElement,
+    Spacer,
+    Text,
+    useToast
 } from "@chakra-ui/react";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {Form} from "@chakra-ui/theme/dist/components";
-import {AtSignIcon, CalendarIcon, EmailIcon, ExternalLinkIcon, PhoneIcon} from "@chakra-ui/icons";
 import {useEffect, useState} from "react";
-import {
-    getMinecraftProfileRequest,
-    getMinecraftProfileSuccess, getUserProfileError,
-    getUserState,
-    updateUserProfileRequest
-} from "../../store/user/userSlice";
-import {
-    emptyAct,
-    getUserProfile,
-    login,
-    register,
-    requestXboxServices,
-    updateUserProfile
-} from "../../store/user/userActions";
+import {getUserState} from "../../store/user/userSlice";
+import {emptyAct, getUserProfile, requestXboxServices, updateUserProfile} from "../../store/user/userActions";
 import {useDispatch, useSelector} from "../../store/store";
-import {use} from "i18next";
 import {Tags} from "../../components/atoms/Tags/Tags";
 
 import {getRoleById} from '../../common/roles/roles'
 
-import {faEdit, faCheck} from "@fortawesome/free-solid-svg-icons";
+import {faCheck, faEdit} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useIsAuthenticated, useMsal} from "@azure/msal-react";
 import {loginRequest} from "../../store/authConfig";
-import {callMsGraph} from "../../common/oauth/microsoft/graph";
-import axios from "axios";
-import parseJson from "parse-json";
-import {getAPIUrl} from "../../store/helper";
 import {Role} from "../../common/types/types";
 
 
@@ -68,7 +50,17 @@ const ProfilePage: NextPage = () => {
     const [isEditing, setEditing] = useState<boolean>(false)
 
     const handleEditing = () => {
-
+        if(emailIsInvalid){
+            toast({
+                title: 'Impossible de modifier votre profil',
+                description: 'Email non valide',
+                status: 'error',
+                duration: toastDuration,
+                isClosable: true,
+                position: 'bottom-right',
+            });
+            return;
+        }
         console.log('editing', isEditing)
         if (isEditing) {
             dispatch(updateUserProfile(auth?.accessToken, {
@@ -101,7 +93,7 @@ const ProfilePage: NextPage = () => {
     const [shopPointsValue, setShopPointsValue] = useState<number>();
 
     const [birthdayValue, setBirthdayValue] = useState<string>('');
-    const handleBithdayChange = (event: any) => setBirthdayValue(event.target.value);
+    const handleBirthdayChange = (event: any) => setBirthdayValue(event.target.value);
 
     const [emailIsInvalid, setEmailIsInvalid] = useState(false);
     const regexpEmail = new RegExp(
@@ -153,23 +145,6 @@ const ProfilePage: NextPage = () => {
     const toast = useToast();
     const toastDuration = 5000;
 
-    //const RECEIVE_AUTHORIZATION_CODE_URL = "https://login.live.com/oauth20_authorize.srf";
-    const RECEIVE_AUTHORIZATION_CODE_URL = "https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize";
-
-    const [mcirosoftAccessToken, setMcirosoftAccessToken] = useState("");
-
-    const AZURE_AD_CLIENT_ID = "26b12d6c-de49-4979-b639-b90f6bedf6cc";
-
-    const urlMicrosoft = RECEIVE_AUTHORIZATION_CODE_URL +
-        "?client_id="+AZURE_AD_CLIENT_ID
-        +"&response_type=code" +
-        "&approval_prompt=auto" +
-        "&scope=Xboxlive.signin offline_access" +
-        //"&redirect_url=http://localhost:3000/api/oauth/microsoft/callback"
-        "&redirect_uri=https://login.microsoftonline.com/common/oauth2/nativeclient"
-
-
-
 
     useEffect(() => {
         if (auth?.accessToken) {
@@ -201,7 +176,7 @@ const ProfilePage: NextPage = () => {
 
         if((!getUserInfosLoading && getUserInfosError) || localStorage.getItem('act') == undefined){
             dispatch(emptyAct())
-            router.push('/login')
+            router.push('/login').then(() => {});
         }
 
         if(isAuthenticated && !userInfos?.mcProfile){
@@ -216,8 +191,6 @@ const ProfilePage: NextPage = () => {
                 });
             });*/
             instance.acquireTokenSilent({...loginRequest, account: accounts[0]}).then((response) => {
-                setMcirosoftAccessToken(response.accessToken)
-                //console.log("REPONSE microsoft",response);
                 dispatch(requestXboxServices(response.accessToken, auth?.accessToken))
             });
         }
@@ -385,7 +358,7 @@ const ProfilePage: NextPage = () => {
                                                 bgColor={'transparent'}>Anniv.</InputLeftAddon>
                                 <Input fontSize={21} pr={150} value={birthdayValue}
                                        isDisabled={!isEditing} placeholder={'-'} type={'date'}
-                                       onChange={handleBithdayChange}></Input>
+                                       onChange={handleBirthdayChange}></Input>
                             </InputGroup>
 
                         </Box>
@@ -396,7 +369,7 @@ const ProfilePage: NextPage = () => {
                                     mt={10}
                                     borderRadius={2}
                                     onClick={isAuthenticated ? () => {
-                                        instance.logoutPopup({});
+                                        instance.logoutPopup({}).then(() => {});
                                     } : () => {
                                         instance.loginPopup(loginRequest).catch(e => {
                                             console.log(e);

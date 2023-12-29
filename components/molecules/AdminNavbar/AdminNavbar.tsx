@@ -1,48 +1,10 @@
-import {
-    IconButton,
-    Avatar,
-    Box,
-    CloseButton,
-    Flex,
-    HStack,
-    VStack,
-    Icon,
-    useColorModeValue,
-    Text,
-    Drawer,
-    DrawerContent,
-    BoxProps,
-    FlexProps,
-    Menu,
-    MenuButton,
-    MenuDivider,
-    MenuItem,
-    MenuList,
-    useDisclosure
-} from "@chakra-ui/react";
+import {FlexProps} from "@chakra-ui/react";
 import React, {FC, useEffect, useState} from "react";
-import {useTranslation} from "next-i18next";
-import {LinkItemProps} from "./types";
-import {CloseIcon, HamburgerIcon} from "@chakra-ui/icons";
-import {Simulate} from "react-dom/test-utils";
 import {getUserState} from "../../../store/user/userSlice";
-import { useDispatch, useSelector } from "../../../store/store";
+import {useDispatch, useSelector} from "../../../store/store";
 import {checkLogin, getUserProfile} from "../../../store/user/userActions";
 import {NextRouter, useRouter} from "next/router";
-
-import {
-    FiHome,
-    FiTrendingUp,
-    FiCompass,
-    FiStar,
-    FiSettings,
-    FiMenu,
-    FiBell,
-    FiChevronDown,
-} from 'react-icons/fi'
-import { IconType } from 'react-icons'
 import SidebarWithHeader from "./SideNavbar";
-import {use} from "i18next";
 import {getRoleById} from "../../../common/roles/roles";
 
 interface SidebarWithHeaderProps extends FlexProps{
@@ -83,7 +45,6 @@ const AdminNavbar: FC<SidebarWithHeaderProps> = (props) => {
 
 
     const dispatch = useDispatch();
-    const { t, i18n } = useTranslation();
 
     const {
         auth,
@@ -101,7 +62,7 @@ const AdminNavbar: FC<SidebarWithHeaderProps> = (props) => {
         }
 
         if(auth?.accessToken && userInfos && !(userInfos?.roles?.includes('admin') || userInfos?.roles?.includes('moderator') || userInfos?.roles?.includes('responsable') || userInfos?.roles?.includes('developer'))){
-            router.push('/')
+            router.push('/').then(() => {});
         }
 
         if(auth?.accessToken && !userInfos){

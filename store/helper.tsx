@@ -1,4 +1,3 @@
-import { store } from './store';
 import React from "react";
 
 export const getAPIUrl = () => {
@@ -23,7 +22,7 @@ export function occurrences(string: string, subString: string, allowOverlapping:
     subString += "";
     if (subString.length <= 0) return (string.length + 1);
 
-    var n = 0,
+    let n = 0,
         pos = 0,
         step = allowOverlapping ? 1 : subString.length;
 

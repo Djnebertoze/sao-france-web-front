@@ -1,24 +1,15 @@
-import { ChevronRightIcon } from "@chakra-ui/icons";
 import {
     Box,
     Button,
-    Flex,
-    Icon, Image, Link,
+    Flex, Image, Link,
     Link as ChakraLink,
-    Popover,
-    PopoverContent,
-    PopoverTrigger, Spacer,
-    Stack,
-    Text,
-    useColorModeValue
 } from "@chakra-ui/react";
 import {FC, useEffect} from "react";
-import { GenericNavbarProps, NavItem } from "./types";
+import { GenericNavbarProps } from "./types";
 import { NextRouter, useRouter } from "next/router";
 import MainLogo from '../../../public/images/MainLogo.png';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faPaperclip } from "@fortawesome/free-solid-svg-icons";
-import {useTranslation} from "next-i18next";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 import {useDispatch, useSelector} from "../../../store/store";
 import {getUserState} from "../../../store/user/userSlice";
 import {getUserProfile} from "../../../store/user/userActions";
@@ -27,17 +18,14 @@ const DesktopNavbar: FC<GenericNavbarProps> = (props) => {
     const router: NextRouter = useRouter();
 
     const dispatch = useDispatch();
-    const { t, i18n } = useTranslation();
 
-    const { auth , userInfos, getUserInfosLoading,getUserInfosError} = useSelector(getUserState);
+    const { auth , userInfos} = useSelector(getUserState);
 
     useEffect(() => {
         if(auth?.accessToken && !userInfos){
             dispatch(getUserProfile(auth.accessToken));
         }
     }, [auth?.accessToken, dispatch, userInfos])
-
-    let count=0;
 
     return (
         <>

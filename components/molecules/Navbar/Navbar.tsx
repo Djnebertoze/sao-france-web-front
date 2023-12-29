@@ -1,38 +1,14 @@
-import {
-    Avatar,
-    Badge, Box,
-    Button,
-    Collapse, Container,
-    Divider,
-    Flex,
-    HStack,
-    Icon,
-    IconButton,
-    Image,
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuList,
-    Skeleton, Spacer,
-    Stack,
-    Text,
-    useColorModeValue,
-    useDisclosure
-} from "@chakra-ui/react";
-import {FC, useEffect, useState} from "react";
+import {Box, Collapse, Flex, IconButton, Spacer, useColorModeValue, useDisclosure} from "@chakra-ui/react";
+import {FC, useEffect} from "react";
 import {useTranslation} from "next-i18next";
 import {NavItem} from "./types";
 import {CloseIcon, HamburgerIcon} from "@chakra-ui/icons";
 import DesktopNavbar from "./DesktopNavbar";
 import MobileNavbar from "./MobileNavbar";
-import {Simulate} from "react-dom/test-utils";
 import {getUserState} from "../../../store/user/userSlice";
-import { useDispatch, useSelector } from "../../../store/store";
-import { checkLogin } from "../../../store/user/userActions";
+import {useDispatch, useSelector} from "../../../store/store";
+import {checkLogin} from "../../../store/user/userActions";
 import {NextRouter, useRouter} from "next/router";
-import NextTopLoader from "nextjs-toploader";
-
-
 
 
 const Navbar: FC = () => {
@@ -40,9 +16,7 @@ const Navbar: FC = () => {
 
 
     const dispatch = useDispatch();
-    const { t, i18n } = useTranslation();
-
-    const [scrollY, setScrollY] = useState(0)
+    const { t } = useTranslation();
 
     const { auth} = useSelector(getUserState)
 

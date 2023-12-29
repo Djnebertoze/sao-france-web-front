@@ -1,5 +1,3 @@
-import { LogLevel } from "@azure/msal-browser";
-
 export const msalConfig = {
     auth: {
         clientId: "26b12d6c-de49-4979-b639-b90f6bedf6cc",
@@ -18,8 +16,4 @@ export const msalConfig = {
 
 export const loginRequest = {
     scopes: ["Xboxlive.signin","offline_access"]
-};
-
-export const graphConfig = {
-    graphMeEndpoint: "https://graph.microsoft.com/v1.0/me"
 };

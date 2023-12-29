@@ -6,7 +6,6 @@ import {Provider} from "react-redux";
 import {ChakraProvider} from "@chakra-ui/react";
 import {store} from "../store/store";
 import ErrorBoundary from "../components/ErrorBoundary";
-import Favicon from "../public/images/favicon.ico";
 import {theme} from "../styles/theme";
 import Navbar from "../components/molecules/Navbar/Navbar";
 import "@fortawesome/fontawesome-svg-core/styles.css";
@@ -14,8 +13,8 @@ import {config} from "@fortawesome/fontawesome-svg-core";
 import {MsalProvider} from "@azure/msal-react";
 import {PublicClientApplication} from "@azure/msal-browser";
 import {msalConfig} from "../store/authConfig";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
+import {loadStripe} from "@stripe/stripe-js";
+import {Elements} from "@stripe/react-stripe-js";
 import Footer from "../components/molecules/Footer/Footer";
 import NextTopLoader from "nextjs-toploader";
 

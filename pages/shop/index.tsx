@@ -1,21 +1,8 @@
 import {NextPage} from "next";
 import {NextRouter, useRouter} from "next/router";
-import {useTranslation} from "next-i18next";
-import {
-    Box,
-    Container,
-    Flex,
-    Text,
-    useToast,
-    Skeleton,
-    Wrap,
-} from "@chakra-ui/react";
+import {Box, Container, Flex, Skeleton, Text, useToast, Wrap,} from "@chakra-ui/react";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useEffect, useState} from "react";
-import {
-    getUserState,
-} from "../../store/user/userSlice";
-import {getUserProfile, login, register, requestXboxServices, updateUserProfile} from "../../store/user/userActions";
 import {useDispatch, useSelector} from "../../store/store";
 import ShopProductCard from "../../components/molecules/ShopProductCard/ShopProductCard";
 import {ShopCategorie, ShopProduct} from "../../common/types/types";
@@ -42,11 +29,7 @@ const ShopPage: NextPage = () => {
         getShopProductsLoading
     } = useSelector(getShopState)
 
-
-    const {t} = useTranslation();
-
     const toast = useToast();
-    const toastDuration = 1000;
 
     const [currentShopCategories, setCurrentShopCategories] = useState<Array<ShopCategorie>>()
 
@@ -101,32 +84,12 @@ const ShopPage: NextPage = () => {
             }
         }
 
-        if(/*auth?.accessToken && */!shopProducts && !getShopProductsLoading){
+        if(!shopProducts && !getShopProductsLoading){
             console.log('Getting products')
             dispatch(getShopProducts())
         }
 
-        /*if (!auth?.accessToken && userLoginError !== undefined) {
-            console.log('userLoginError', userLoginError)
-            router.push('/login');
-        }*/
-
-    }, [dispatch, /*auth*/, toast, router, /*userInfos, userLoginLoading, userLoginError, minecraftProfile*/, shopProducts, temporaryCategories, getShopProductsLoading]);
-
-    /*useEffect(() => {
-        if(getMinecraftProfileError !== undefined){
-            toast({
-                title: "Impossible de récupérer votre compte Minecraft",
-                description: getMinecraftProfileError,
-                status: 'error',
-                duration: toastDuration,
-                isClosable: true,
-                position: 'bottom-right',
-            });
-        }
-    }, [getMinecraftProfileError, toast])*/
-
-    let tagsMargin = 4;
+    }, [dispatch,toast, router,  shopProducts, temporaryCategories, getShopProductsLoading]);
 
     return (
         <Container maxW={'full'} margin={0} padding={0}>

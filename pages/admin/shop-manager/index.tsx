@@ -6,21 +6,8 @@ import {getUserState} from "../../../store/user/userSlice";
 import {getShopState} from "../../../store/shop/shopSlice";
 import {ShopCategorie, ShopProduct} from "../../../common/types/types";
 import {shopCategories} from "../../../common/shop/shopCategories";
-import {useCallback, useEffect, useState} from "react";
-import {
-    Box,
-    Button,
-    Container,
-    Flex,
-    HStack,
-    Image,
-    Spacer,
-    Text,
-    VStack,
-    Input,
-    InputGroup,
-    InputLeftElement, Checkbox, Link as ChakraLink, Link, useToast, Skeleton, InputLeftAddon, InputRightElement, Wrap
-} from "@chakra-ui/react";
+import {useEffect, useState} from "react";
+import {Box, Button, Flex, Text, useToast, Wrap} from "@chakra-ui/react";
 import {getShopProducts} from "../../../store/shop/shopActions";
 import AdminNavbar from "../../../components/molecules/AdminNavbar/AdminNavbar";
 import ShopProductCard from "../../../components/molecules/ShopProductCard/ShopProductCard";
@@ -35,7 +22,7 @@ const ShopManager: NextPage = () => {
     const {
         auth,
         userInfos,
-        userLoginError, updateUserProfileSuccess, updateUserProfileError,
+        userLoginError,
         getUserInfosError
     } = useSelector(getUserState)
 
@@ -139,27 +126,22 @@ const ShopManager: NextPage = () => {
     const toastDuration = 10000;
 
     useEffect(() => {
-        console.log('1')
         if(auth?.accessToken && userInfos && !(userInfos?.roles?.includes('admin'))){
-            router.push('/')
+            router.push('/').then(() => {});
         }
 
         if (!auth?.accessToken && userLoginError !== undefined) {
             console.log('userLoginError', userLoginError)
-            router.push('/login');
+            router.push('/login').then(() => {});
         }
 
 
         if(auth?.accessToken && shopProducts){
-
-            console.log(shopProducts)
             temporaryCategories.sort((a, b) => a.place - b.place);
 
 
 
             setCurrentShopCategories(temporaryCategories)
-
-            console.log("cat", temporaryCategories)
 
             setSelectedProducts([])
             setSelectedCategorie(temporaryCategories[0]._id)
@@ -250,7 +232,7 @@ const ShopManager: NextPage = () => {
                     }
                 </Flex>
                 <Flex w={'full'} h={800} bgColor={'rgb(76,78,82,.85)'} borderTop={'1px solid rgb(0,0,0,.2)'} borderRadius={5} flexDirection={'column'} px={7} pt={5} overflow={"auto"}>
-                    <Button colorScheme={'blue'} variant={'solid'} marginBottom={3} py={4} onClick={(e) => router.push('/admin/shop-manager/create')}>
+                    <Button colorScheme={'blue'} variant={'solid'} marginBottom={3} py={4} onClick={() => router.push('/admin/shop-manager/create')}>
                         + Créer
                     </Button>
 

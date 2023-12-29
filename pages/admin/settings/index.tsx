@@ -3,27 +3,8 @@ import {NextRouter, useRouter} from "next/router";
 import {useDispatch} from "../../../store/store";
 import {useSelector} from "react-redux";
 import {getUserState} from "../../../store/user/userSlice";
-import {getShopState} from "../../../store/shop/shopSlice";
-import {ShopCategorie, ShopProduct} from "../../../common/types/types";
-import {shopCategories} from "../../../common/shop/shopCategories";
-import {useEffect, useState} from "react";
-import {
-    Box,
-    Button,
-    Container,
-    Flex,
-    HStack,
-    Image,
-    Spacer,
-    Text,
-    VStack,
-    Input,
-    InputGroup,
-    InputLeftElement, Checkbox, Link as ChakraLink, Link, useToast, Skeleton, InputLeftAddon, InputRightElement, Wrap
-} from "@chakra-ui/react";
-import {getShopProducts} from "../../../store/shop/shopActions";
+import {useEffect} from "react";
 import AdminNavbar from "../../../components/molecules/AdminNavbar/AdminNavbar";
-import ShopProductCard from "../../../components/molecules/ShopProductCard/ShopProductCard";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
 
@@ -35,22 +16,18 @@ const SettingsPage: NextPage = () => {
     const {
         auth,
         userInfos,
-        userLoginError, updateUserProfileSuccess, updateUserProfileError,
+        userLoginError,
         getUserInfosError
     } = useSelector(getUserState)
 
-
-    const toast = useToast();
-    const toastDuration = 10000;
-
     useEffect(() => {
         if(auth?.accessToken && userInfos && !(userInfos?.roles?.includes('admin'))){
-            router.push('/')
+            router.push('/').then(() => {})
         }
 
         if (!auth?.accessToken && userLoginError !== undefined) {
             console.log('userLoginError', userLoginError)
-            router.push('/login');
+            router.push('/login').then(() => {});
         }
 
     }, [dispatch, auth?.accessToken, router, userInfos, userLoginError, getUserInfosError]);

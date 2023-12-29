@@ -3,40 +3,39 @@
 'use client'
 
 import {
-    IconButton,
     Avatar,
     Box,
+    BoxProps,
     CloseButton,
-    Flex,
-    HStack,
-    VStack,
-    Icon,
-    //useColorModeValue,
-    Text,
     Drawer,
     DrawerContent,
-    useDisclosure,
-    BoxProps,
+    Flex,
     FlexProps,
+    HStack,
+    Icon,
+    IconButton,
     Menu,
     MenuButton,
     MenuDivider,
     MenuItem,
     MenuList,
+    Text,
+    useDisclosure,
+    VStack,
 } from '@chakra-ui/react'
 import {
-    FiHome,
-    FiTrendingUp,
-    FiCompass,
-    FiStar,
-    FiSettings,
-    FiMenu,
     FiBell,
-    FiChevronDown, FiShoppingCart, FiBriefcase, FiUsers,
+    FiBriefcase,
+    FiChevronDown,
+    FiHome,
+    FiMenu,
+    FiSettings,
+    FiShoppingCart,
+    FiTrendingUp,
+    FiUsers,
 } from 'react-icons/fi'
-import { IconType } from 'react-icons'
+import {IconType} from 'react-icons'
 import React from "react";
-import MainLogo from '../../../public/images/MainLogo.png';
 import {NextRouter, useRouter} from "next/router";
 
 interface LinkItemProps {
@@ -106,7 +105,7 @@ const SidebarContent = ({ onClose, userPower, selected, ...rest }: SidebarProps)
         LinkItems.map((link) => {
             if (userPower >= link.powerRequired) {
                 return (
-                    <NavItem key={link.name} icon={link.icon} onClick={(e) => router.push('/admin' + link.href)} bgColor={selected === link.href ? 'rgb(0,0,0,.3)' : ''}>
+                    <NavItem key={link.name} icon={link.icon} onClick={() => router.push('/admin' + link.href)} bgColor={selected === link.href ? 'rgb(0,0,0,.3)' : ''}>
                         {selected === link.href ? '- ' : ''}{link.name}
                     </NavItem>
                 );
@@ -217,7 +216,7 @@ const MobileNav = ({ onOpen, name, role,imageUrl, ...rest }: MobileProps) => {
     borderColor={'whiteAlpha.300'}>
     <MenuItem bg={'rgb(38,39,41,1)'} _hover={{bg: 'rgb(48,49,51,1)'}} borderRadius={10} >Profile</MenuItem>
     <MenuDivider />
-    <MenuItem bg={'rgb(38,39,41,1)'} _hover={{bg: 'rgb(48,49,51,1)'}} borderRadius={10} color={'red'} onClick={(event) => router.push('/profile')}>Revenir au site</MenuItem>
+    <MenuItem bg={'rgb(38,39,41,1)'} _hover={{bg: 'rgb(48,49,51,1)'}} borderRadius={10} color={'red'} onClick={() => router.push('/profile')}>Revenir au site</MenuItem>
     </MenuList>
     </Menu>
     </Flex>

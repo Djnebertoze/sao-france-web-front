@@ -16,19 +16,9 @@ a {
     box-sizing: border-box;
 }
 
-.rounded {
-    border-radius: 1rem;
-    width: 100%;
-}
-
 .main-background {
     background: rgb(55,56,58,1);
     /*background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(228,236,206,1) 100%);*/
-    /*border-bottom: black 1px solid;*/
-}
-.main-background-reverse {
-    background: rgb(255,255,255);
-    background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(228,236,206,1) 100%);
     /*border-bottom: black 1px solid;*/
 }
 
@@ -37,11 +27,7 @@ a {
     /*background: linear-gradient(145deg, #bbe3d1, #e4ecce, #a6c2e0);*/
     /*border-bottom: black 1px solid;*/
 }
-.secondary-background-reverse {
-    background: rgb(255,255,255);
-    background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(187,227,209,1) 100%);
-    /*border-bottom: black 1px solid;*/
-}
+
 
 .colored-title-text{
     background: linear-gradient(to right, #a1e5c2 0%, #2b82e0 100%);
@@ -50,7 +36,7 @@ a {
     background-clip: text;
     text-fill-color: transparent;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0px 0px 30px rgba(255,255,255,0.3);
+    text-shadow: 0 0 30px rgba(255,255,255,0.3);
     -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: white;
 }
@@ -77,14 +63,6 @@ a {
 
 a:hover{
     text-decoration: none!important;
-}
-
-#navItem{
-    transition: all 0.3s
-}
-
-#navItem:hover{
-    color: #a1e5c2;
 }
 
 .clickable-link{

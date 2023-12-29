@@ -1,21 +1,10 @@
 import {NextPage} from "next";
 import {NextRouter, useRouter} from "next/router";
 import {useTranslation} from "next-i18next";
-import {
-    Box,
-    Button,
-    Container,
-    Flex,
-    Image,
-    Spacer,
-    Text,useToast, Skeleton
-} from "@chakra-ui/react";
+import {Box, Container, Flex, Image, Skeleton, Spacer, Text} from "@chakra-ui/react";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {useEffect, useState} from "react";
-import {
-    getUserState,
-} from "../../store/user/userSlice";
-import {getUserProfile} from "../../store/user/userActions";
+import {useEffect} from "react";
+import {getUserState,} from "../../store/user/userSlice";
 import {useDispatch, useSelector} from "../../store/store";
 import {Tags} from "../../components/atoms/Tags/Tags";
 
@@ -32,8 +21,7 @@ const ProfilePage: NextPage = () => {
     const {
         auth,
         userInfos,
-        userLoginLoading,
-        userLoginError, updateUserProfileSuccess, updateUserProfileError,
+        userLoginError,
         getUserInfosError
     } = useSelector(getUserState)
 
@@ -44,15 +32,10 @@ const ProfilePage: NextPage = () => {
 
     const {t} = useTranslation();
 
-
-    const toast = useToast();
-    const toastDuration = 1000;
-
-
     useEffect(() => {
         if (!auth?.accessToken && userLoginError !== undefined) {
             console.log('userLoginError', userLoginError)
-            router.push('/login');
+            router.push('/login').then(() => {});
         }
 
         if(auth?.accessToken && !getMemberInfos){

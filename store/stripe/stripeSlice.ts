@@ -1,5 +1,5 @@
-import { createSlice, Draft } from "@reduxjs/toolkit";
-import {ShopProduct, StripePrice, StripeProduct} from "../../common/types/types";
+import {createSlice, Draft} from "@reduxjs/toolkit";
+import {StripePrice, StripeProduct} from "../../common/types/types";
 
 export interface StripeState {
     getStripeProductsLoading: boolean;

@@ -1,25 +1,7 @@
-import { BellIcon, ChatIcon, ChevronDownIcon } from "@chakra-ui/icons";
-import {
-  Button,
-  Collapse,
-  HStack,
-  Icon,
-  Image,
-  Link as ChakraLink,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Stack,
-  Text,
-  useColorModeValue,
-  useDisclosure
-} from "@chakra-ui/react";
-import {FC, useEffect} from "react";
-import { Link } from "../../atoms/Links/Links";
-import { GenericNavbarProps, NavItem } from "./types";
-import {Simulate} from "react-dom/test-utils";
-import {child} from "winston";
+import {ChevronDownIcon} from "@chakra-ui/icons";
+import {Collapse, Icon, Link as ChakraLink, Stack, useColorModeValue, useDisclosure} from "@chakra-ui/react";
+import {FC} from "react";
+import {GenericNavbarProps, NavItem} from "./types";
 
 const MobileNavbar: FC<GenericNavbarProps> = (props) => {
 	return (

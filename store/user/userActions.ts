@@ -17,12 +17,6 @@ import {
 import {getAPIUrl} from "../helper";
 import {UpdateUserDto} from "./dtos/updateUserDto";
 
-
-const STANDARD_HEADERS = {
-    'Content-Type': 'application/json',
-    Accept: 'application/json'
-}
-
 export const register =
     (username: string,
      lastName: string,
@@ -89,7 +83,7 @@ export const register =
         }
     }
 
-export const emptyAct = () => async (dispatch: any) => {
+export const emptyAct = () => async () => {
 
     localStorage.removeItem('act');
     localStorage.removeItem('scp');

@@ -1,13 +1,12 @@
 import {FC, useEffect} from "react";
-import { NextRouter, useRouter } from "next/router";
+import {NextRouter, useRouter} from "next/router";
 import {Box, Flex, Image, Link, Spacer, Text, Wrap} from "@chakra-ui/react";
 import {useTranslation} from "next-i18next";
-import {BiX} from "react-icons/bi";
 import {getCDNUrl} from "../../../store/helper";
 
 const Footer: FC = () => {
     const router: NextRouter = useRouter();
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
 
     useEffect(() => {
         if(document.URL.includes('admin')){

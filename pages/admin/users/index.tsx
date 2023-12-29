@@ -3,36 +3,23 @@ import {NextRouter, useRouter} from "next/router";
 import {useDispatch} from "../../../store/store";
 import {useSelector} from "react-redux";
 import {getUserState} from "../../../store/user/userSlice";
-import {getShopState} from "../../../store/shop/shopSlice";
-import {ShopCategorie, ShopProduct} from "../../../common/types/types";
-import {shopCategories} from "../../../common/shop/shopCategories";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {
     Box,
     Button,
-    Container,
     Flex,
-    HStack,
-    Image,
+    Skeleton,
     Spacer,
-    Text,
-    VStack,
-    Input,
-    InputGroup,
-    InputLeftElement, Checkbox, Link as ChakraLink, Link, useToast, Skeleton, InputLeftAddon, InputRightElement, Wrap,
     Table,
-    Thead,
-    Tbody,
-    Tfoot,
-    Tr,
-    Th,
-    Td,
-    TableCaption,
     TableContainer,
+    Tbody,
+    Text,
+    Th,
+    Thead,
+    Tr,
+    useToast,
 } from "@chakra-ui/react";
-import {getShopProducts} from "../../../store/shop/shopActions";
 import AdminNavbar from "../../../components/molecules/AdminNavbar/AdminNavbar";
-import ShopProductCard from "../../../components/molecules/ShopProductCard/ShopProductCard";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {getUsersList} from "../../../store/user/userActions";
 import {FiRefreshCcw} from "react-icons/fi";
@@ -46,7 +33,7 @@ const AdminUsersManagerPage: NextPage = () => {
     const {
         auth,
         userInfos,
-        userLoginError, updateUserProfileSuccess, updateUserProfileError,
+        userLoginError,
         getUserInfosError,
         getUsersListLoading, getUsersListError, usersList
     } = useSelector(getUserState)
@@ -60,12 +47,12 @@ const AdminUsersManagerPage: NextPage = () => {
     useEffect(() => {
         console.log('1')
         if(auth?.accessToken && userInfos && !(userInfos?.roles?.includes('admin'))){
-            router.push('/')
+            router.push('/').then(() => {});
         }
 
         if (!auth?.accessToken && userLoginError !== undefined) {
             console.log('userLoginError', userLoginError)
-            router.push('/login');
+            router.push('/login').then(() => {});
         }
 
     }, [dispatch, auth?.accessToken, router, userInfos, userLoginError, getUserInfosError]);
@@ -90,8 +77,6 @@ const AdminUsersManagerPage: NextPage = () => {
             toastError('Impossible de récupérer la liste des joueurs.')
         }
     },[usersList, getUsersListLoading, getUsersListError, auth?.accessToken, dispatch, toast])
-
-    const th_parameters = {color:'rgb(255,255,255,.6)', textTransform: 'none'}
 
     return (
         <AdminNavbar selected={'/users'}>

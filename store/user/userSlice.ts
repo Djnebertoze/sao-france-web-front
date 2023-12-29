@@ -68,7 +68,6 @@ export const userSlice = createSlice({
     reducers: {
         userLoginRequest: (state: Draft<typeof initialState>) => {
             state.userLoginLoading = true;
-            state.auth = state.auth;
             state.userLoginError = undefined;
         },
         userLoginSuccess: (state: Draft<typeof initialState>, { payload }) => {
@@ -79,14 +78,12 @@ export const userSlice = createSlice({
 
         userLoginError: (state: Draft<typeof initialState>, { payload }) => {
             state.userLoginLoading = false;
-            state.auth = state.auth;
             state.userLoginError = payload;
         },
 
 
         userRegisterRequest: (state: Draft<typeof initialState>) => {
             state.userRegisterLoading = true;
-            state.auth = state.auth;
             state.userRegisterSuccess = undefined;
             state.userRegisterError = undefined;
         },
@@ -98,7 +95,6 @@ export const userSlice = createSlice({
         },
         userRegisterError: (state: Draft<typeof initialState>, { payload }) => {
             state.userRegisterLoading = false;
-            state.auth = state.auth;
             state.userRegisterSuccess = undefined;
             state.userRegisterError = payload;
         },
@@ -133,7 +129,6 @@ export const userSlice = createSlice({
 
         getUserProfileRequest: (state: Draft<typeof initialState>) => {
             state.getUserInfosLoading = true;
-            state.userInfos = state.userInfos;
             state.getUserInfosError = undefined;
         },
         getUserProfileSuccess: (state: Draft<typeof initialState>, { payload }) => {
@@ -184,7 +179,6 @@ export const userSlice = createSlice({
 
         getMinecraftProfileRequest: (state: Draft<typeof initialState>) => {
             state.getMinecraftProfileLoading = true;
-            state.minecraftProfile = state.minecraftProfile;
             state.getMinecraftProfileError = undefined;
         },
         getMinecraftProfileSuccess: (state: Draft<typeof initialState>, { payload }) => {
@@ -210,10 +204,6 @@ export const {
     userRegisterRequest,
     userRegisterSuccess,
     userRegisterError,
-
-    userLogoutRequest,
-    userLogoutSuccess,
-    userLogoutError,
 
     getUsersListRequest,
     getUsersListSuccess,

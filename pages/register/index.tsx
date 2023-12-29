@@ -4,27 +4,22 @@ import {useTranslation} from "next-i18next";
 import {
     Box,
     Button,
+    Checkbox,
     Container,
     Flex,
-    HStack,
-    Image,
-    Spacer,
-    Text,
-    VStack,
     Input,
     InputGroup,
-    InputLeftElement, Checkbox, Link as ChakraLink, Link, useToast
+    InputLeftElement,
+    Link,
+    Text,
+    useToast
 } from "@chakra-ui/react";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {Form} from "@chakra-ui/theme/dist/components";
-import {AtSignIcon, CalendarIcon, EmailIcon, ExternalLinkIcon, PhoneIcon} from "@chakra-ui/icons";
+import {CalendarIcon, ExternalLinkIcon, PhoneIcon} from "@chakra-ui/icons";
 import {useEffect, useState} from "react";
-import { getUserState } from "../../store/user/userSlice";
+import {getUserState} from "../../store/user/userSlice";
 import {register} from "../../store/user/userActions";
-import { useDispatch, useSelector } from "../../store/store";
-
-
-
+import {useDispatch, useSelector} from "../../store/store";
 
 
 const RegisterPage: NextPage = () => {
@@ -32,7 +27,7 @@ const RegisterPage: NextPage = () => {
     const router: NextRouter = useRouter();
     const dispatch = useDispatch();
 
-    const { userRegisterLoading, auth, userInfos, userRegisterError, userRegisterSuccess } = useSelector(getUserState)
+    const { userRegisterLoading, auth, userRegisterError, userRegisterSuccess } = useSelector(getUserState)
 
     const { t } = useTranslation();
 
@@ -92,20 +87,20 @@ const RegisterPage: NextPage = () => {
     const handlePhoneNumberChange = (event: any) => setPhoneNumberValue(event.target.value);
 
     const [birthdayValue, setBirthdayValue] = useState<string>('');
-    const handleBithdayChange = (event: any) => setBirthdayValue(event.target.value);
+    const handleBirthdayChange = (event: any) => setBirthdayValue(event.target.value);
 
     const [acceptMailsValue, setAcceptMailsValue] = useState<boolean>(true);
-    const handleAcceptMailsChange = (event: any) => setAcceptMailsValue(!acceptMailsValue);
+    const handleAcceptMailsChange = () => setAcceptMailsValue(!acceptMailsValue);
 
     const [acceptCGUValue, setAcceptCGUValue] = useState<boolean>(false);
-    const handleAcceptCGUChange = (event: any) => setAcceptCGUValue(!acceptCGUValue);
+    const handleAcceptCGUChange = () => setAcceptCGUValue(!acceptCGUValue);
 
     const toast = useToast();
     const toastDuration = 5000;
 
     useEffect(() => {
         if(userRegisterSuccess){
-            router.push('/profile');
+            router.push('/profile').then(() => {});
             toast({
                 title: t('register.REGISTER_USER_CREATION_SUCCESS_TOAST_TITLE'),
                 description: t('register.REGISTER_USER_CREATION_SUCCESS_TOAST_DESCRIPTION'),
@@ -198,7 +193,7 @@ const RegisterPage: NextPage = () => {
                                     <InputLeftElement pointerEvents='none'>
                                         <CalendarIcon color='white' />
                                     </InputLeftElement>
-                                    <Input w={'full'} color={'white'} placeholder={t('register.FILL_THE_FIELD_LABEL')} variant='flushed' type={'date'} value={birthdayValue} onChange={handleBithdayChange}></Input>
+                                    <Input w={'full'} color={'white'} placeholder={t('register.FILL_THE_FIELD_LABEL')} variant='flushed' type={'date'} value={birthdayValue} onChange={handleBirthdayChange}></Input>
                                 </InputGroup>
                             </Box>
                             <Box borderLeft={'rgb(255,255,255,.4) 1px solid'} pl={5} mt={5}>

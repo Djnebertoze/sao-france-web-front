@@ -14,7 +14,6 @@ import {
     getStripeProductsRequest,
     getStripeProductsSuccess
 } from "./stripeSlice";
-import {getShopProductsError, getShopProductsSuccess} from "../shop/shopSlice";
 
 export const getStripeProducts = (accessToken: string | undefined) => async (dispatch: any) => {
     dispatch(getStripeProductsRequest())

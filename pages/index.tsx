@@ -1,19 +1,13 @@
-import {Box, Button, Center, Container, Flex, HStack, Image, Link, Spacer, Text} from "@chakra-ui/react";
-import { NextPage } from "next";
+import {Box, Button, Center, Container, Flex, Image, Spacer, Text} from "@chakra-ui/react";
+import {NextPage} from "next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {MainButton} from "../components/atoms/Buttons/Buttons";
 
-import perso1 from '../public/images/home/perso1.png';
-
-import { useTranslation } from "next-i18next";
-import {NextRouter, useRouter} from "next/router";
+import {useTranslation} from "next-i18next";
 
 import {getCDNUrl} from "../store/helper";
 
 
 const HomePage: NextPage = () => {
-
-    const router: NextRouter = useRouter();
 
     const { t } = useTranslation();
 
@@ -190,7 +184,6 @@ const HomePage: NextPage = () => {
                         <Spacer display={{lg:'flex', base:'none'}}/>
                         <Box display={{sm:'block', base: 'none'}}>
                         <iframe src="https://discord.com/widget?id=583776836325081090&theme=dark" width="350" height="500"
-                                frameBorder="0"
                                 sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
                         </Box>
                     </Flex>

@@ -1,5 +1,5 @@
 import {FC} from "react";
-import {Box, BoxProps, Button, Flex, Text, TextProps} from "@chakra-ui/react";
+import {BoxProps, Flex, Text, TextProps} from "@chakra-ui/react";
 
 
 export const Tags: FC<BoxProps & TextProps> = (props) => {

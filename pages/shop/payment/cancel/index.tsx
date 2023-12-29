@@ -1,29 +1,11 @@
 import {NextPage} from "next";
 import {NextRouter, useRouter} from "next/router";
-import {useTranslation} from "next-i18next";
-import {
-    Box,
-    Container,
-    Flex,
-    Text,
-    useToast,
-    Skeleton,
-    Wrap, Image, Center, Spacer, Button, Spinner,
-} from "@chakra-ui/react";
+import {Box, Button, Center, Container, Flex, Spacer, Text, useToast,} from "@chakra-ui/react";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import React, {useEffect, useState} from "react";
-import {
-    getUserState,
-} from "../../../../store/user/userSlice";
+import React, {useEffect} from "react";
+import {getUserState,} from "../../../../store/user/userSlice";
 import {getUserProfile} from "../../../../store/user/userActions";
 import {useDispatch, useSelector} from "../../../../store/store";
-
-
-import {getStripePaymentSuccessRequest, getStripeState} from "../../../../store/stripe/stripeSlice";
-import {getStripePaymentSuccess} from "../../../../store/stripe/stripeActions";
-import {CgSearchLoading} from "react-icons/cg";
-import {AiOutlineLoading} from "react-icons/ai";
-
 
 
 const CancelPaymentPage: NextPage = () => {
@@ -34,17 +16,12 @@ const CancelPaymentPage: NextPage = () => {
     const {
         auth,
         userInfos,
-        getUserInfosLoading,
         userLoginLoading,
-        userLoginError,minecraftProfile, getMinecraftProfileError
+        userLoginError,minecraftProfile
     } = useSelector(getUserState)
 
 
-
-    const {t} = useTranslation();
-
     const toast = useToast();
-    const toastDuration = 1000;
 
 
     useEffect(() => {
@@ -58,7 +35,7 @@ const CancelPaymentPage: NextPage = () => {
 
         if (!auth?.accessToken && userLoginError !== undefined) {
             console.log('userLoginError', userLoginError)
-            router.push('/login');
+            router.push('/login').then(() => {});
         }
 
     }, [dispatch, auth, toast, router, userInfos, userLoginLoading, userLoginError, minecraftProfile]);

@@ -2,31 +2,17 @@ import {NextPage} from "next";
 import {NextRouter, useRouter} from "next/router";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useEffect, useState} from "react";
-import {
-    getUserState,
-} from "../../../../store/user/userSlice";
+import {getUserState,} from "../../../../store/user/userSlice";
 import {useDispatch, useSelector} from "../../../../store/store";
 import AdminNavbar from "../../../../components/molecules/AdminNavbar/AdminNavbar";
-import {
-    Box,
-    Button,
-    Container,
-    Flex,
-    Heading,
-    Input,
-    InputGroup,
-    Select,
-    Spacer,
-    Text,
-    useToast
-} from "@chakra-ui/react";
-import {ShopCategorie, ShopProduct} from "../../../../common/types/types";
+import {Box, Button, Flex, Heading, Input, InputGroup, Select, Text, useToast} from "@chakra-ui/react";
+import {ShopCategorie} from "../../../../common/types/types";
 import {shopCategories} from "../../../../common/shop/shopCategories";
 import ShopProductCard from "../../../../components/molecules/ShopProductCard/ShopProductCard";
 import MainLogo from '../../../../public/images/MainLogo.png';
-import {createShopProduct, editShopProduct, getShopProduct, getShopProducts} from "../../../../store/shop/shopActions";
+import {editShopProduct, getShopProduct} from "../../../../store/shop/shopActions";
 import {getShopState} from "../../../../store/shop/shopSlice";
-import {getActiveStripePricesRequest, getActiveStripePricesSuccess, getStripeState} from "../../../../store/stripe/stripeSlice";
+import {getStripeState} from "../../../../store/stripe/stripeSlice";
 import {CreateShopProductDto} from "../../../../store/shop/dtos/createShopProductDto";
 import {getActiveStripePrices, getStripeProducts} from "../../../../store/stripe/stripeActions";
 import {roles} from "../../../../common/roles/roles";
@@ -40,8 +26,7 @@ const ShopManagerEditPage: NextPage = () => {
     const {
         auth,
         userInfos,
-        userLoginError, updateUserProfileSuccess, updateUserProfileError,
-        getUserInfosError
+        userLoginError, getUserInfosError
     } = useSelector(getUserState)
 
     const {
@@ -67,11 +52,7 @@ const ShopManagerEditPage: NextPage = () => {
     const temporaryCategories: Array<ShopCategorie> = shopCategories;
 
     const [currentShopCategories, setCurrentShopCategories] = useState<Array<ShopCategorie>>()
-
-    const [selectedCategorie, setSelectedCategorie] = useState<string>()
-
-    const [selectedProducts, setSelectedProducts] = useState<Array<ShopProduct>>()
-
+    
 
     const [productName, setProductName] = useState<string>();
     const [productDescription, setProductDescription] = useState<string>();
@@ -118,7 +99,7 @@ const ShopManagerEditPage: NextPage = () => {
         });
     }
 
-    const handleEdit = (event: any) => {
+    const handleEdit = () => {
         setErrorMessage('')
         if(!productName){
             toastError('Le nom du produit est obligatoire !')
@@ -185,12 +166,12 @@ const ShopManagerEditPage: NextPage = () => {
 
     useEffect(() => {
         if(auth?.accessToken && userInfos && !(userInfos?.roles?.includes('admin'))){
-            router.push('/')
+            router.push('/').then(() => {})
         }
 
         if (!auth?.accessToken && userLoginError !== undefined) {
             console.log('userLoginError', userLoginError)
-            router.push('/login');
+            router.push('/login').then(() => {});
         }
 
         console.log(currentShopCategories)
@@ -270,7 +251,7 @@ const ShopManagerEditPage: NextPage = () => {
                     isClosable: true,
                     position: 'bottom-right',
                 });
-                router.push('/admin/shop-manager')
+                router.push('/admin/shop-manager').then(() => {})
             }
 
             if (editShopProductError) {

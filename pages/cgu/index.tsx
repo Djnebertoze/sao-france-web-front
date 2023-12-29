@@ -1,19 +1,9 @@
-import {Box, Button, Container, Flex, HStack, Image, Spacer, Text} from "@chakra-ui/react";
-import { NextPage } from "next";
+import {Box, Container, Flex, Spacer, Text} from "@chakra-ui/react";
+import {NextPage} from "next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {MainButton} from "../../components/atoms/Buttons/Buttons";
-
-import perso1 from '../public/images/home/perso1.png';
-
-import { useTranslation } from "next-i18next";
-import {NextRouter, useRouter} from "next/router";
 
 
 const CGUPage: NextPage = () => {
-
-    const router: NextRouter = useRouter();
-
-    const { t } = useTranslation();
 
     const boxMarginBottom = 30;
     const boxPaddingBottom = 10;

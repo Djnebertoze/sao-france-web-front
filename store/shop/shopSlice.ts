@@ -54,7 +54,7 @@ export const shopSlice = createSlice({
             state.createShopProductSuccess = undefined;
             state.createShopProductError = undefined;
         },
-        createShopProductSuccess: (state: Draft<typeof initialState>, { payload }) => {
+        createShopProductSuccess: (state: Draft<typeof initialState>, { }) => {
             state.createShopProductLoading = false;
             state.createShopProductSuccess = 'Shop product successfully created';
             state.createShopProductError = undefined;
@@ -71,7 +71,7 @@ export const shopSlice = createSlice({
             state.editShopProductSuccess = undefined;
             state.editShopProductError = undefined;
         },
-        editShopProductSuccess: (state: Draft<typeof initialState>, { payload }) => {
+        editShopProductSuccess: (state: Draft<typeof initialState>, { }) => {
             state.editShopProductLoading = false;
             state.editShopProductSuccess = 'Shop product successfully edited';
             state.editShopProductError = undefined;
@@ -88,7 +88,7 @@ export const shopSlice = createSlice({
             state.removeShopProductSuccess = undefined;
             state.removeShopProductError = undefined;
         },
-        removeShopProductSuccess: (state: Draft<typeof initialState>, { payload }) => {
+        removeShopProductSuccess: (state: Draft<typeof initialState>, { }) => {
             state.removeShopProductLoading = false;
             state.removeShopProductSuccess = 'Shop product successfully deleted';
             state.removeShopProductError = undefined;

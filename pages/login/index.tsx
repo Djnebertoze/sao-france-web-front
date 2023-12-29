@@ -1,27 +1,12 @@
 import {NextPage} from "next";
 import {NextRouter, useRouter} from "next/router";
 import {useTranslation} from "next-i18next";
-import {
-    Box,
-    Button,
-    Container,
-    Flex,
-    HStack,
-    Image,
-    Spacer,
-    Text,
-    VStack,
-    Input,
-    InputGroup,
-    InputLeftElement, Checkbox, Link as ChakraLink, Link, useToast
-} from "@chakra-ui/react";
+import {Box, Button, Checkbox, Container, Flex, Input, InputGroup, Link, Text, useToast} from "@chakra-ui/react";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {Form} from "@chakra-ui/theme/dist/components";
-import {AtSignIcon, CalendarIcon, EmailIcon, ExternalLinkIcon, PhoneIcon} from "@chakra-ui/icons";
 import {useEffect, useState} from "react";
-import { getUserState } from "../../store/user/userSlice";
-import {login, register} from "../../store/user/userActions";
-import { useDispatch, useSelector } from "../../store/store";
+import {getUserState} from "../../store/user/userSlice";
+import {login} from "../../store/user/userActions";
+import {useDispatch, useSelector} from "../../store/store";
 
 
 const LoginPage: NextPage = () => {
@@ -29,7 +14,7 @@ const LoginPage: NextPage = () => {
     const router: NextRouter = useRouter();
     const dispatch = useDispatch();
 
-    const { userLoginLoading, auth, userInfos, userLoginError } = useSelector(getUserState)
+    const { userLoginLoading, auth, userLoginError } = useSelector(getUserState)
 
     const { t } = useTranslation();
 
@@ -49,14 +34,14 @@ const LoginPage: NextPage = () => {
     };
 
     const [stayConnectedValue, setStayConnectedValue] = useState<boolean>(false);
-    const handleStayConnectedChange = (event: any) => setStayConnectedValue(!stayConnectedValue);
+    const handleStayConnectedChange = () => setStayConnectedValue(!stayConnectedValue);
 
     const toast = useToast();
     const toastDuration = 5000;
 
     useEffect(() => {
         if(auth?.accessToken){
-            router.push('/')
+            router.push('/').then(() => {});
             toast({
                 title: t('register.LOGIN_USER_SUCCESS_TOAST_TITLE'),
                 description: t('register.LOGIN_USER_SUCCESS_TOAST_DESCRIPTION'),

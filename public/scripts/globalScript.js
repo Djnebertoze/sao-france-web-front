@@ -1,5 +1,5 @@
 window.onscroll = function() {
-    var currentScrollPos = window.pageYOffset;
+    const currentScrollPos = window.pageYOffset;
     if (200 > currentScrollPos) {
         document.getElementById("navbar").style.top = "0";
     } else {

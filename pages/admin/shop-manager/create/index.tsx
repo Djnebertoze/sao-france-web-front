@@ -2,25 +2,11 @@ import {NextPage} from "next";
 import {NextRouter, useRouter} from "next/router";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useEffect, useState} from "react";
-import {
-    getUserState,
-} from "../../../../store/user/userSlice";
+import {getUserState,} from "../../../../store/user/userSlice";
 import {useDispatch, useSelector} from "../../../../store/store";
 import AdminNavbar from "../../../../components/molecules/AdminNavbar/AdminNavbar";
-import {
-    Box,
-    Button,
-    Container,
-    Flex,
-    Heading,
-    Input,
-    InputGroup,
-    Select,
-    Spacer,
-    Text,
-    useToast
-} from "@chakra-ui/react";
-import {ShopCategorie, ShopProduct} from "../../../../common/types/types";
+import {Box, Button, Flex, Heading, Input, InputGroup, Select, Text, useToast} from "@chakra-ui/react";
+import {ShopCategorie} from "../../../../common/types/types";
 import {shopCategories} from "../../../../common/shop/shopCategories";
 import ShopProductCard from "../../../../components/molecules/ShopProductCard/ShopProductCard";
 import MainLogo from '../../../../public/images/MainLogo.png';
@@ -40,7 +26,7 @@ const ShopManagerCreatePage: NextPage = () => {
     const {
         auth,
         userInfos,
-        userLoginError, updateUserProfileSuccess, updateUserProfileError,
+        userLoginError,
         getUserInfosError
     } = useSelector(getUserState)
 
@@ -64,10 +50,6 @@ const ShopManagerCreatePage: NextPage = () => {
 
     const [currentShopCategories, setCurrentShopCategories] = useState<Array<ShopCategorie>>()
 
-    const [selectedCategorie, setSelectedCategorie] = useState<string>()
-
-    const [selectedProducts, setSelectedProducts] = useState<Array<ShopProduct>>()
-
 
     const [productName, setProductName] = useState<string>();
     const [productDescription, setProductDescription] = useState<string>();
@@ -87,7 +69,6 @@ const ShopManagerCreatePage: NextPage = () => {
     const handleChangeProductDescriptionDetails = (event: any) => setProductDescriptionDetails(event.target.value);
     const handleChangeProductPrice = (event: any) => setProductPrice(event.target.value);
     const handleChangeProductImageUrl = (event: any) => setProductImageUrl(event.target.value);
-    const handleChangeStripeLink = (event: any) => setProductStripeLink(event.target.value.toLowerCase());
     const handleChangeProductMonneyType = (event: any) => event.target.value === "true" ? setProductIsRealPrice(true) : setProductIsRealPrice(false);
     const handleChangeProductCategorie = (event: any) => setProductCategorie(event.target.value);
     const handleChangeProductStripeLink = (event: any) => {
@@ -111,7 +92,7 @@ const ShopManagerCreatePage: NextPage = () => {
         });
     }
 
-    const handleCreate = (event: any) => {
+    const handleCreate = () => {
         setErrorMessage('')
         if(!productName){
             toastError('Le nom du produit est obligatoire !')
@@ -172,27 +153,17 @@ const ShopManagerCreatePage: NextPage = () => {
 
     useEffect(() => {
         if(auth?.accessToken && userInfos && !(userInfos?.roles?.includes('admin'))){
-            router.push('/')
+            router.push('/').then(() => {});
         }
 
         if (!auth?.accessToken && userLoginError !== undefined) {
             console.log('userLoginError', userLoginError)
-            router.push('/login');
+            router.push('/login').then(() => {});
         }
 
         if(auth?.accessToken && currentShopCategories === undefined){
-
-
             temporaryCategories.sort((a, b) => a.place - b.place);
-
             setCurrentShopCategories(temporaryCategories)
-
-            const exEvent = {
-                target: {
-                    id: temporaryCategories[0]._id
-                }
-            }
-
         }
 
         if(createShopProductSuccess && currentShopCategories){
@@ -204,7 +175,7 @@ const ShopManagerCreatePage: NextPage = () => {
                 isClosable: true,
                 position: 'bottom-right',
             });
-            router.push('/admin/shop-manager')
+            router.push('/admin/shop-manager').then(() => {});
             router.reload();
         }
 

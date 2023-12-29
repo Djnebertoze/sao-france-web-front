@@ -1,23 +1,11 @@
 import {NextPage} from "next";
 import {NextRouter, useRouter} from "next/router";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {useEffect, useState} from "react";
-import {
-    getUserState,
-} from "../../store/user/userSlice";
-import {
-    Box,
-    Container,
-    Flex,
-    Text,
-    useToast,
-    Skeleton,
-    Wrap,
-} from "@chakra-ui/react";
+import {useEffect} from "react";
+import {getUserState,} from "../../store/user/userSlice";
+import {Box, Text,} from "@chakra-ui/react";
 import {useDispatch, useSelector} from "../../store/store";
 import AdminNavbar from "../../components/molecules/AdminNavbar/AdminNavbar";
-import {getShopState} from "../../store/shop/shopSlice";
-import {getShopProducts} from "../../store/shop/shopActions";
 import {emptyAct} from "../../store/user/userActions";
 
 
@@ -29,7 +17,7 @@ const AdminPage: NextPage = () => {
     const {
         auth,
         userInfos,
-        userLoginError, updateUserProfileSuccess, updateUserProfileError,
+        userLoginError,
         getUserInfosError
     } = useSelector(getUserState)
 
@@ -39,17 +27,17 @@ const AdminPage: NextPage = () => {
 
     useEffect(() => {
         if(auth?.accessToken && userInfos && !(userInfos?.roles?.includes('admin') || userInfos?.roles?.includes('moderator') || userInfos?.roles?.includes('responsable') || userInfos?.roles?.includes('developer'))){
-            router.push('/')
+            router.push('/').then(() => {});
         }
 
         if (!auth?.accessToken && userLoginError !== undefined) {
             console.log('userLoginError', userLoginError)
-            router.push('/login');
+            router.push('/login').then(() => {});
         }
 
         if(getUserInfosError){
             dispatch(emptyAct())
-            router.push('/login')
+            router.push('/login').then(() => {});
         }
 
 

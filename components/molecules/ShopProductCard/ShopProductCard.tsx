@@ -1,27 +1,32 @@
-import React, {FC, useEffect, useState} from "react";
-import {Simulate} from "react-dom/test-utils";
+import React, {FC, useEffect} from "react";
 import {
-    Box,
     Button,
     Card,
     CardBody,
     CardFooter,
-    FlexProps,
     Heading,
     Icon,
-    Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spacer,
+    Image,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    Spacer,
     Stack,
     Text,
-    useDisclosure, useToast
+    useDisclosure,
+    useToast
 } from "@chakra-ui/react";
 import {ShopProduct} from "../../../common/types/types";
-import {FiArrowDown, FiArrowLeft, FiArrowRight, FiArrowUp, FiTrash, FiTrash2} from "react-icons/fi";
+import {FiArrowLeft, FiArrowRight, FiTrash2} from "react-icons/fi";
 import MainLogo from "../../../public/images/MainLogo.png"
 import {NextRouter, useRouter} from "next/router";
 import {useDispatch, useSelector} from "../../../store/store";
 import {getUserState} from "../../../store/user/userSlice";
-import {DeleteIcon} from "@chakra-ui/icons";
-import {IconButton, MainButton} from "../../atoms/Buttons/Buttons";
+import {MainButton} from "../../atoms/Buttons/Buttons";
 import {getShopState} from "../../../store/shop/shopSlice";
 import {removeShopProduct} from "../../../store/shop/shopActions";
 import {transformDescription} from "../../../store/helper";
@@ -42,7 +47,7 @@ const ShopProductCard: FC<ShopProductCardProps> = (props) => {
     const toast = useToast();
     const toastDuration = 10000;
 
-    const handleUp = (event: any) => {
+    const handleUp = () => {
         toast({
             title: "En cours de dev",
             description: "Fonctionnalité en cours de développement. Contactez un développeur web.",
@@ -53,7 +58,7 @@ const ShopProductCard: FC<ShopProductCardProps> = (props) => {
         });
     }
 
-    const handleDown = (event: any) => {
+    const handleDown = () => {
         toast({
             title: "En cours de dev",
             description: "Fonctionnalité en cours de développement. Contactez un développeur web.",
@@ -66,12 +71,12 @@ const ShopProductCard: FC<ShopProductCardProps> = (props) => {
 
 
 
-    const handleBuy = (event: any) => {
-        router.push('/shop/product/'+product._id)
+    const handleBuy = () => {
+        router.push('/shop/product/'+product._id).then(() => {});
     }
 
-    const handleModify = (event: any) => {
-        router.push('/admin/shop-manager/edit/'+product._id)
+    const handleModify = () => {
+        router.push('/admin/shop-manager/edit/'+product._id).then(() => {});
     }
 
     return(
@@ -125,7 +130,7 @@ const RemoveProductModal: FC<RemoveProductModalProps> = (props) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const handleDelete = (event: any) => {
+    const handleDelete = () => {
         dispatch(removeShopProduct(auth?.accessToken, props.product._id))
     }
 

@@ -64,10 +64,6 @@ export const membersSlice = createSlice({
 export const getMembersState = (state: { members: MembersState }) => state.members;
 
 export const {
-    getMemberListRequest,
-    getMemberListSuccess,
-    getMemberListError,
-
     getMemberProfileRequest,
     getMemberProfileSuccess,
     getMemberProfileError,
