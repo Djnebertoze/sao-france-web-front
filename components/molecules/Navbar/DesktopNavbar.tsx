@@ -32,9 +32,9 @@ const DesktopNavbar: FC<GenericNavbarProps> = (props) => {
     const { auth , userInfos, getUserInfosLoading,getUserInfosError} = useSelector(getUserState);
 
     useEffect(() => {
-        /*if(auth?.accessToken && !userInfos){
+        if(auth?.accessToken && !userInfos){
             dispatch(getUserProfile(auth.accessToken));
-        }*/
+        }
     }, [auth?.accessToken, dispatch, userInfos])
 
     let count=0;
@@ -61,7 +61,8 @@ const DesktopNavbar: FC<GenericNavbarProps> = (props) => {
             </Flex>
             <Button maxW={{'2xl':50}} ml={{'2xl':-140, base: -109}} mr={{'2xl':50, base: 19}} onClick={() => auth?.accessToken ? router.push('/profile') : router.push('/login')}>
                 {auth?.accessToken ? (
-                    <FontAwesomeIcon icon={faPaperclip}/>
+                    <Image src={"https://skins.danielraybone.com/v1/head/"+userInfos?.mcProfile?.name+"?overlay=true"} borderRadius={'50%'} maxW={30} maxH={30}
+                           border={'2px solid white'} alt={'User image profile'}/>
                 ) : (
                     <FontAwesomeIcon icon={faUser}/>)
                 }
