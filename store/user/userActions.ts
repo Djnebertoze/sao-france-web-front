@@ -150,7 +150,7 @@ export const checkLogin = () => async (dispatch: any) => {
     }
 };
 
-export const getUserProfile = (accessToken: string | null) => async (dispatch: any) => {
+export const getUserProfile = (accessToken: string | null | undefined) => async (dispatch: any) => {
     console.log('getting user profile')
     dispatch(getUserProfileRequest());
     try {

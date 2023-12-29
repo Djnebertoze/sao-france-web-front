@@ -8,8 +8,8 @@ import {getUserProfile} from "../../../store/user/userActions";
 import {useDispatch, useSelector} from "../../../store/store";
 import {ShopCategorie} from "../../../common/types/types";
 import {shopCategories} from "../../../common/shop/shopCategories";
-import {getShopState} from "../../../store/shop/shopSlice";
-import {getShopProduct} from "../../../store/shop/shopActions";
+import {getPayProductWithShopPointsReset, getShopState} from "../../../store/shop/shopSlice";
+import {getShopProduct, payProductWithShopPoints} from "../../../store/shop/shopActions";
 import {transformDescription} from "../../../store/helper";
 import ImageSecurised from "../../../public/images/shop/securised.png"
 import {getStripeState} from "../../../store/stripe/stripeSlice";
@@ -31,7 +31,10 @@ const ProductPage: NextPage = () => {
     } = useSelector(getUserState)
     const {
         shopProduct,
-        getShopProductError
+        getShopProductError,
+        payProductWithShopPointsLoading,
+        payProductWithShopPointsError,
+        payProductWithShopPointsSuccess
     } = useSelector(getShopState)
 
     const {
@@ -41,7 +44,7 @@ const ProductPage: NextPage = () => {
     } = useSelector(getStripeState)
 
     const toast = useToast();
-    const toastDuration = 1000;
+    const toastDuration = 5000;
 
 
     useEffect(() => {
@@ -115,8 +118,38 @@ const ProductPage: NextPage = () => {
     const handleBuy = () => {
         if(shopProduct?.isRealMoney) {
             dispatch(getStripePaymentLink(auth?.accessToken, router.query.id))
+        } else {
+            dispatch(payProductWithShopPoints(auth?.accessToken, router.query.id))
         }
     }
+
+    useEffect(() => {
+        if (payProductWithShopPointsSuccess){
+            dispatch(getUserProfile(auth?.accessToken))
+            router.push('/profile').then(() => {
+                toast({
+                    title: `${shopProduct?.name} acquis !`,
+                    description: 'Merci pour votre achat !',
+                    status: 'success',
+                    duration: toastDuration,
+                    isClosable: true,
+                    position: 'bottom-right',
+                });
+            })
+            dispatch(getPayProductWithShopPointsReset())
+        }
+        if (payProductWithShopPointsError){
+            toast({
+                title: `Impossible d'effectuer l'achat.`,
+                description: payProductWithShopPointsError,
+                status: 'error',
+                duration: toastDuration,
+                isClosable: true,
+                position: 'bottom-right',
+            });
+            dispatch(getPayProductWithShopPointsReset())
+        }
+    }, [payProductWithShopPointsSuccess, payProductWithShopPointsError])
 
     return (
         <Container maxW={'full'} margin={0} padding={0}>
@@ -142,7 +175,7 @@ const ProductPage: NextPage = () => {
                             <Text color={'rgb(255,255,255,.7)'}>Comtpe Minecraft connecté: {userInfos?.mcProfile?.name}</Text>
                         </Center>
 
-                        <Button variant={'solid'} colorScheme={'blue'} onClick={handleBuy} mt={11} isLoading={getStripePaymentLinkLoading}>
+                        <Button variant={'solid'} colorScheme={'blue'} onClick={handleBuy} mt={11} isLoading={getStripePaymentLinkLoading || payProductWithShopPointsLoading}>
                             Acheter
                         </Button>
                     </Flex>

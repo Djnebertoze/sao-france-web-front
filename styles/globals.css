@@ -51,14 +51,14 @@ a {
     font-weight: 500;
 }
 
-.shop-label:hover{
-    opacity: .6;
-}
-
 
 #navbar{
     top: 0;
     transition: top 0.3s
+}
+
+.navItem:hover{
+    opacity: .6;
 }
 
 a:hover{

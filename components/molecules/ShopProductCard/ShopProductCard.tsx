@@ -93,7 +93,7 @@ const ShopProductCard: FC<ShopProductCardProps> = (props) => {
                     </Stack>
                 </CardBody>
                 <CardFooter flexDirection={'column'}>
-                    <Text mb={3}  fontWeight={'bold'} textAlign={'center'} px={6}>{product.isRealMoney ? product.price + "€" : product.price + " PB"}</Text>
+                    <Text mb={3}  fontWeight={'bold'} textAlign={'center'} px={6}>{product.isRealMoney ? product.price.toLocaleString(undefined) + "€" : product.price.toLocaleString(undefined) + " PB"}</Text>
                     <Button variant={'solid'} colorScheme={'blue'} onClick={props.isEditing ? handleModify : handleBuy} isDisabled={props.isPreview}>
                         {props.isEditing ? 'Modifier' : 'Acheter'}
                     </Button>

@@ -21,6 +21,10 @@ export interface ShopState {
     getShopProductLoading: boolean;
     shopProduct?: ShopProduct;
     getShopProductError?: string;
+
+    payProductWithShopPointsLoading: boolean;
+    payProductWithShopPointsSuccess?: string;
+    payProductWithShopPointsError?: string;
 }
 
 const initialState: ShopState = {
@@ -43,6 +47,10 @@ const initialState: ShopState = {
     getShopProductLoading: false,
     shopProduct: undefined,
     getShopProductError: undefined,
+
+    payProductWithShopPointsLoading: false,
+    payProductWithShopPointsSuccess: undefined,
+    payProductWithShopPointsError: undefined,
 }
 
 export const shopSlice = createSlice({
@@ -132,6 +140,27 @@ export const shopSlice = createSlice({
             state.shopProduct = undefined;
             state.getShopProductError = payload;
         },
+
+        getPayProductWithShopPointsRequest: (state: Draft<typeof initialState>) => {
+            state.payProductWithShopPointsLoading = true;
+            state.payProductWithShopPointsSuccess = undefined;
+            state.payProductWithShopPointsError = undefined;
+        },
+        getPayProductWithShopPointsSuccess: (state: Draft<typeof initialState>, { payload }) => {
+            state.payProductWithShopPointsLoading = false;
+            state.payProductWithShopPointsSuccess = payload;
+            state.payProductWithShopPointsError = undefined;
+        },
+        getPayProductWithShopPointsError: (state: Draft<typeof initialState>, { payload }) => {
+            state.payProductWithShopPointsLoading = false;
+            state.payProductWithShopPointsSuccess = undefined;
+            state.payProductWithShopPointsError = payload;
+        },
+        getPayProductWithShopPointsReset: (state: Draft<typeof initialState>) => {
+            state.payProductWithShopPointsLoading = false;
+            state.payProductWithShopPointsSuccess = undefined;
+            state.payProductWithShopPointsError = undefined;
+        }
     }
 })
 
@@ -156,7 +185,12 @@ export const {
 
     getShopProductRequest,
     getShopProductSuccess,
-    getShopProductError
+    getShopProductError,
+
+    getPayProductWithShopPointsRequest,
+    getPayProductWithShopPointsSuccess,
+    getPayProductWithShopPointsError,
+    getPayProductWithShopPointsReset
 } = shopSlice.actions;
 
 export default shopSlice.reducer;

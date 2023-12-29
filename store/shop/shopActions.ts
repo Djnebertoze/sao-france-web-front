@@ -1,18 +1,25 @@
 import {getAPIUrl} from "../helper";
-import axios from "axios";
+import axios, {HttpStatusCode} from "axios";
 import {CreateShopProductDto} from "./dtos/createShopProductDto";
 import {
     createShopProductError,
     createShopProductRequest,
-    createShopProductSuccess, editShopProductError,
+    createShopProductSuccess,
+    editShopProductError,
     editShopProductRequest,
     editShopProductSuccess,
+    getPayProductWithShopPointsError,
+    getPayProductWithShopPointsRequest,
+    getPayProductWithShopPointsSuccess,
     getShopProductError,
     getShopProductRequest,
     getShopProductsError,
     getShopProductsRequest,
     getShopProductsSuccess,
-    getShopProductSuccess, removeShopProductError, removeShopProductRequest, removeShopProductSuccess
+    getShopProductSuccess,
+    removeShopProductError,
+    removeShopProductRequest,
+    removeShopProductSuccess
 } from "./shopSlice";
 
 export const createShopProduct = (accessToken: string | undefined, createShopProductDto : CreateShopProductDto) => async (dispatch: any) => {
@@ -122,5 +129,30 @@ export const getShopProduct = (accessToken: string | undefined, productId: strin
         )
     } catch (error: any) {
         dispatch(getShopProductError({error: error}))
+    }
+}
+
+export const payProductWithShopPoints = (accessToken: string | undefined, productId: string | string[] | undefined) => async (dispatch: any) => {
+    dispatch(getPayProductWithShopPointsRequest())
+
+    try {
+        const response = await axios.post(
+            `${getAPIUrl()}/shop/pay/`+productId,
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        );
+        if (response.data.status == HttpStatusCode.Created){
+            dispatch(getPayProductWithShopPointsSuccess(response.data))
+        } else (
+            dispatch(getPayProductWithShopPointsError(response.data.message))
+        )
+    } catch (error: any) {
+        console.log('error')
+        console.log(error)
+        dispatch(getPayProductWithShopPointsError(error.code))
     }
 }
