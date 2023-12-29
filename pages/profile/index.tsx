@@ -58,9 +58,7 @@ const ProfilePage: NextPage = () => {
     const {
         auth,
         userInfos,
-        getUserInfosLoading,
-        userLoginLoading,
-        userLoginError, updateUserProfileSuccess, updateUserProfileError,
+        getUserInfosLoading, updateUserProfileSuccess, updateUserProfileError,
         getMinecraftProfileLoading, minecraftProfile, getMinecraftProfileError,
         getUserInfosError
     } = useSelector(getUserState)
@@ -82,7 +80,6 @@ const ProfilePage: NextPage = () => {
                 birthday: birthdayValue,
                 bio: bioValue
             }))
-            router.reload()
         }
 
         setEditing(!isEditing);
@@ -100,6 +97,8 @@ const ProfilePage: NextPage = () => {
 
     const [phoneNumberValue, setPhoneNumberValue] = useState<string>("");
     const handlePhoneNumberChange = (event: any) => setPhoneNumberValue(event.target.value);
+
+    const [shopPointsValue, setShopPointsValue] = useState<number>();
 
     const [birthdayValue, setBirthdayValue] = useState<string>('');
     const handleBithdayChange = (event: any) => setBirthdayValue(event.target.value);
@@ -126,6 +125,20 @@ const ProfilePage: NextPage = () => {
         }
     };
 
+    const logout = () => {
+        dispatch(emptyAct());
+        router.push('/')
+        router.reload()
+        toast({
+            title: 'Déconnexion réussie',
+            description: 'Vous avez été correctement déconnecté',
+            status: 'success',
+            duration: toastDuration,
+            isClosable: true,
+            position: 'bottom-right',
+        });
+    }
+
 
     const [lastNameValue, setLastNameValue] = useState<string>("");
     const handleLastNameChange = (event: any) => setLastNameValue(event.target.value);
@@ -137,7 +150,7 @@ const ProfilePage: NextPage = () => {
     const isAuthenticated = useIsAuthenticated();
 
     const toast = useToast();
-    const toastDuration = 1000;
+    const toastDuration = 5000;
 
     //const RECEIVE_AUTHORIZATION_CODE_URL = "https://login.live.com/oauth20_authorize.srf";
     const RECEIVE_AUTHORIZATION_CODE_URL = "https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize";
@@ -170,6 +183,7 @@ const ProfilePage: NextPage = () => {
                 setEmailValue(userInfos.email);
                 setBirthdayValue(userInfos.birthday ? userInfos.birthday : "");
                 setPhoneNumberValue(userInfos.phoneNumber ? userInfos.phoneNumber : "");
+                setShopPointsValue(userInfos.shopPoints ? userInfos.shopPoints : 0)
                 if(userInfos.roles) {
                     const roles_filtered: Role[] = [];
                     userInfos.roles.map((role_id) => {
@@ -184,12 +198,7 @@ const ProfilePage: NextPage = () => {
             }
         }
 
-        if (userLoginError !== undefined) {
-            console.log('userLoginError', userLoginError)
-            router.push('/login');
-        }
-
-        if(!getUserInfosLoading && getUserInfosError){
+        if((!getUserInfosLoading && getUserInfosError) || localStorage.getItem('act') == undefined){
             dispatch(emptyAct())
             router.push('/login')
         }
@@ -212,7 +221,7 @@ const ProfilePage: NextPage = () => {
             });
         }
 
-    }, [dispatch, auth, toast, router, userInfos, userLoginLoading, userLoginError, isEditing, isAuthenticated, minecraftProfile,
+    }, [dispatch, auth, toast, router, userInfos, isEditing, isAuthenticated, minecraftProfile,
         accounts, instance, getUserInfosError, getUserInfosLoading]);
 
     useEffect(() => {
@@ -221,6 +230,16 @@ const ProfilePage: NextPage = () => {
                 title: t('profile.UPDATE_USER_SUCCESS_TOAST_TITLE'),
                 description: t('profile.UPDATE_USER_SUCCESS_TOAST_DESCRIPTION'),
                 status: 'success',
+                duration: toastDuration,
+                isClosable: true,
+                position: 'bottom-right',
+            });
+        }
+        if (updateUserProfileError && !isEditing) {
+            toast({
+                title: 'Impossible de modifier votre profil',
+                description: updateUserProfileError,
+                status: 'error',
                 duration: toastDuration,
                 isClosable: true,
                 position: 'bottom-right',
@@ -248,14 +267,14 @@ const ProfilePage: NextPage = () => {
             <Container bg={'rgb(55,56,58,1)'} minH={1000} maxW={'full'} color={'white'} p={0}>
                 <Flex w={'full'} pt={100}>
                     <Box marginRight={10} borderRight={'1px solid white'} py={5} px={10}>
-                        <Image src={userInfos?.mcProfile ? "https://skins.danielraybone.com/v1/head/"+userInfos.mcProfile.name+"?overlay=true" : userInfos?.profilePicture} borderRadius={'50%'} maxW={200} maxH={200}
+                        <Image src={"https://skins.danielraybone.com/v1/head/"+userInfos?.mcProfile?.name+"?overlay=true"} borderRadius={'50%'} maxW={200} maxH={200}
                                mx={1} mb={5} border={'5px solid white'} boxShadow={'0px 0px 20px 2px rgb(0,0,0,.15)'} alt={'User image profile'}/>
                         {userInfos?.mcProfile && (
                             <>
                                 <Text textAlign={'center'} mt={2} fontStyle={'italic'}>{userInfos.mcProfile.name}</Text>
                             </>
                         )}
-                        <Text textAlign={'center'} mt={2}>{userInfos?.shopPoints?.toLocaleString(undefined)} Points Boutique</Text>
+                        <Text textAlign={'center'} mt={2}>{shopPointsValue?.toLocaleString(undefined)} Points Boutique</Text>
 
                     </Box>
                     <Box w={'full'}>
@@ -367,6 +386,7 @@ const ProfilePage: NextPage = () => {
                                        isDisabled={!isEditing} placeholder={'-'} type={'date'}
                                        onChange={handleBithdayChange}></Input>
                             </InputGroup>
+
                         </Box>
                         <Box ml={41} mr={150} mt={30}>
                             <Text fontSize={30} as={'i'}>Applications externes:</Text>
@@ -382,6 +402,13 @@ const ProfilePage: NextPage = () => {
                                         })
                                     }/*dispatch(linkMicrosoftAccount)*//*() => router.push(urlMicrosoft)*//*openPopupWindow*/} isLoading={getMinecraftProfileLoading}>
                                 {isAuthenticated ? "Microsoft: Connecté" : "Me connecter à Microsoft"}
+                            </Button>
+                        </Box>
+                        <Box ml={41} mr={150} mt={30}>
+                            <Text fontSize={30} as={'i'}>Utilitaires:</Text>
+                            <Box w={'full'} h={'1px'} bgColor={'black'} mt={2}/>
+                            <Button colorScheme={'red'} mt={10} onClick={logout}>
+                                Me déconnecter
                             </Button>
                         </Box>
                     </Box>

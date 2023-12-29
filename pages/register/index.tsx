@@ -32,7 +32,7 @@ const RegisterPage: NextPage = () => {
     const router: NextRouter = useRouter();
     const dispatch = useDispatch();
 
-    const { userRegisterLoading, auth, userInfos, userRegisterError } = useSelector(getUserState)
+    const { userRegisterLoading, auth, userInfos, userRegisterError, userRegisterSuccess } = useSelector(getUserState)
 
     const { t } = useTranslation();
 
@@ -104,12 +104,22 @@ const RegisterPage: NextPage = () => {
     const toastDuration = 5000;
 
     useEffect(() => {
-        if(auth?.registerSuccess){
-            router.push('/');
+        if(userRegisterSuccess){
+            router.push('/profile');
             toast({
                 title: t('register.REGISTER_USER_CREATION_SUCCESS_TOAST_TITLE'),
                 description: t('register.REGISTER_USER_CREATION_SUCCESS_TOAST_DESCRIPTION'),
                 status: 'success',
+                duration: toastDuration,
+                isClosable: true,
+                position: 'bottom-right',
+            });
+        }
+        if(userRegisterError){
+            toast({
+                title: 'Impossible de créer votre compte',
+                description: userRegisterError,
+                status: 'error',
                 duration: toastDuration,
                 isClosable: true,
                 position: 'bottom-right',

@@ -65,11 +65,18 @@ export const register =
                 data.birthday = birthday;
             }
 
-            console.log('data', data)
-
-            await axios.post(`${getAPIUrl()}/users`, data);
-
-            dispatch(userRegisterSuccess({registerSuccess: true}));
+            const response = await axios.post(`${getAPIUrl()}/users`, data);
+            if (response.data.accessToken){
+                localStorage.setItem('act', response.data.accessToken);
+                dispatch(
+                    userRegisterSuccess({
+                        _id: response.data.userId,
+                        accessToken: response.data.accessToken,
+                    })
+                );
+            } else {
+                dispatch(userRegisterError(response.data.message));
+            }
         } catch (error: any) {
             let message;
             console.log('Error', error)
@@ -87,12 +94,12 @@ export const emptyAct = () => async (dispatch: any) => {
     localStorage.removeItem('act');
     localStorage.removeItem('scp');
 
-    dispatch(
+    /*dispatch(
         userLoginSuccess({
             accessToken: undefined,
             scope: undefined,
         })
-    );
+    );*/
 
 };
 
@@ -129,6 +136,7 @@ export const login = (username: string, password: string) => async (dispatch: an
         } else if (error.response.status === 404) {
             dispatch(userLoginError('Aucun utilisateur avec ce pseudo trouvé'));
         } else {
+            console.log(error)
             dispatch(userLoginError(error.message));
         }
     }
@@ -192,9 +200,16 @@ export const updateUserProfile = (accessToken: string | undefined, updateUserPro
                 },
             }
         );
-        dispatch(updateUserProfileSuccess(response.data));
+
+        if(response.data.status != undefined){
+            dispatch(updateUserProfileError(response.data.message));
+        } else {
+            dispatch(updateUserProfileSuccess(response.data));
+        }
+
+
     } catch (error: any) {
-        dispatch(updateUserProfileError(error.message));
+        dispatch(updateUserProfileError(error));
     }
 };
 
