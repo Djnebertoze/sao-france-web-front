@@ -44,7 +44,6 @@ const SettingsPage: NextPage = () => {
     const toastDuration = 10000;
 
     useEffect(() => {
-        console.log('1')
         if(auth?.accessToken && userInfos && !(userInfos?.roles?.includes('admin'))){
             router.push('/')
         }

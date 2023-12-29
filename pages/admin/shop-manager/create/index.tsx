@@ -163,8 +163,6 @@ const ShopManagerCreatePage: NextPage = () => {
             pointsToGive: productPointsToGive,
             roleToGive: productRoleToGive
         }
-
-        console.log("a", shopProductDto)
         dispatch(createShopProduct(auth?.accessToken, shopProductDto));
     }
 
@@ -181,8 +179,6 @@ const ShopManagerCreatePage: NextPage = () => {
             console.log('userLoginError', userLoginError)
             router.push('/login');
         }
-
-        console.log(currentShopCategories)
 
         if(auth?.accessToken && currentShopCategories === undefined){
 
@@ -220,7 +216,7 @@ const ShopManagerCreatePage: NextPage = () => {
                 isClosable: true,
                 position: 'bottom-right',
             });
-            console.log(createShopProductError)
+            console.log('Error: ',createShopProductError)
         }
     }, [dispatch, auth?.accessToken, router, userInfos, userLoginError, getUserInfosError, createShopProductLoading, createShopProductSuccess, createShopProductError,
         temporaryCategories, currentShopCategories, toast]);
@@ -228,7 +224,8 @@ const ShopManagerCreatePage: NextPage = () => {
     useEffect(() => {
         if (auth?.accessToken){
             if(!stripeProducts) {
-                console.log('Getting stripe products')
+                if(process.env.NODE_ENV == 'development')
+                    console.log('Getting stripe products')
                 dispatch(getStripeProducts(auth.accessToken))
             }
             if (stripeProducts) {

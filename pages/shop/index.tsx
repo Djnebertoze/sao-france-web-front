@@ -30,13 +30,13 @@ const ShopPage: NextPage = () => {
     const dispatch = useDispatch();
 
     const temporaryCategories: ShopCategorie[] = shopCategories;
-
+/*
     const {
         auth,
         userInfos,
         userLoginLoading,
         userLoginError, minecraftProfile, getMinecraftProfileError
-    } = useSelector(getUserState)
+    } = useSelector(getUserState)*/
     const {
         shopProducts,
         getShopProductsLoading
@@ -72,16 +72,16 @@ const ShopPage: NextPage = () => {
     useEffect(() => {
         /*console.log('usss')*/
 
-        if (auth?.accessToken) {
+        /*if (auth?.accessToken) {
             if (!userInfos){
                 dispatch(getUserProfile(auth.accessToken))
             }
             if (userInfos) {
 
             }
-        }
+        }*/
 
-        if(auth?.accessToken && shopProducts && !getShopProductsLoading){
+        if(/*auth?.accessToken && */shopProducts && !getShopProductsLoading){
             /*console.log('usss1')
             console.log(shopProducts)*/
             console.log('Got products')
@@ -101,19 +101,19 @@ const ShopPage: NextPage = () => {
             }
         }
 
-        if(auth?.accessToken && !shopProducts && !getShopProductsLoading){
+        if(/*auth?.accessToken && */!shopProducts && !getShopProductsLoading){
             console.log('Getting products')
-            dispatch(getShopProducts(auth.accessToken))
+            dispatch(getShopProducts())
         }
 
-        if (!auth?.accessToken && userLoginError !== undefined) {
+        /*if (!auth?.accessToken && userLoginError !== undefined) {
             console.log('userLoginError', userLoginError)
             router.push('/login');
-        }
+        }*/
 
-    }, [dispatch, auth, toast, router, userInfos, userLoginLoading, userLoginError, minecraftProfile, shopProducts, temporaryCategories, getShopProductsLoading]);
+    }, [dispatch, /*auth*/, toast, router, /*userInfos, userLoginLoading, userLoginError, minecraftProfile*/, shopProducts, temporaryCategories, getShopProductsLoading]);
 
-    useEffect(() => {
+    /*useEffect(() => {
         if(getMinecraftProfileError !== undefined){
             toast({
                 title: "Impossible de récupérer votre compte Minecraft",
@@ -124,15 +124,14 @@ const ShopPage: NextPage = () => {
                 position: 'bottom-right',
             });
         }
-    }, [getMinecraftProfileError, toast])
+    }, [getMinecraftProfileError, toast])*/
 
     let tagsMargin = 4;
 
     return (
-        <Container maxW={'full'} margin={0} padding={0} mt={80.1}>
+        <Container maxW={'full'} margin={0} padding={0}>
             <Container maxW={'full'} p={0} mx={0} className={'main-background'} minH={'100%'} w={'full'}>
-
-                <Flex w={'full'} h={'100%'} className={'main-background'}>
+                <Flex w={'full'} h={'100%'} className={'main-background'} mt={{lg:'80px', base:'50px'}}>
                         <Flex h={'auto'} className={'secondary-background'} borderTop={'1px solid rgb(0,0,0,.2)'} flex={1} align={'center'} borderRightRadius={10}
                               flexDirection={'column'}>
                             <Text color={'white'} fontWeight={'bold'} fontSize={17} textTransform={'uppercase'} marginTop={3}>Boutique</Text>

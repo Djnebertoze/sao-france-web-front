@@ -19,11 +19,12 @@ import {FC, useEffect} from "react";
 import { Link } from "../../atoms/Links/Links";
 import { GenericNavbarProps, NavItem } from "./types";
 import {Simulate} from "react-dom/test-utils";
+import {child} from "winston";
 
 const MobileNavbar: FC<GenericNavbarProps> = (props) => {
 	return (
 		<Stack bg={useColorModeValue('white', 'gray.800')} p={4} display={{ lg: 'none' }}>
-			{props.navItems.map((navItem) => (
+			{props.navItems.filter((child) => child.label != 'LOGO').map((navItem) => (
 				<MobileNavItem key={navItem.numberKey} {...navItem} />
 			))}
 		</Stack>

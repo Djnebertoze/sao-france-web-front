@@ -96,7 +96,6 @@ const AdminNavbar: FC<SidebarWithHeaderProps> = (props) => {
     const router: NextRouter = useRouter();
 
     useEffect(() => {
-        console.log('haha')
         if (!auth?.accessToken) {
             dispatch(checkLogin());
         }

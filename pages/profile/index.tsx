@@ -82,6 +82,7 @@ const ProfilePage: NextPage = () => {
                 birthday: birthdayValue,
                 bio: bioValue
             }))
+            router.reload()
         }
 
         setEditing(!isEditing);
@@ -254,7 +255,7 @@ const ProfilePage: NextPage = () => {
                                 <Text textAlign={'center'} mt={2} fontStyle={'italic'}>{userInfos.mcProfile.name}</Text>
                             </>
                         )}
-                        <Text textAlign={'center'} mt={2}>{userInfos?.shopPoints.toLocaleString(undefined)} Points Boutique</Text>
+                        <Text textAlign={'center'} mt={2}>{userInfos?.shopPoints?.toLocaleString(undefined)} Points Boutique</Text>
 
                     </Box>
                     <Box w={'full'}>
@@ -362,7 +363,7 @@ const ProfilePage: NextPage = () => {
                             <InputGroup border={'transparent'} mt={5}>
                                 <InputLeftAddon fontSize={21} w={100}
                                                 bgColor={'transparent'}>Anniv.</InputLeftAddon>
-                                <Input fontSize={21} pr={150} value={phoneNumberValue}
+                                <Input fontSize={21} pr={150} value={birthdayValue}
                                        isDisabled={!isEditing} placeholder={'-'} type={'date'}
                                        onChange={handleBithdayChange}></Input>
                             </InputGroup>

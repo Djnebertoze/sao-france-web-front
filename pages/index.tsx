@@ -8,6 +8,8 @@ import perso1 from '../public/images/home/perso1.png';
 import { useTranslation } from "next-i18next";
 import {NextRouter, useRouter} from "next/router";
 
+import {getCDNUrl} from "../store/helper";
+
 
 const HomePage: NextPage = () => {
 
@@ -75,7 +77,7 @@ const HomePage: NextPage = () => {
                     <Box />
 
                 </Flex>
-                <Center mt={{sm: 100,base:0}}><Image width={"64"} height={"64"} src={"https://saofrance.net/images/icons8-minecraft.svg"} alt={"minecraft-grass-cube"}/></Center>
+                <Center mt={{sm: 100,base:0}}><Image maxW={"64"} maxH={"64"} src={getCDNUrl()+"/images/icons8-minecraft.svg"} alt={"minecraft-grass-cube"}/></Center>
                 <Center>
                     <Text textAlign={"center"}
                           fontSize={{sm:40, vsm:30, base:19}}
@@ -93,7 +95,7 @@ const HomePage: NextPage = () => {
                 <Flex color={'white'} m={10} mt={{vsm:61, base:35}} flexDirection={{lg: 'row', base: 'column', }}>
                     <Flex>
                         <Spacer/>
-                        <Image src={'https://saofrance.net/images/wallpaper/plan4.png'}
+                        <Image src={getCDNUrl()+'/images/wallpaper/plan4.png'}
                                h={{sm:400, vsm: 200}}
                                minW={{base:200}}
                                 alt={'Wal paper image'}
@@ -146,7 +148,7 @@ const HomePage: NextPage = () => {
                     </Flex>
                     <Flex>
                         <Spacer/>
-                        <Image src={'https://saofrance.net/images/wallpaper/plan3.png'}
+                        <Image src={getCDNUrl()+'/images/wallpaper/plan3.png'}
                                h={{sm:400, vsm: 200}}
                                minW={{base:200}}
                                alt={'Wallpaper image'}
@@ -156,7 +158,7 @@ const HomePage: NextPage = () => {
                         <Spacer/>
                     </Flex>
                 </Flex>
-                <Center mt={{sm: 100,base:0}}><Image width={"64"} height={"64"} src={"https://saofrance.net/images/icons8-minecraft.svg"} alt={"minecraft-grass-cube"}/></Center>
+                <Center mt={{sm: 100,base:0}}><Image maxW={"64"} maxH={"64"} src={getCDNUrl()+"/images/icons8-minecraft.svg"} alt={"minecraft-grass-cube"}/></Center>
                 <Center>
                     <Text textAlign={"center"}
                           fontSize={{sm:20, base:20}}

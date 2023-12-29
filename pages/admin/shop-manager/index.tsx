@@ -172,7 +172,7 @@ const ShopManager: NextPage = () => {
         }
 
         if(auth?.accessToken && !shopProducts){
-            dispatch(getShopProducts(auth.accessToken))
+            dispatch(getShopProducts())
         }
 
         if(getShopProductsError){

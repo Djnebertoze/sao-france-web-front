@@ -100,22 +100,21 @@ const Navbar: FC = () => {
             document.getElementById('navbar').style.display = 'block'
         }
 
-        const handleScroll = () => {
+        /*const handleScroll = () => {
             setScrollY(window.scrollY);
 
             // @ts-ignore
             if(document.getElementById("collapse").style.display === "block"){
-                console.log('passed')
                 onToggle();
             }
         }
-        handleScroll();
+        handleScroll();*/
 
-        window.addEventListener("scroll", handleScroll);
+        /*window.addEventListener("scroll", handleScroll);
 
         return () => {
             window.removeEventListener("scroll", handleScroll);
-        };
+        };*/
 
 
     }, [router, auth?.accessToken, dispatch, onToggle]);

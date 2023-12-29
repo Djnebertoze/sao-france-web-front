@@ -3,6 +3,7 @@ import { NextRouter, useRouter } from "next/router";
 import {Box, Flex, Image, Link, Spacer, Text, Wrap} from "@chakra-ui/react";
 import {useTranslation} from "next-i18next";
 import {BiX} from "react-icons/bi";
+import {getCDNUrl} from "../../../store/helper";
 
 const Footer: FC = () => {
     const router: NextRouter = useRouter();
@@ -73,7 +74,7 @@ const Footer: FC = () => {
                         <Text fontSize={{vsm:30, base:18}} mb={5} fontWeight={'bold'}>Nous retrouver</Text>
                         <Wrap>
                             <Link href={'https://discord.gg/saofrance'} target={'_blank'}>
-                                <Image src={'https://saofrance.net/images/discord_logo.png'} w={{vsm:30, base:22}} _hover={{opacity:.7}} cursor={"pointer"} alt={'Discord Logo Image'}/>
+                                <Image src={getCDNUrl()+'/images/discord_logo.png'} w={{vsm:30, base:22}} _hover={{opacity:.7}} cursor={"pointer"} alt={'Discord Logo Image'}/>
                             </Link>
                         </Wrap>
                     </Flex>

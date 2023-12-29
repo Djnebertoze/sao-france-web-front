@@ -8,6 +8,8 @@ import perso1 from '../public/images/home/perso1.png';
 import { useTranslation } from "next-i18next";
 import {NextRouter, useRouter} from "next/router";
 
+import {getCDNUrl} from "../../store/helper";
+
 
 const VotesPage: NextPage = () => {
 
@@ -38,7 +40,7 @@ const VotesPage: NextPage = () => {
                 <Flex  w={'full'} my={200}>
                     <Spacer />
                     <Box>
-                        <Image src={'https://saofrance.net/images/undraw/reading.svg'} w={400} alt={'Undraw reading image'}/>
+                        <Image src={getCDNUrl()+'/images/undraw/reading.svg'} w={400} alt={'Undraw reading image'}/>
                     </Box>
                     <Spacer />
                 </Flex>

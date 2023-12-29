@@ -9,6 +9,14 @@ export const getAPIUrl = () => {
     return url;
 };
 
+export const getCDNUrl = () => {
+    let url;
+
+    url = "https://cdn.saofrance.net";
+
+    return url;
+};
+
 export function occurrences(string: string, subString: string, allowOverlapping: boolean) {
 
     string += "";

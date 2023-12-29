@@ -84,17 +84,12 @@ export const removeShopProduct = (accessToken: string | undefined, productId: st
     }
 }
 
-export const getShopProducts = (accessToken: string | undefined) => async (dispatch: any) => {
+export const getShopProducts = () => async (dispatch: any) => {
     dispatch(getShopProductsRequest())
 
     try {
         const response = await axios.get(
-            `${getAPIUrl()}/shop/products`,
-            {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            }
+            `${getAPIUrl()}/shop/products`,{}
         );
         if (response.data.success){
             console.log("data",response.data)
