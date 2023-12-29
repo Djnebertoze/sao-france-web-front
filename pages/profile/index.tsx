@@ -80,8 +80,8 @@ const ProfilePage: NextPage = () => {
                 birthday: birthdayValue,
                 bio: bioValue
             }))
+            router.reload();
         }
-
         setEditing(!isEditing);
     }
 
@@ -127,16 +127,17 @@ const ProfilePage: NextPage = () => {
 
     const logout = () => {
         dispatch(emptyAct());
-        router.push('/')
-        router.reload()
-        toast({
-            title: 'Déconnexion réussie',
-            description: 'Vous avez été correctement déconnecté',
-            status: 'success',
-            duration: toastDuration,
-            isClosable: true,
-            position: 'bottom-right',
-        });
+        router.push('/').then(() => {
+            router.reload()
+            toast({
+                title: 'Déconnexion réussie',
+                description: 'Vous avez été correctement déconnecté',
+                status: 'success',
+                duration: toastDuration,
+                isClosable: true,
+                position: 'bottom-right',
+            });
+        })
     }
 
 

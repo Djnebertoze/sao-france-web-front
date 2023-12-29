@@ -56,17 +56,17 @@ a {
 }
 
 .shop-label{
-    background: linear-gradient(to right, #c5e8d6 0%, #a6c2e0 100%);
+    background: linear-gradient(to right, #6e33b7 0%, #717CA7 100%);
     /*background: linear-gradient(to right,#ffffff 0%, #2b82e0 100%);*/
     -webkit-background-clip: text;
     background-clip: text;
     text-fill-color: transparent;
     -webkit-text-fill-color: transparent;
+    font-weight: 500;
 }
+
 .shop-label:hover{
-    background: #a1e5c2;
-    -webkit-background-clip: text;
-    color: #a1e5c2;
+    opacity: .6;
 }
 
 

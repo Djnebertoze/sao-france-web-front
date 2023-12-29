@@ -117,8 +117,8 @@ const ShopManagerCreatePage: NextPage = () => {
             toastError('Le nom du produit est obligatoire !')
             return;
         }
-        if(!productPrice || productPrice <= 0){
-            toastError('Le prix ne peut pas être égal ou inférieur à 0 !')
+        if(!productPrice || productPrice < 0){
+            toastError('Le prix ne peut pas être inférieur à 0 !')
             return;
         }
         if(!productCategorie){
@@ -205,6 +205,7 @@ const ShopManagerCreatePage: NextPage = () => {
                 position: 'bottom-right',
             });
             router.push('/admin/shop-manager')
+            router.reload();
         }
 
         if(createShopProductError && currentShopCategories) {
