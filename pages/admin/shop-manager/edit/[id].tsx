@@ -60,20 +60,19 @@ const ShopManagerEditPage: NextPage = () => {
     const [productPrice, setProductPrice] = useState<number>();
     const [productIsRealMoney, setProductIsRealPrice] = useState<boolean>();
     const [productImageUrl, setProductImageUrl] = useState<string>()
-    const [productCategorie, setProductCategorie] = useState<string>()
+    const [productCategory, setProductCategory] = useState<string>()
     const [productStripeLink, setProductStripeLink] = useState<string>()
     const [productPointsToGive, setProductPointsToGive] = useState<number>()
     const [productRoleToGive, setProductRoleToGive] = useState<string>()
     const [errorMessage, setErrorMessage] = useState<string>()
-
 
     const handleChangeProductName = (event: any) => setProductName(event.target.value);
     const handleChangeProductDescription = (event: any) => setProductDescription(event.target.value);
     const handleChangeProductDescriptionDetails = (event: any) => setProductDescriptionDetails(event.target.value);
     const handleChangeProductPrice = (event: any) => setProductPrice(event.target.value);
     const handleChangeProductImageUrl = (event: any) => setProductImageUrl(event.target.value);
-    const handleChangeProductMonneyType = (event: any) => event.target.value === "true" ? setProductIsRealPrice(true) : setProductIsRealPrice(false);
-    const handleChangeProductCategorie = (event: any) => setProductCategorie(event.target.value);
+    const handleChangeProductMoneyType = (event: any) => event.target.value === "true" ? setProductIsRealPrice(true) : setProductIsRealPrice(false);
+    const handleChangeProductCategorie = (event: any) => setProductCategory(event.target.value);
     const handleChangeProductStripeLink = (event: any) => {
         setProductStripeLink(event.target.value);
         if (activeStripePrices) {
@@ -109,8 +108,8 @@ const ShopManagerEditPage: NextPage = () => {
             toastError('Le prix ne peut pas être égal ou inférieur à 0 !')
             return;
         }
-        if(!productCategorie){
-            toastError('Le produit doit faire forcémment parti d\'une catégorie !')
+        if(!productCategory){
+            toastError('Le produit doit faire forcément parti d\'une catégorie !')
             return;
         }
         if(!productDescription){
@@ -130,12 +129,12 @@ const ShopManagerEditPage: NextPage = () => {
             return;
         }
 
-        if (productCategorie == 'points' && !productPointsToGive){
+        if (productCategory == 'points' && !productPointsToGive){
             toastError('Veuillez préciser le montant de points boutiques à donner !')
             return;
         }
 
-        if (productCategorie == 'grades' && !productRoleToGive){
+        if (productCategory == 'grades' && !productRoleToGive){
             toastError('Veuillez préciser le grade à donner !')
             return;
         }
@@ -143,7 +142,7 @@ const ShopManagerEditPage: NextPage = () => {
         const shopProductDto: CreateShopProductDto = {
             name: productName,
             description: productDescription,
-            categorieId: productCategorie,
+            categorieId: productCategory,
             // @ts-ignore
             price: productIsRealMoney ? activeStripePrices?.filter((stripePrice) => stripePrice.id ===
                 stripeProducts?.filter((stripeProduct) => stripeProduct.id === productStripeLink)[0].default_price)[0].unit_amount / 100
@@ -275,7 +274,7 @@ const ShopManagerEditPage: NextPage = () => {
             console.log("SHOP P", shopProduct)
             setProductName(shopProduct.name);
             setProductDescription(shopProduct.description);
-            setProductCategorie(shopProduct.categorieId);
+            setProductCategory(shopProduct.categorieId);
             setProductPrice(shopProduct.price);
             setProductIsRealPrice(shopProduct.isRealMoney);
             setProductImageUrl(shopProduct.imageUrl)
@@ -331,14 +330,14 @@ const ShopManagerEditPage: NextPage = () => {
                         </Box>
                         <Box marginLeft={5}>
                             <Text fontSize={19} mb={2} mt={5}>Type de monnaie</Text>
-                            <Select placeholder='- Type -' cursor={'pointer'} bgColor={'rgb(76,78,82,1)'} value={productIsRealMoney ? 'true' : 'false'} onChange={handleChangeProductMonneyType}>
+                            <Select placeholder='- Type -' cursor={'pointer'} bgColor={'rgb(76,78,82,1)'} value={productIsRealMoney ? 'true' : 'false'} onChange={handleChangeProductMoneyType}>
                                 <option value={'true'}>Euro €</option>
                                 <option value={'false'}>Points boutique</option>
                             </Select>
                         </Box>
                         <Box marginLeft={5}>
                             <Text fontSize={19} mb={2} mt={5}>Catégorie</Text>
-                            <Select placeholder='- Catégorie -' cursor={'pointer'} bgColor={'rgb(76,78,82,1)'} value={productCategorie} onChange={handleChangeProductCategorie}>
+                            <Select placeholder='- Catégorie -' cursor={'pointer'} bgColor={'rgb(76,78,82,1)'} value={productCategory} onChange={handleChangeProductCategorie}>
                                 {
                                     currentShopCategories?.map((categorie) => {
                                         return <option value={categorie._id} key={categorie._id}>{categorie.name}</option>
@@ -373,7 +372,7 @@ const ShopManagerEditPage: NextPage = () => {
                             </InputGroup>
                         </Box>
                     </Box>
-                    {productCategorie == 'points' && (
+                    {productCategory == 'points' && (
                         <Box>
                             <Box >
                                 <Text fontSize={19} mb={2} mt={5}>Points à donner</Text>
@@ -383,7 +382,7 @@ const ShopManagerEditPage: NextPage = () => {
                             </Box>
                         </Box>
                     )}
-                    {productCategorie == 'grades' && (
+                    {productCategory == 'grades' && (
                         <Box>
                             <Box >
                                 <Text fontSize={19} mb={2} mt={5}>Grade à donner</Text>
@@ -399,7 +398,7 @@ const ShopManagerEditPage: NextPage = () => {
                     )}
                     <Box >
                         <Box >
-                            <Text fontSize={19} mb={2} mt={5}>URL image (temporaire) - priviligier les images basse résolution</Text>
+                            <Text fontSize={19} mb={2} mt={5}>URL image (temporaire) - privilégier les images basse résolution</Text>
                             <InputGroup w={'full'}>
                                 <Input w={'full'} placeholder={'Url de l\'image à afficher'} variant={'flushed'} type={'text'} value={productImageUrl} onChange={handleChangeProductImageUrl}></Input>
                             </InputGroup>

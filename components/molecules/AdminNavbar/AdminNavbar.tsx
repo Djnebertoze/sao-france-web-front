@@ -79,6 +79,7 @@ const AdminNavbar: FC<SidebarWithHeaderProps> = (props) => {
     }, [router, auth, userInfos, dispatch]);
 
     return(
+        // eslint-disable-next-line react/no-children-prop
         <SidebarWithHeader children={props.children}
                            role={userRolesStr}
                            name={userInfos?.username && userInfos?.firstName ?

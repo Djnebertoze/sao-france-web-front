@@ -11,7 +11,7 @@ import {shopCategories} from "../../../common/shop/shopCategories";
 import {getPayProductWithShopPointsReset, getShopState} from "../../../store/shop/shopSlice";
 import {getShopProduct, payProductWithShopPoints} from "../../../store/shop/shopActions";
 import {transformDescription} from "../../../store/helper";
-import ImageSecurised from "../../../public/images/shop/securised.png"
+import ImageSecured from "../../../public/images/shop/securised.png"
 import {getStripeState} from "../../../store/stripe/stripeSlice";
 import {getStripePaymentLink} from "../../../store/stripe/stripeActions";
 
@@ -48,9 +48,6 @@ const ProductPage: NextPage = () => {
 
 
     useEffect(() => {
-        console.log('mmhh')
-        /*console.log('usss')*/
-
         if (auth?.accessToken && !userInfos) {
             dispatch(getUserProfile(auth.accessToken))
             if (userInfos) {
@@ -58,14 +55,7 @@ const ProductPage: NextPage = () => {
             }
         }
 
-        if(auth?.accessToken && shopProduct){
-            /*console.log('usss1')*/
-            console.log('Got product')
-            console.log(shopProduct)
-        }
-
         if(auth?.accessToken && (!shopProduct || (shopProduct && shopProduct._id !== router.query.id))){
-            console.log('Getting product')
             dispatch(getShopProduct(auth.accessToken, router.query.id))
 
         }
@@ -149,7 +139,7 @@ const ProductPage: NextPage = () => {
             });
             dispatch(getPayProductWithShopPointsReset())
         }
-    }, [payProductWithShopPointsSuccess, payProductWithShopPointsError])
+    }, [payProductWithShopPointsSuccess, payProductWithShopPointsError, auth?.accessToken, dispatch, shopProduct?.name, toast, router])
 
     return (
         <Container maxW={'full'} margin={0} padding={0}>
@@ -169,10 +159,10 @@ const ProductPage: NextPage = () => {
                             <Text color={'white'} fontSize={25}>{shopProduct?.price}{shopProduct?.isRealMoney ? '€' : ' Points Boutique'}</Text>
                         </Center>
                         <Center>
-                            <Image src={ImageSecurised.src} w={250} py={11} alt={'Secured payment image'}/>
+                            <Image src={ImageSecured.src} w={250} py={11} alt={'Secured payment image'}/>
                         </Center>
                         <Center>
-                            <Text color={'rgb(255,255,255,.7)'}>Comtpe Minecraft connecté: {userInfos?.mcProfile?.name}</Text>
+                            <Text color={'rgb(255,255,255,.7)'}>Compte Minecraft connecté: {userInfos?.mcProfile?.name}</Text>
                         </Center>
 
                         <Button variant={'solid'} colorScheme={'blue'} onClick={handleBuy} mt={11} isLoading={getStripePaymentLinkLoading || payProductWithShopPointsLoading}>
