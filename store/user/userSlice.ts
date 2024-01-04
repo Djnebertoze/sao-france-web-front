@@ -30,6 +30,13 @@ export interface UserState {
     minecraftProfile?: MinecraftProfile;
     getMinecraftProfileError?: string;
 
+    sendPasswordResetLoading: boolean;
+    sendPasswordResetSuccess?: string;
+    sendPasswordResetError?: string;
+
+    resetPasswordLoading: boolean;
+    resetPasswordSuccess?: string;
+    resetPasswordError?: string;
 }
 
 const initialState: UserState = {
@@ -60,6 +67,14 @@ const initialState: UserState = {
     getMinecraftProfileLoading: false,
     minecraftProfile: undefined,
     getMinecraftProfileError: undefined,
+
+    sendPasswordResetLoading: false,
+    sendPasswordResetSuccess: undefined,
+    sendPasswordResetError: undefined,
+
+    resetPasswordLoading: false,
+    resetPasswordSuccess: undefined,
+    resetPasswordError: undefined,
 }
 
 export const userSlice = createSlice({
@@ -191,6 +206,40 @@ export const userSlice = createSlice({
             state.minecraftProfile = undefined;
             state.getMinecraftProfileError = payload;
         },
+
+
+        sendPasswordResetRequest: (state: Draft<typeof initialState>) => {
+            state.sendPasswordResetLoading = true;
+            state.sendPasswordResetSuccess = undefined;
+            state.sendPasswordResetError = undefined;
+        },
+        sendPasswordResetSuccess: (state: Draft<typeof initialState>, { payload }) => {
+            state.sendPasswordResetLoading = false;
+            state.sendPasswordResetSuccess = payload;
+            state.sendPasswordResetError = undefined;
+        },
+        sendPasswordResetError: (state: Draft<typeof initialState>, { payload }) => {
+            state.sendPasswordResetLoading = false;
+            state.sendPasswordResetSuccess = undefined;
+            state.sendPasswordResetError = payload;
+        },
+
+
+        resetPasswordRequest: (state: Draft<typeof initialState>) => {
+            state.resetPasswordLoading = true;
+            state.resetPasswordSuccess = undefined;
+            state.resetPasswordError = undefined;
+        },
+        resetPasswordSuccess: (state: Draft<typeof initialState>, { payload }) => {
+            state.resetPasswordLoading = false;
+            state.resetPasswordSuccess = payload;
+            state.resetPasswordError = undefined;
+        },
+        resetPasswordError: (state: Draft<typeof initialState>, { payload }) => {
+            state.resetPasswordLoading = false;
+            state.resetPasswordSuccess = undefined;
+            state.resetPasswordError = payload;
+        },
     }
 });
 
@@ -219,7 +268,15 @@ export const {
 
     getMinecraftProfileRequest,
     getMinecraftProfileSuccess,
-    getMinecraftProfileError
+    getMinecraftProfileError,
+
+    sendPasswordResetRequest,
+    sendPasswordResetSuccess,
+    sendPasswordResetError,
+
+    resetPasswordRequest,
+    resetPasswordSuccess,
+    resetPasswordError,
 } = userSlice.actions;
 
 export default userSlice.reducer;

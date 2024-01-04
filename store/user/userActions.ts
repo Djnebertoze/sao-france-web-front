@@ -1,9 +1,16 @@
-import axios from "axios";
+import axios, {HttpStatusCode} from "axios";
 import {
     getMinecraftProfileError,
-    getMinecraftProfileRequest, getMinecraftProfileSuccess, getUserProfileError,
+    getMinecraftProfileRequest,
+    getMinecraftProfileSuccess,
+    getUserProfileError,
     getUserProfileRequest,
-    getUserProfileSuccess, getUsersListError, getUsersListRequest, getUsersListSuccess,
+    getUserProfileSuccess,
+    getUsersListError,
+    getUsersListRequest,
+    getUsersListSuccess, resetPasswordError, resetPasswordRequest, resetPasswordSuccess, sendPasswordResetError,
+    sendPasswordResetRequest,
+    sendPasswordResetSuccess,
     updateUserProfileError,
     updateUserProfileRequest,
     updateUserProfileSuccess,
@@ -19,13 +26,13 @@ import {UpdateUserDto} from "./dtos/updateUserDto";
 
 export const register =
     (username: string,
-     lastName: string,
-     firstName: string,
      email: string,
      password: string,
      acceptEmails: boolean,
      phoneNumber?: string,
-     birthday?: string) => async (dispatch: any) => {
+     birthday?: string,
+     lastName?: string,
+     firstName?: string) => async (dispatch: any) => {
 
         dispatch(userRegisterRequest());
 
@@ -33,8 +40,8 @@ export const register =
 
             interface UserData {
                 username: string;
-                lastName: string;
-                firstName: string;
+                lastName?: string;
+                firstName?: string;
                 email: string;
                 password: string;
                 acceptEmails: boolean;
@@ -44,8 +51,6 @@ export const register =
 
             let data: UserData = {
                 username: username,
-                lastName: lastName,
-                firstName: firstName,
                 email: email,
                 password: password,
                 acceptEmails: acceptEmails,
@@ -57,6 +62,12 @@ export const register =
 
             if (birthday) {
                 data.birthday = birthday;
+            }
+            if(firstName){
+                data.firstName = firstName;
+            }
+            if (data.lastName){
+                data.lastName = lastName;
             }
 
             const response = await axios.post(`${getAPIUrl()}/users`, data);
@@ -204,6 +215,41 @@ export const updateUserProfile = (accessToken: string | undefined, updateUserPro
 
     } catch (error: any) {
         dispatch(updateUserProfileError(error));
+    }
+};
+
+export const sendPasswordReset = (email: string | string[] | undefined) => async (dispatch: any) => {
+    dispatch(sendPasswordResetRequest());
+    try {
+
+        const response = await axios.get(`${getAPIUrl()}/users/send-password-reset/` + email, {});
+
+        if (response.status === HttpStatusCode.Ok){
+            console.log('ok')
+            dispatch(sendPasswordResetSuccess('Success'))
+        }
+    } catch (error: any) {
+        dispatch(sendPasswordResetError(error.message));
+    }
+};
+
+export const resetPassword = (token: string | string[] | undefined, password: string) => async (dispatch: any) => {
+    dispatch(resetPasswordRequest());
+    try {
+
+        const response = await axios.post(`${getAPIUrl()}/users/reset-password/${token}`, { password: password });
+
+        if (response.status === HttpStatusCode.Created){
+            if (response.data.status === HttpStatusCode.Ok){
+                dispatch(resetPasswordSuccess('Success'));
+            } else {
+                dispatch(resetPasswordError(response.data.message));
+            }
+        } else {
+            dispatch(resetPasswordError('Status: ' + response.status));
+        }
+    } catch (error: any) {
+        dispatch(resetPasswordError(error.message));
     }
 };
 

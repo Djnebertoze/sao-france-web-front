@@ -48,7 +48,7 @@ const Footer: FC = () => {
                 <Spacer display={{xl:'block', sm: 'none'}}/>
                 <Box display={{xl:'block', lg: 'none'}} pt={{lg:0,base:2}}  borderTop={{lg:'none', base:'1px solid rgb(255,255,255,.5)'}} margin={'auto'} mt={{lg: 0, base:5}} >
                     <Flex flexDirection={'column'} textAlign={{lg: 'left', base: 'center'}}>
-                        <Text fontSize={{vsm:30, base:18}} mb={5} fontWeight={'bold'}>Á propos</Text>
+                        <Text fontSize={{vsm:30, base:18}} mb={5} fontWeight={'bold'}>À propos</Text>
                         <Text maxW={{lg:300, base: '500'}} margin={{lg:0, base:'auto'}} fontSize={{vsm:16, base:10}}>
                             {t('home.HOME_DESCRIPTION')}
                         </Text>

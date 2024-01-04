@@ -3,11 +3,11 @@ import {NextRouter, useRouter} from "next/router";
 import {useDispatch} from "../../../store/store";
 import {useSelector} from "react-redux";
 import {getUserState} from "../../../store/user/userSlice";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {
     Box,
     Button,
-    Flex,
+    Flex, Input, InputGroup, Select,
     Skeleton,
     Spacer,
     Table,
@@ -23,7 +23,7 @@ import AdminNavbar from "../../../components/molecules/AdminNavbar/AdminNavbar";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {getUsersList} from "../../../store/user/userActions";
 import {FiRefreshCcw} from "react-icons/fi";
-
+import {roles} from "../../../common/roles/roles";
 
 const AdminUsersManagerPage: NextPage = () => {
 
@@ -38,11 +38,19 @@ const AdminUsersManagerPage: NextPage = () => {
         getUsersListLoading, getUsersListError, usersList
     } = useSelector(getUserState)
 
+    const [usernameFilter, setUsernameFilter] = useState<string>("")
+    const handleUsernameFilterChange = (event: any) => setUsernameFilter(event.target.value)
+
+    const [emailFilter, setEmailFilter] = useState<string>("")
+    const handleEmailFilterChange = (event: any) => setEmailFilter(event.target.value)
+
+    const [roleFilter, setRoleFilter] = useState<string>("")
+    const handleRoleFilterChange = (event: any) => setRoleFilter(event.target.value)
+    const [mcUsernameFilter, setMcUsernameFilter] = useState<string>("")
+    const handleMcUsernameFilterChange = (event: any) => setMcUsernameFilter(event.target.value)
 
     const toast = useToast();
     const toastDuration = 3000;
-
-
 
     useEffect(() => {
         console.log('1')
@@ -90,12 +98,42 @@ const AdminUsersManagerPage: NextPage = () => {
                 {auth?.accessToken && (
                     <Button p={0} colorScheme={'blue'} onClick={() => dispatch(getUsersList(auth.accessToken))}><FiRefreshCcw/></Button>
                 )}
-
             </Flex>
             <Box h={'1px'} w={'full'} backgroundColor={'rgb(255,255,255,.2)'} mb={5}/>
-
+            <Flex mb={5}>
+                <InputGroup flexDirection={'column'} maxW={200}>
+                    <Text mb={2}>Filtrer par pseudonyme</Text>
+                    <Input placeholder={"Pseudo"} value={usernameFilter} onChange={handleUsernameFilterChange}></Input>
+                </InputGroup>
+                <InputGroup flexDirection={'column'} maxW={200} ml={2}>
+                    <Text mb={2}>Filtrer par email</Text>
+                    <Input placeholder={"Email"} value={emailFilter} onChange={handleEmailFilterChange}></Input>
+                </InputGroup>
+                <InputGroup flexDirection={'column'} maxW={180} ml={2}>
+                    <Text mb={2}>Filtrer par rôle</Text>
+                    <Select placeholder='- Grade à filtrer -' cursor={'pointer'} bgColor={'rgb(38,39,41,1)'} value={roleFilter} onChange={handleRoleFilterChange}>
+                        {
+                            roles?.map((role) => {
+                                return <option value={role._id} key={role._id}>{role.name}</option>
+                            })
+                        }
+                    </Select>
+                </InputGroup>
+                <InputGroup flexDirection={'column'} maxW={220} ml={2}>
+                    <Text mb={2}>Filtrer par pseudo Minecraft</Text>
+                    <Input placeholder={"Pseudo Minecraft"} value={mcUsernameFilter} onChange={handleMcUsernameFilterChange}></Input>
+                </InputGroup>
+            </Flex>
 
             <Skeleton isLoaded={!getUsersListLoading}>
+                <Text mb={2} color={'rgb(141,141,141)'} ml={1}>{
+                    usersList?.users?.filter((user) => user.username.toLowerCase().includes(usernameFilter.toLowerCase()))
+                        .filter((user) => user.email.toLowerCase().includes(emailFilter.toLowerCase()))
+                        .filter((user) => user.roles?.toString().toLowerCase().includes(roleFilter.toLowerCase()))
+                        .filter((user) => mcUsernameFilter != "" ? usersList?.mcProfiles?.filter((mcProfile) =>
+                            mcProfile.user?._id == user?._id)[0]?.name.toLowerCase().includes(mcUsernameFilter.toLowerCase()) : true)
+                        .length
+                } résultat(s)</Text>
                 <TableContainer>
                     <Table variant={'striped'} colorScheme={'whiteAlpha'} size='sm'>
                         <Thead>
@@ -113,7 +151,13 @@ const AdminUsersManagerPage: NextPage = () => {
 
                         <Tbody>
                             {
-                                usersList?.users?.map((user) => {
+                                usersList?.users?.filter((user) => user.username.toLowerCase().includes(usernameFilter.toLowerCase()))
+                                    .filter((user) => user.email.toLowerCase().includes(emailFilter.toLowerCase()))
+                                    .filter((user) => user.roles?.toString().toLowerCase().includes(roleFilter.toLowerCase()))
+                                    .filter((user) => mcUsernameFilter != "" ? usersList?.mcProfiles?.filter((mcProfile) =>
+                                        mcProfile.user?._id == user?._id)[0]?.name.toLowerCase().includes(mcUsernameFilter.toLowerCase()) : true)
+                                    .sort((a, b) => a.username.localeCompare(b.username))
+                                    .map((user) => {
                                     return (
                                         <Tr key={user._id} className={'custom-tr'}>
                                             <Th color={'rgb(255,255,255,.6)'} textTransform={'none'}>
@@ -129,8 +173,8 @@ const AdminUsersManagerPage: NextPage = () => {
                                                 {new Date(user.createdAt).toLocaleString()}
                                             </Th>
                                             <Th color={'rgb(255,255,255,.6)'} textTransform={'none'}>
-                                                {usersList?.mcProfiles.filter((mcProfile) => mcProfile.user._id == user._id).length != 0 ?
-                                                    usersList?.mcProfiles.filter((mcProfile) => mcProfile.user._id == user._id)[0].name
+                                                {usersList?.mcProfiles?.filter((mcProfile) => mcProfile.user?._id == user?._id).length != 0 ?
+                                                    usersList?.mcProfiles?.filter((mcProfile) => mcProfile.user?._id == user?._id)[0].name
                                                     : '-'
                                                 }
                                             </Th>

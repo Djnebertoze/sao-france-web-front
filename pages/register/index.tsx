@@ -120,7 +120,7 @@ const RegisterPage: NextPage = () => {
                 position: 'bottom-right',
             });
         }
-    }, [dispatch, auth, toast, router, userRegisterError, t]);
+    }, [dispatch, auth, toast, router, userRegisterError, t, userRegisterSuccess]);
 
 
     return (
@@ -147,19 +147,6 @@ const RegisterPage: NextPage = () => {
                                     <Input w={'full'} color={'white'} placeholder={t('register.FILL_THE_FIELD_LABEL')} variant='flushed' value={usernameValue} onChange={handleUsernameChange}></Input>
                                 </InputGroup>
                             </Box>
-
-                            <Box borderLeft={'rgb(255,255,255,.4) 1px solid'} pl={5}>
-                                <Text fontSize={19} color={'white'} mb={2} mt={5}>{t('register.LAST_NAME_LABEL')} <Text color={'red'} as={'a'} fontSize={16}>*</Text></Text>
-                                <InputGroup w={'full'}>
-                                    <Input w={'full'} color={'white'} placeholder={t('register.FILL_THE_FIELD_LABEL')} variant='flushed' value={lastNameValue} onChange={handleLastNameChange}></Input>
-                                </InputGroup>
-                            </Box>
-                            <Box borderLeft={'rgb(255,255,255,.4) 1px solid'} pl={5}>
-                                <Text fontSize={19} color={'white'} mb={2} mt={5}>{t('register.FIRST_NAME_LABEL')} <Text color={'red'} as={'a'} fontSize={16}>*</Text></Text>
-                                <InputGroup w={'full'}>
-                                    <Input w={'full'} color={'white'} placeholder={t('register.FILL_THE_FIELD_LABEL')} variant='flushed' value={firstNameValue} onChange={handleFirstNameChange}></Input>
-                                </InputGroup>
-                            </Box>
                             <Box borderLeft={!emailIsInvalid ? 'rgb(255,255,255,.4) 1px solid' : 'red 3px solid'} pl={5}>
                                 <Text fontSize={19} color={'white'} mb={2} mt={5}>{t('register.EMAIL_LABEL')} <Text color={'red'} as={'a'} fontSize={16}>* {emailIsInvalid ? "Veuillez rentrer une adresse email valide !":""}</Text></Text>
                                 <InputGroup w={'full'}>
@@ -176,6 +163,18 @@ const RegisterPage: NextPage = () => {
                                 <Text fontSize={19} color={'white'} mb={2} mt={5}>{t('register.VERIFICATION_PASSWORD_LABEL')} <Text color={'red'} as={'a'} fontSize={16}>* {passwordConfirmationIsInvalid ? "Les deux mots de passes de correspondent pas !":""}</Text></Text>
                                 <InputGroup w={'full'}>
                                     <Input w={'full'} color={'white'} placeholder={t('register.FILL_THE_FIELD_LABEL')} variant='flushed' type={'password'} value={verificationPasswordValue} onChange={handleVerificationPasswordChange}></Input>
+                                </InputGroup>
+                            </Box>
+                            <Box borderLeft={'rgb(255,255,255,.4) 1px solid'} pl={5}>
+                                <Text fontSize={19} color={'white'} mb={2} mt={5}>{t('register.LAST_NAME_LABEL')} <Text as={'i'} fontSize={10}>(requis pour faire des achats)</Text></Text>
+                                <InputGroup w={'full'}>
+                                    <Input w={'full'} color={'white'} placeholder={t('register.FILL_THE_FIELD_LABEL')} variant='flushed' value={lastNameValue} onChange={handleLastNameChange}></Input>
+                                </InputGroup>
+                            </Box>
+                            <Box borderLeft={'rgb(255,255,255,.4) 1px solid'} pl={5}>
+                                <Text fontSize={19} color={'white'} mb={2} mt={5}>{t('register.FIRST_NAME_LABEL')} <Text as={'i'} fontSize={10}>(requis pour faire des achats)</Text></Text>
+                                <InputGroup w={'full'}>
+                                    <Input w={'full'} color={'white'} placeholder={t('register.FILL_THE_FIELD_LABEL')} variant='flushed' value={firstNameValue} onChange={handleFirstNameChange}></Input>
                                 </InputGroup>
                             </Box>
                             <Box borderLeft={'rgb(255,255,255,.4) 1px solid'} pl={5}>
@@ -212,11 +211,9 @@ const RegisterPage: NextPage = () => {
                                     py={5}
                                     isLoading={userRegisterLoading}
                                     onClick={() => {
-                                        dispatch(register(usernameValue, lastNameValue, firstNameValue, emailValue, passwordValue, acceptMailsValue, phoneNumberValue, birthdayValue))
+                                        dispatch(register(usernameValue, emailValue, passwordValue, acceptMailsValue, phoneNumberValue, birthdayValue, lastNameValue, firstNameValue))
                                     }}
                                     isDisabled={!usernameValue ||
-                                        !lastNameValue ||
-                                        !firstNameValue ||
                                         !emailValue ||
                                         !passwordValue ||
                                         !verificationPasswordValue ||

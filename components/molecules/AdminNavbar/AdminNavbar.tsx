@@ -79,10 +79,12 @@ const AdminNavbar: FC<SidebarWithHeaderProps> = (props) => {
     }, [router, auth, userInfos, dispatch]);
 
     return(
-        // eslint-disable-next-line react/no-children-prop
         <SidebarWithHeader children={props.children}
                            role={userRolesStr}
-                           name={userInfos?.username && userInfos?.firstName ? userInfos.firstName + ' ('+userInfos.username+')' : 'Loading...'}
+                           name={userInfos?.username && userInfos?.firstName ?
+                               userInfos.firstName + ' ('+userInfos.username+')'
+                               : userInfos?.username ? userInfos.username
+                                   : 'Loading...'}
                            imageUrl={userInfos?.mcProfile ? 'https://skins.danielraybone.com/v1/head/' + userInfos.mcProfile.name : userInfos?.profilePicture ? userInfos.profilePicture : ''}
                            power={userPower}
                            selected={props.selected}/>

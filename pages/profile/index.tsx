@@ -133,10 +133,10 @@ const ProfilePage: NextPage = () => {
     }
 
 
-    const [lastNameValue, setLastNameValue] = useState<string>("");
+    const [lastNameValue, setLastNameValue] = useState<string|undefined>();
     const handleLastNameChange = (event: any) => setLastNameValue(event.target.value);
 
-    const [firstNameValue, setFirstNameValue] = useState<string>("");
+    const [firstNameValue, setFirstNameValue] = useState<string|undefined>();
     const handleFirstNameChange = (event: any) => setFirstNameValue(event.target.value);
 
     const {instance, accounts} = useMsal();
@@ -164,11 +164,13 @@ const ProfilePage: NextPage = () => {
                     const roles_filtered: Role[] = [];
                     userInfos.roles.map((role_id) => {
                         // @ts-ignore
-                        if (getRoleById(role_id) && (role_id != 'user' && userInfos.roles.length > 1)) {
+                        if (getRoleById(role_id) && role_id != 'user') {
+                            roles_filtered.push(getRoleById(role_id) as Role)
+                        // @ts-ignore
+                        } else if (role_id == 'user' && userInfos.roles?.length <= 1){
                             roles_filtered.push(getRoleById(role_id) as Role)
                         }
                     })
-                    console.log('roles', roles_filtered)
                     setUserRoles(roles_filtered.sort((a, b) => a.power - b.power))
                 }
             }

@@ -1,28 +1,30 @@
 import {NextPage} from "next";
 import {NextRouter, useRouter} from "next/router";
 import {useTranslation} from "next-i18next";
-import {Box, Button, Checkbox, Container, Flex, Input, InputGroup, Link, Text, useToast} from "@chakra-ui/react";
+import {Box, Button, Container, Flex, Input, InputGroup, Link, Text, useToast} from "@chakra-ui/react";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useEffect, useState} from "react";
-import {getUserState} from "../../store/user/userSlice";
-import {login} from "../../store/user/userActions";
-import {useDispatch, useSelector} from "../../store/store";
+import {
+    getUserState
+} from "../../../store/user/userSlice";
+import {resetPassword} from "../../../store/user/userActions";
+import {useDispatch, useSelector} from "../../../store/store";
 
 
 const LoginPage: NextPage = () => {
 
     const router: NextRouter = useRouter();
     const dispatch = useDispatch();
+    const token = router.query.token
 
-    const { userLoginLoading, auth, userLoginError } = useSelector(getUserState)
+    const {
+        resetPasswordLoading, resetPasswordError, resetPasswordSuccess
+    } = useSelector(getUserState)
 
     const { t } = useTranslation();
 
     const [passwordIsInvalid, setPasswordIsInvalid] = useState(false);
-
-    const [usernameValue, setUsernameValue] = useState<string>("");
-    const handleUsernameChange = (event: any) => setUsernameValue(event.target.value)
-
+    const [passwordConfirmationIsInvalid, setPasswordConfirmationIsInvalid] = useState(false);
     const [passwordValue, setPasswordValue] = useState<string>("");
     const handlePasswordChange = (event: any) => {
         setPasswordValue(event.target.value)
@@ -31,40 +33,52 @@ const LoginPage: NextPage = () => {
         } else {
             setPasswordIsInvalid(false);
         }
+        if (event.target.value !== verificationPasswordValue) {
+            setPasswordConfirmationIsInvalid(true);
+        } else {
+            setPasswordConfirmationIsInvalid(false);
+        }
     };
 
-    const [stayConnectedValue, setStayConnectedValue] = useState<boolean>(false);
-    const handleStayConnectedChange = () => setStayConnectedValue(!stayConnectedValue);
+    const [verificationPasswordValue, setVerificationPasswordValue] = useState<string>("");
+    const handleVerificationPasswordChange = (event: any) => {
+        setVerificationPasswordValue(event.target.value)
+        if (event.target.value !== passwordValue) {
+            setPasswordConfirmationIsInvalid(true);
+        } else {
+            setPasswordConfirmationIsInvalid(false);
+        }
+    };
+
 
     const toast = useToast();
     const toastDuration = 5000;
 
     useEffect(() => {
-        if(auth?.accessToken){
-            router.push('/').then(() => {});
-            toast({
-                title: t('register.LOGIN_USER_SUCCESS_TOAST_TITLE'),
-                description: t('register.LOGIN_USER_SUCCESS_TOAST_DESCRIPTION'),
-                status: 'success',
-                duration: toastDuration,
-                isClosable: true,
-                position: 'bottom-right',
+        console.log('mmmh')
+        if (resetPasswordSuccess && !resetPasswordLoading){
+            router.push('/login').then(() => {
+                toast({
+                    title: 'Mot de passe changé',
+                    description: 'Votre mot de passe a été changé.',
+                    status: 'success',
+                    duration: toastDuration,
+                    isClosable: true,
+                    position: 'bottom-right',
+                });
             });
         }
-
-        if(userLoginError){
+        if (resetPasswordError && !resetPasswordLoading){
             toast({
-                title: 'Impossible de se connecter',
-                description: userLoginError,
+                title: 'Erreur lors de la réinitialisation de votre mot de passe',
+                description: resetPasswordError,
                 status: 'error',
                 duration: toastDuration,
                 isClosable: true,
                 position: 'bottom-right',
             });
         }
-
-    }, [dispatch, auth, toast, router, userLoginError, t]);
-
+    }, [resetPasswordSuccess, resetPasswordError, resetPasswordLoading, dispatch, toast, router])
 
     return (
         <Container maxW={'full'} margin={0} padding={0}>
@@ -75,47 +89,38 @@ const LoginPage: NextPage = () => {
                          mx={18}
                          mb={150}>
                         <Text maxW={'full'} textAlign={'center'} fontFamily={'Bebas Neue'} fontSize={30} letterSpacing={3} color={'white'}>
-                            {t('globals.LOGIN_LABEL')}
+                            Réinitialisation mot de passe
                         </Text>
                         <Box h={'1px'} w={'full'} bgColor={'rgb(255,255,255,.2)'} mx={0} my={3}/>
                         <Flex flex={1} justify={'center'} w={'full'} align={'center'}>
-                            <Link className={'clickable-link'} color={'rgb(255,255,255,.8)!important'} onClick={() => router.push('/register')}>Je n&apos;ai pas encore de compte</Link>
+                            <Link className={'clickable-link'} color={'rgb(255,255,255,.8)!important'} onClick={() => router.push('/login')}>J&apos;ai déjà un compte</Link>
                         </Flex>
 
                         <Box w={'full'} px={10}>
-                            <Box borderLeft={'rgb(255,255,255,.5) 1px solid'} pl={5}>
-                                <Text fontSize={19} mb={2} mt={5} color={'white'}>{t('register.USERNAME_LABEL')}</Text>
-                                <InputGroup w={'full'}>
-                                    <Input w={'full'} placeholder={t('register.FILL_THE_FIELD_LABEL')} variant='flushed' value={usernameValue} color={'white'} onChange={handleUsernameChange}></Input>
-                                </InputGroup>
-                            </Box>
                             <Box borderLeft={!passwordIsInvalid ? 'rgb(255,255,255,.5) 1px solid' : 'red 2px solid'} pl={5}>
-                                <Text fontSize={19} mb={2} mt={5} color={'white'}>{t('register.PASSWORD_LABEL')} <Text color={'red'} fontSize={15} as={'a'}>{passwordIsInvalid ? "Le mot de passe doit contenir au moins 8 caractères !":""}</Text></Text>
+                                <Text fontSize={19} mb={2} mt={5} color={'white'}>Nouveau mot de passe<Text color={'red'} fontSize={15} as={'a'}>{passwordIsInvalid ? "Le mot de passe doit contenir au moins 8 caractères !":""}</Text></Text>
                                 <InputGroup w={'full'}>
                                     <Input w={'full'} placeholder={t('register.FILL_THE_FIELD_LABEL')} variant='flushed' type={'password'} color={'white'} value={passwordValue} onChange={handlePasswordChange}></Input>
                                 </InputGroup>
                             </Box>
-                            <Box borderLeft={'rgb(255,255,255,.5) 1px solid'} pl={5} mt={5} display={'none'}>
-                                <Checkbox checked={stayConnectedValue} onChange={handleStayConnectedChange}>
-                                    {t('register.LOGIN_STAY_CONNECTED_LABEL')}
-                                </Checkbox>
+                            <Box borderLeft={!passwordConfirmationIsInvalid ? 'rgb(255,255,255,.4) 1px solid' : 'red 3px solid'} pl={5}>
+                                <Text fontSize={19} color={'white'} mb={2} mt={5}>{t('register.VERIFICATION_PASSWORD_LABEL')} <Text color={'red'} as={'a'} fontSize={16}>* {passwordConfirmationIsInvalid ? "Les deux mots de passes de correspondent pas !":""}</Text></Text>
+                                <InputGroup w={'full'}>
+                                    <Input w={'full'} color={'white'} placeholder={t('register.FILL_THE_FIELD_LABEL')} variant='flushed' type={'password'} value={verificationPasswordValue} onChange={handleVerificationPasswordChange}></Input>
+                                </InputGroup>
                             </Box>
+
                             <Flex flex={1} justify={'center'} w={'full'} align={'center'} mt={10}>
                                 <Button
                                     px={100}
                                     py={5}
-                                    isLoading={userLoginLoading}
+                                    isLoading={resetPasswordLoading}
                                     onClick={() => {
-                                        dispatch(login(usernameValue, passwordValue))
+                                        dispatch(resetPassword(token,passwordValue))
                                     }}
-                                    isDisabled={!usernameValue ||
-                                        !passwordValue ||
-                                        passwordIsInvalid}>
-                                    {t('register.LOGIN_BUTTON_LABEL')}
+                                    isDisabled={!passwordValue || passwordIsInvalid || passwordConfirmationIsInvalid}>
+                                    Modifier
                                 </Button>
-                            </Flex>
-                            <Flex flex={1} justify={'center'} w={'full'} align={'center'} mt={3}>
-                                <Link className={'clickable-link'} color={'rgb(255,255,255,.8)!important'} onClick={() => router.push('/login/forgot-password')}>J&apos;ai oublié mon mot de passe</Link>
                             </Flex>
                         </Box>
                         <Box h={'1px'} w={'full'} bgColor={'rgb(255,255,255,.2)'} mx={0} my={10} />

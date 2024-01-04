@@ -6,6 +6,7 @@ import {getUserState} from "../../../store/user/userSlice";
 import {useEffect} from "react";
 import AdminNavbar from "../../../components/molecules/AdminNavbar/AdminNavbar";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import {Box, Flex, Spacer, Text} from "@chakra-ui/react";
 
 
 const SettingsPage: NextPage = () => {
@@ -35,6 +36,14 @@ const SettingsPage: NextPage = () => {
 
     return (
         <AdminNavbar selected={'/settings'}>
+            <Text fontSize={25} mb={0}>Bienvenue sur votre onglet &apos;<Text color={'cyan.400'} as={'span'}>Paramètres</Text>&apos; !</Text>
+            <Flex mb={5}>
+                <Flex direction={"column"}>
+                    <Text fontSize={16} color={'rgb(255,255,255,.5)'}>Vous retrouverez ici différents paramètres pour gérer le site.</Text>
+                </Flex>
+                <Spacer/>
+            </Flex>
+            <Box h={'1px'} w={'full'} backgroundColor={'rgb(255,255,255,.2)'} mb={5}/>
             En cours de dev...
         </AdminNavbar>
     );

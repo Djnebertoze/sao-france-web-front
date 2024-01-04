@@ -7,10 +7,10 @@ export interface User {
     _id: string;
     email: string;
     password?: string;
-    firstName: string;
-    lastName: string;
+    firstName?: string;
+    lastName?: string;
     profilePicture: string;
-    roles?: string[];
+    roles: string[];
     phoneNumber?: string;
     createdAt: Date;
     updatedAt?: Date;
