@@ -11,13 +11,14 @@ import {
 } from "../../../../store/user/userSlice";
 import React, {FC, useEffect, useState} from "react";
 import {
+    Button,
     Flex, Icon, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select,
     Text, useDisclosure,
     useToast,
 } from "@chakra-ui/react";
 import AdminNavbar from "../../../../components/molecules/AdminNavbar/AdminNavbar";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {addRole, getUserPrivateProfile, removeRole} from "../../../../store/user/userActions";
+import {addRole, getUserPrivateProfile, removeRole, sendPasswordReset} from "../../../../store/user/userActions";
 import {getRoleById, roles} from "../../../../common/roles/roles";
 import {getMaxPowerFromUserRoles} from "../../../../store/helper";
 import {Tags} from "../../../../components/atoms/Tags/Tags";
@@ -52,7 +53,10 @@ const AdminUserManagerPage: NextPage = () => {
         removeRoleError,
         addRoleLoading,
         addRoleSuccess,
-        addRoleError
+        addRoleError,
+        sendPasswordResetLoading,
+        sendPasswordResetError,
+        sendPasswordResetSuccess
     } = useSelector(getUserState)
 
     const handleDelete = (roleId: string | undefined, email: string) => {
@@ -61,6 +65,10 @@ const AdminUserManagerPage: NextPage = () => {
 
     const handleAdd = (roleId: string | undefined, email: string) => {
         dispatch(addRole(auth?.accessToken, roleId, email))
+    }
+
+    const handleResetPassword = () => {
+        dispatch(sendPasswordReset(getUserPrivateProfileSuccess?.user?.email))
     }
 
     const toast = useToast();
@@ -110,6 +118,31 @@ const AdminUserManagerPage: NextPage = () => {
         }
     }, [dispatch, toast, auth?.accessToken, userId, router, userInfos, userLoginError, getUserInfosError, getUserPrivateProfileSuccess, getUserPrivateProfileLoading, getUserPrivateProfileError ]);
 
+
+    useEffect(() => {
+        if(!sendPasswordResetLoading){
+            if(sendPasswordResetSuccess){
+                toast({
+                    title: 'Email envoyée',
+                    description: 'L\'email de réinitialisation a bien été envoyé',
+                    status: 'success',
+                    duration: toastDuration,
+                    isClosable: true,
+                    position: 'bottom-right',
+                });
+            }
+            if(sendPasswordResetError){
+                toast({
+                    title: 'Email non envoyée',
+                    description: 'L\'email de réinitialisation n\' a pas été envoyé',
+                    status: 'error',
+                    duration: toastDuration,
+                    isClosable: true,
+                    position: 'bottom-right',
+                });
+            }
+        }
+    }, [dispatch, sendPasswordResetLoading, sendPasswordResetError, sendPasswordResetSuccess, toast])
 
     useEffect(() => {
         if (!removeRoleLoading){
@@ -299,6 +332,9 @@ const AdminUserManagerPage: NextPage = () => {
                                 <br/>
                                 Points boutique: {getUserPrivateProfileSuccess.user.shopPoints}
                             </Text>
+                            <Button colorScheme={'blue'} maxW={500} isLoading={sendPasswordResetLoading} onClick={handleResetPassword}>
+                                Envoyer le mail de réinitialisation du mot de passe
+                            </Button>
                         </Flex>
                     </Flex>
                 )
