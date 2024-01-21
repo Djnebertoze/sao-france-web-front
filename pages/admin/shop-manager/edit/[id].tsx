@@ -16,6 +16,7 @@ import {getStripeState} from "../../../../store/stripe/stripeSlice";
 import {CreateShopProductDto} from "../../../../store/shop/dtos/createShopProductDto";
 import {getActiveStripePrices, getStripeProducts} from "../../../../store/stripe/stripeActions";
 import {roles} from "../../../../common/roles/roles";
+import {getMaxPowerFromUserRoles} from "../../../../store/helper";
 
 
 const ShopManagerEditPage: NextPage = () => {
@@ -164,7 +165,7 @@ const ShopManagerEditPage: NextPage = () => {
 
 
     useEffect(() => {
-        if(auth?.accessToken && userInfos && !(userInfos?.roles?.includes('admin'))){
+        if(auth?.accessToken && userInfos && getMaxPowerFromUserRoles(userInfos.roles) < 6){
             router.push('/').then(() => {})
         }
 

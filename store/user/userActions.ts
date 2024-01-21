@@ -1,14 +1,25 @@
 import axios, {HttpStatusCode} from "axios";
 import {
+    addRoleError,
+    addRoleRequest,
+    addRoleSuccess,
     getMinecraftProfileError,
     getMinecraftProfileRequest,
     getMinecraftProfileSuccess,
+    getUserPrivateProfileError,
+    getUserPrivateProfileRequest,
+    getUserPrivateProfileSuccess,
     getUserProfileError,
     getUserProfileRequest,
     getUserProfileSuccess,
     getUsersListError,
     getUsersListRequest,
-    getUsersListSuccess, resetPasswordError, resetPasswordRequest, resetPasswordSuccess, sendPasswordResetError,
+    getUsersListSuccess, removeRoleError,
+    removeRoleRequest, removeRoleSuccess,
+    resetPasswordError,
+    resetPasswordRequest,
+    resetPasswordSuccess,
+    sendPasswordResetError,
     sendPasswordResetRequest,
     sendPasswordResetSuccess,
     updateUserProfileError,
@@ -23,6 +34,7 @@ import {
 } from "./userSlice";
 import {getAPIUrl} from "../helper";
 import {UpdateUserDto} from "./dtos/updateUserDto";
+import {UserPrivateProfile} from "../../common/types/types";
 
 export const register =
     (username: string,
@@ -162,7 +174,6 @@ export const checkLogin = () => async (dispatch: any) => {
 };
 
 export const getUserProfile = (accessToken: string | null | undefined) => async (dispatch: any) => {
-    console.log('getting user profile')
     dispatch(getUserProfileRequest());
     try {
         const response = await axios.get(`${getAPIUrl()}/users/profile`, {
@@ -173,6 +184,32 @@ export const getUserProfile = (accessToken: string | null | undefined) => async 
         dispatch(getUserProfileSuccess(response.data));
     } catch (error: any) {
         dispatch(getUserProfileError(error.message));
+        console.log(error)
+    }
+};
+
+export const getUserPrivateProfile = (accessToken: string | null | undefined, userId: string | string[] | undefined) => async (dispatch: any) => {
+    dispatch(getUserPrivateProfileRequest());
+    try {
+        const response = await axios.get(`${getAPIUrl()}/users/user/`+userId, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+
+        if (response.status === HttpStatusCode.Ok){
+            if(response.data.status === HttpStatusCode.Ok){
+                dispatch(getUserPrivateProfileSuccess(response.data as UserPrivateProfile));
+            } else {
+                dispatch(getUserPrivateProfileError(response.data.message));
+            }
+        } else {
+            dispatch(getUserPrivateProfileError(response.statusText));
+        }
+
+
+    } catch (error: any) {
+        dispatch(getUserPrivateProfileError(error.message));
         console.log(error)
     }
 };
@@ -250,6 +287,60 @@ export const resetPassword = (token: string | string[] | undefined, password: st
         }
     } catch (error: any) {
         dispatch(resetPasswordError(error.message));
+    }
+};
+
+export const addRole = (accessToken: string | undefined, roleId: string | undefined, userEmail: string | undefined) => async (dispatch: any) => {
+    dispatch(addRoleRequest());
+    try {
+
+        const response = await axios.post(`${getAPIUrl()}/users/addRole`,
+            {
+                email: userEmail,
+                roleId: roleId
+            },
+            {
+                headers: { Authorization: `Bearer ${accessToken}` },
+            });
+
+        if (response.status === HttpStatusCode.Created){
+            if (response.data.status === HttpStatusCode.Ok){
+                dispatch(addRoleSuccess('Success'));
+            } else {
+                dispatch(addRoleError(response.data.message));
+            }
+        } else {
+            dispatch(addRoleError('Status: ' + response.status));
+        }
+    } catch (error: any) {
+        dispatch(addRoleError(error.message));
+    }
+};
+
+export const removeRole = (accessToken: string | undefined, roleId: string | undefined, userEmail: string | undefined) => async (dispatch: any) => {
+    dispatch(removeRoleRequest());
+    try {
+
+        const response = await axios.post(`${getAPIUrl()}/users/removeRole`,
+            {
+                email: userEmail,
+                roleId: roleId
+            },
+            {
+                headers: { Authorization: `Bearer ${accessToken}` },
+            });
+
+        if (response.status === HttpStatusCode.Created){
+            if (response.data.status === HttpStatusCode.Ok){
+                dispatch(removeRoleSuccess('Success'));
+            } else {
+                dispatch(removeRoleError(response.data.message));
+            }
+        } else {
+            dispatch(removeRoleError('Status: ' + response.status));
+        }
+    } catch (error: any) {
+        dispatch(removeRoleError(error.message));
     }
 };
 

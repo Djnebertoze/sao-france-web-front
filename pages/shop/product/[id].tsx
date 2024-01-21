@@ -162,11 +162,11 @@ const ProductPage: NextPage = () => {
                             <Image src={ImageSecured.src} w={250} py={11} alt={'Secured payment image'}/>
                         </Center>
                         <Center>
-                            <Text color={'rgb(255,255,255,.7)'}>Compte Minecraft connecté: {userInfos?.mcProfile?.name}</Text>
+                            <Text color={'rgb(255,255,255,.7)'}>Compte Minecraft connecté: {userInfos?.mcProfile?.name ? userInfos?.mcProfile?.name : 'NON CONNECTÉ'}</Text>
                         </Center>
 
-                        <Button variant={'solid'} colorScheme={'blue'} onClick={handleBuy} mt={11} isLoading={getStripePaymentLinkLoading || payProductWithShopPointsLoading}>
-                            Acheter
+                        <Button variant={'solid'} colorScheme={'blue'} onClick={() => userInfos?.mcProfile?.name ? handleBuy : router.push('/profile')} mt={11} isLoading={getStripePaymentLinkLoading || payProductWithShopPointsLoading}>
+                            {userInfos?.mcProfile?.name ? 'Acheter' : 'Connecter mon compte Minecraft'}
                         </Button>
                     </Flex>
                     <Spacer/>

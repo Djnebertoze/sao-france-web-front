@@ -73,7 +73,7 @@ interface SidebarWithHeaderProps extends FlexProps{
 }
 
 const LinkItems: Array<LinkItemProps> = [
-    { name: 'Panel', icon: FiHome, href: '', powerRequired: 3 },
+    { name: 'Panel', icon: FiHome, href: '', powerRequired: 2 },
     { name: 'Statistiques', icon: FiTrendingUp, href: '/stats', powerRequired: 3 },
     { name: 'Utilisateurs', icon: FiUsers, href: '/users', powerRequired: 3},
     { name: 'Recrutements', icon: FiBriefcase, href: '/apply-manager', powerRequired: 5},

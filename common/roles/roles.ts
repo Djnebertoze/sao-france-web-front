@@ -41,14 +41,14 @@ export const roles: Role[] = [
         name: 'Staff',
         color: 'yellow.300',
         textColor: 'black',
-        power:2
+        power: 2
     },
     {
         _id: 'developer',
         name: 'Développeur',
         color: '#81cc83',
         textColor: 'white',
-        power:3
+        power: 3
     },
     {
         _id: 'moderator',
@@ -62,14 +62,14 @@ export const roles: Role[] = [
         name: 'Responsable',
         color: 'blue',
         textColor: 'white',
-        power:5
+        power: 5
     },
     {
         _id: 'admin',
         name: 'Administrateur',
         color: '#df6a6a',
         textColor: 'white',
-        power:6
+        power: 6
     }
 ]
 

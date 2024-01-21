@@ -1,5 +1,5 @@
 import { createSlice, Draft } from "@reduxjs/toolkit";
-import {Auth, MinecraftProfile, User, UsersList} from "../../common/types/types";
+import {Auth, MinecraftProfile, User, UserPrivateProfile, UsersList} from "../../common/types/types";
 
 export interface UserState {
     userLoginLoading: boolean;
@@ -37,6 +37,18 @@ export interface UserState {
     resetPasswordLoading: boolean;
     resetPasswordSuccess?: string;
     resetPasswordError?: string;
+
+    getUserPrivateProfileLoading: boolean;
+    getUserPrivateProfileSuccess?: UserPrivateProfile;
+    getUserPrivateProfileError?: string;
+
+    addRoleLoading: boolean;
+    addRoleSuccess?: string;
+    addRoleError?: string;
+
+    removeRoleLoading: boolean;
+    removeRoleSuccess?: string;
+    removeRoleError?: string;
 }
 
 const initialState: UserState = {
@@ -75,6 +87,18 @@ const initialState: UserState = {
     resetPasswordLoading: false,
     resetPasswordSuccess: undefined,
     resetPasswordError: undefined,
+
+    getUserPrivateProfileLoading: false,
+    getUserPrivateProfileSuccess: undefined,
+    getUserPrivateProfileError: undefined,
+
+    addRoleLoading: false,
+    addRoleSuccess: undefined,
+    addRoleError: undefined,
+
+    removeRoleLoading: false,
+    removeRoleSuccess: undefined,
+    removeRoleError: undefined,
 }
 
 export const userSlice = createSlice({
@@ -240,6 +264,72 @@ export const userSlice = createSlice({
             state.resetPasswordSuccess = undefined;
             state.resetPasswordError = payload;
         },
+
+
+        getUserPrivateProfileRequest: (state: Draft<typeof initialState>) => {
+            state.getUserPrivateProfileLoading = true;
+            state.getUserPrivateProfileSuccess = undefined;
+            state.getUserPrivateProfileError = undefined;
+        },
+        getUserPrivateProfileSuccess: (state: Draft<typeof initialState>, { payload }) => {
+            state.getUserPrivateProfileLoading = false;
+            state.getUserPrivateProfileSuccess = payload;
+            state.getUserPrivateProfileError = undefined;
+        },
+        getUserPrivateProfileError: (state: Draft<typeof initialState>, { payload }) => {
+            state.getUserPrivateProfileLoading = false;
+            state.getUserPrivateProfileSuccess = undefined;
+            state.getUserPrivateProfileError = payload;
+        },
+        resetUserPrivateProfileRequest: (state: Draft<typeof initialState>) => {
+            state.getUserPrivateProfileLoading = false;
+            state.getUserPrivateProfileSuccess = undefined;
+            state.getUserPrivateProfileError = undefined;
+        },
+
+
+        addRoleRequest: (state: Draft<typeof initialState>) => {
+            state.addRoleLoading = true;
+            state.addRoleSuccess = undefined;
+            state.addRoleError = undefined;
+        },
+        addRoleSuccess: (state: Draft<typeof initialState>, { payload }) => {
+            state.addRoleLoading = false;
+            state.addRoleSuccess = payload;
+            state.addRoleError = undefined;
+        },
+        addRoleError: (state: Draft<typeof initialState>, { payload }) => {
+            state.addRoleLoading = false;
+            state.addRoleSuccess = undefined;
+            state.addRoleError = payload;
+        },
+        resetAddRole: (state: Draft<typeof initialState>) => {
+            state.addRoleLoading = false;
+            state.addRoleSuccess = undefined;
+            state.addRoleError = undefined;
+        },
+
+
+        removeRoleRequest: (state: Draft<typeof initialState>) => {
+            state.removeRoleLoading = true;
+            state.removeRoleSuccess = undefined;
+            state.removeRoleError = undefined;
+        },
+        removeRoleSuccess: (state: Draft<typeof initialState>, { payload }) => {
+            state.removeRoleLoading = false;
+            state.removeRoleSuccess = payload;
+            state.removeRoleError = undefined;
+        },
+        removeRoleError: (state: Draft<typeof initialState>, { payload }) => {
+            state.removeRoleLoading = false;
+            state.removeRoleSuccess = undefined;
+            state.removeRoleError = payload;
+        },
+        resetRemoveRole: (state: Draft<typeof initialState>) => {
+            state.removeRoleLoading = false;
+            state.removeRoleSuccess = undefined;
+            state.removeRoleError = undefined;
+        },
     }
 });
 
@@ -277,6 +367,21 @@ export const {
     resetPasswordRequest,
     resetPasswordSuccess,
     resetPasswordError,
+
+    getUserPrivateProfileRequest,
+    getUserPrivateProfileSuccess,
+    getUserPrivateProfileError,
+    resetUserPrivateProfileRequest,
+
+    addRoleRequest,
+    addRoleSuccess,
+    addRoleError,
+    resetAddRole,
+
+    removeRoleRequest,
+    removeRoleSuccess,
+    removeRoleError,
+    resetRemoveRole,
 } = userSlice.actions;
 
 export default userSlice.reducer;

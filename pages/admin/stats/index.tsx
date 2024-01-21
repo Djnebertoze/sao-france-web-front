@@ -7,6 +7,7 @@ import {useEffect} from "react";
 import AdminNavbar from "../../../components/molecules/AdminNavbar/AdminNavbar";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {Box, Flex, Spacer, Text} from "@chakra-ui/react";
+import {getMaxPowerFromUserRoles} from "../../../store/helper";
 
 
 const AdminStatsPage: NextPage = () => {
@@ -23,7 +24,7 @@ const AdminStatsPage: NextPage = () => {
 
     useEffect(() => {
         console.log('1')
-        if(auth?.accessToken && userInfos && !(userInfos?.roles?.includes('admin'))){
+        if(auth?.accessToken && userInfos && getMaxPowerFromUserRoles(userInfos.roles) < 3){
             router.push('/').then(() => {});
         }
 

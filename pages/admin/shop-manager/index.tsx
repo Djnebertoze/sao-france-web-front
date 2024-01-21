@@ -12,6 +12,7 @@ import {getShopProducts} from "../../../store/shop/shopActions";
 import AdminNavbar from "../../../components/molecules/AdminNavbar/AdminNavbar";
 import ShopProductCard from "../../../components/molecules/ShopProductCard/ShopProductCard";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import {getMaxPowerFromUserRoles} from "../../../store/helper";
 
 
 const ShopManager: NextPage = () => {
@@ -37,69 +38,6 @@ const ShopManager: NextPage = () => {
 
     const temporaryCategories: ShopCategorie[] = shopCategories;
 
-    /*const shopProducts: Array<ShopProduct> = [
-        {
-            _id: "product_500_points",
-            name: "500 Points Boutique",
-            description: "Les points boutiques vous permettent d'acheter des cosmétiques, grades et pleins d'autres choses dans la boutique!",
-            price:4.99,
-            isRealMoney: true,
-            categorieId:"points",
-            imageUrl: "",
-            place:2
-        },
-        {
-            _id: "product_1000_points",
-            name: "1000 + 100 Points Boutique",
-            description: "Les points boutiques vous permettent d'acheter des cosmétiques, grades et pleins d'autres choses dans la boutique!",
-            price:9.99,
-            isRealMoney: true,
-            categorieId:"points",
-            imageUrl: "",
-            place:0
-        },
-        {
-            _id: "product_25k_points",
-            name: "25k + 1500 Points Boutique",
-            description: "Les points boutiques vous permettent d'acheter des cosmétiques, grades et pleins d'autres choses dans la boutique!",
-            price:24.99,
-            isRealMoney: true,
-            categorieId:"points",
-            imageUrl: "",
-            place:1
-        },
-        {
-            _id: "product_50k_points",
-            name: "50k + 5k Points Boutique",
-            description: "Les points boutiques vous permettent d'acheter des cosmétiques, grades et pleins d'autres choses dans la boutique!",
-            price:49.99,
-            isRealMoney: true,
-            categorieId:"points",
-            imageUrl: "",
-            place:3
-        },
-        {
-            _id: "product_100k_points",
-            name: "100k + 10k Points Boutique",
-            description: "Les points boutiques vous permettent d'acheter des cosmétiques, grades et pleins d'autres choses dans la boutique!",
-            price:99.99,
-            isRealMoney: true,
-            categorieId:"points",
-            imageUrl: "",
-            place:4
-        },
-        {
-            _id: "product_first_grade",
-            name: "Grade jsp",
-            description: "Grade ultra coooool",
-            price:1000,
-            isRealMoney: false,
-            categorieId:"grades",
-            imageUrl: "",
-            place:0
-        },
-    ]*/
-
     const [currentShopCategories, setCurrentShopCategories] = useState<Array<ShopCategorie>>()
 
     const [selectedCategorie, setSelectedCategorie] = useState<string>()
@@ -110,10 +48,6 @@ const ShopManager: NextPage = () => {
         setSelectedProducts([])
         setSelectedCategorie(event.target.id)
 
-
-        console.log(shopProducts)
-
-        //const categorieProducts = shopProducts.filter(product => product.categorieId === event.target.id)
         if (shopProducts) {
             const categorieProducts = shopProducts.filter(product => product.categorieId === event.target.id);
             categorieProducts.sort((a, b) => a.place - b.place)
@@ -121,12 +55,11 @@ const ShopManager: NextPage = () => {
         }
     }
 
-
     const toast = useToast();
     const toastDuration = 10000;
 
     useEffect(() => {
-        if(auth?.accessToken && userInfos && !(userInfos?.roles?.includes('admin'))){
+        if(auth?.accessToken && userInfos && getMaxPowerFromUserRoles(userInfos.roles) < 6){
             router.push('/').then(() => {});
         }
 

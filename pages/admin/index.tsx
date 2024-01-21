@@ -7,6 +7,8 @@ import {Box, Text,} from "@chakra-ui/react";
 import {useDispatch, useSelector} from "../../store/store";
 import AdminNavbar from "../../components/molecules/AdminNavbar/AdminNavbar";
 import {emptyAct} from "../../store/user/userActions";
+import {getMaxPowerFromUserRoles} from "../../store/helper";
+import {roles} from "../../common/roles/roles";
 
 
 const AdminPage: NextPage = () => {
@@ -21,12 +23,8 @@ const AdminPage: NextPage = () => {
         getUserInfosError
     } = useSelector(getUserState)
 
-
-
-
-
     useEffect(() => {
-        if(auth?.accessToken && userInfos && !(userInfos?.roles?.includes('admin') || userInfos?.roles?.includes('moderator') || userInfos?.roles?.includes('responsable') || userInfos?.roles?.includes('developer'))){
+        if(auth?.accessToken && userInfos && getMaxPowerFromUserRoles(userInfos.roles) < 2){
             router.push('/').then(() => {});
         }
 
@@ -39,8 +37,6 @@ const AdminPage: NextPage = () => {
             dispatch(emptyAct())
             router.push('/login').then(() => {});
         }
-
-
     }, [dispatch, auth?.accessToken, router, userInfos, userLoginError, getUserInfosError]);
 
 

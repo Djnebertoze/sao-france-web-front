@@ -1,4 +1,5 @@
 import React from "react";
+import {getRoleById} from "../common/roles/roles";
 
 export const getAPIUrl = () => {
     let url;
@@ -15,6 +16,19 @@ export const getCDNUrl = () => {
 
     return url;
 };
+
+export function getMaxPowerFromUserRoles(userRoles: string[]): number {
+    let maxPower = 0;
+
+    userRoles.forEach(roleId => {
+        const role = getRoleById(roleId);
+        if (role && role.power > maxPower) {
+            maxPower = role.power;
+        }
+    });
+
+    return maxPower;
+}
 
 export function occurrences(string: string, subString: string, allowOverlapping: boolean) {
 

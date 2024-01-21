@@ -24,6 +24,7 @@ import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {getUsersList} from "../../../store/user/userActions";
 import {FiRefreshCcw} from "react-icons/fi";
 import {roles} from "../../../common/roles/roles";
+import {getMaxPowerFromUserRoles} from "../../../store/helper";
 
 const AdminUsersManagerPage: NextPage = () => {
 
@@ -54,7 +55,7 @@ const AdminUsersManagerPage: NextPage = () => {
 
     useEffect(() => {
         console.log('1')
-        if(auth?.accessToken && userInfos && !(userInfos?.roles?.includes('admin'))){
+        if(auth?.accessToken && userInfos && getMaxPowerFromUserRoles(userInfos.roles) < 3){
             router.push('/').then(() => {});
         }
 
@@ -186,14 +187,7 @@ const AdminUsersManagerPage: NextPage = () => {
                                             </Th>
                                             <Th isNumeric color={'rgb(255,255,255,.6)'}>
                                                 <Button colorScheme={'blue'} p={1} height={6}
-                                                        onClick={() => toast({
-                                                            title: "En cours de dev",
-                                                            description: "Fonctionnalité en cours de développement. Contactez un développeur web.",
-                                                            status: 'info',
-                                                            duration: toastDuration,
-                                                            isClosable: true,
-                                                            position: 'bottom-right',
-                                                        })
+                                                        onClick={() => router.push('/admin/users/user/' + user._id).then(() => {})
                                                 }>Voir</Button>
                                             </Th>
                                         </Tr>

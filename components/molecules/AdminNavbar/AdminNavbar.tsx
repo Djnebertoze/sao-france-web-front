@@ -6,6 +6,7 @@ import {checkLogin, getUserProfile} from "../../../store/user/userActions";
 import {NextRouter, useRouter} from "next/router";
 import SidebarWithHeader from "./SideNavbar";
 import {getRoleById} from "../../../common/roles/roles";
+import {getMaxPowerFromUserRoles} from "../../../store/helper";
 
 interface SidebarWithHeaderProps extends FlexProps{
     children: React.ReactNode
@@ -27,18 +28,7 @@ function abbreviateRoles(roles: string[]) {
     return filteredRoles.map(role =>  abbreviationMap[role]).join(" / ").toString();
 }
 
-function getMaxPowerFromUserRoles(userRoles: string[]): number {
-    let maxPower = 0;
 
-    userRoles.forEach(roleId => {
-        const role = getRoleById(roleId);
-        if (role && role.power > maxPower) {
-            maxPower = role.power;
-        }
-    });
-
-    return maxPower;
-}
 
 const AdminNavbar: FC<SidebarWithHeaderProps> = (props) => {
 
@@ -70,11 +60,8 @@ const AdminNavbar: FC<SidebarWithHeaderProps> = (props) => {
         }
 
         if(auth?.accessToken && userInfos?.roles){
-
             setUserRolesStr(abbreviateRoles(userInfos.roles))
-
             setUserPower(getMaxPowerFromUserRoles(userInfos.roles))
-
         }
     }, [router, auth, userInfos, dispatch]);
 

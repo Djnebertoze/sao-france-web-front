@@ -22,6 +22,12 @@ export interface User {
     mcProfile?: McProfile
 }
 
+export interface UserPrivateProfile {
+    user: User,
+    mcProfile: McProfile,
+    status: number
+}
+
 export interface UsersList {
     users: User[];
     mcProfiles: McProfile[]
