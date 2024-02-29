@@ -74,7 +74,7 @@ const SuccessPaymentPage: NextPage = () => {
                                 <Center><Text fontSize={25} mb={5}>Merci beaucoup pour votre achat {userInfos?.username} !</Text></Center>
                                 <Box h={'1px'} w={'full'} my={3} background={'rgb(255,255,255,.3)'}/>
                                 <Center><Text fontSize={19} mb={5}>Vous pouvez dès maintenant vous rendre sur votre profil et récupérer votre achat !</Text></Center>
-                                <Center><Text fontSize={19} mb={5}>Votre achat sera disponible sur le jeu d'ici 5 minutes. Merci pour votre patience</Text></Center>
+                                <Center><Text fontSize={19} mb={5}>Votre achat sera disponible sur le jeu d&apos;ici 5 minutes. Merci pour votre patience</Text></Center>
                                 <Center><Button colorScheme={'blue'} w={300} onClick={() => router.push('/profile')}>Voir mon profil</Button></Center>
                             </>
                         )}
