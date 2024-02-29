@@ -1,4 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&display=swap');
+@font-face {
+    font-family: 'Zen Kaku Gothic New';
+    src: url("ZenKakuGothicNew-Regular.ttf");
+}
+
+@font-face {
+    font-family: 'Bebas Neue';
+    src: url("BebasNeue-Regular.ttf");
+}
 
 html,
 body {

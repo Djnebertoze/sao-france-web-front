@@ -181,7 +181,7 @@ const ProfilePage: NextPage = () => {
             router.push('/login').then(() => {});
         }
 
-        if(isAuthenticated && !userInfos?.mcProfile){
+        if(isAuthenticated && (!userInfos?.mcProfile || !userInfos?.mcProfile?.name)){
             /*instance.acquireTokenSilent({
                 ...loginRequest,
                 account: accounts[0]
@@ -193,7 +193,8 @@ const ProfilePage: NextPage = () => {
                 });
             });*/
             instance.acquireTokenSilent({...loginRequest, account: accounts[0]}).then((response) => {
-                dispatch(requestXboxServices(response.accessToken, auth?.accessToken))
+                console.log('llllll');
+                dispatch(requestXboxServices(response.accessToken, auth?.accessToken));
             });
         }
 

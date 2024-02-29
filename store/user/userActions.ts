@@ -345,7 +345,7 @@ export const removeRole = (accessToken: string | undefined, roleId: string | und
 };
 
 export const requestXboxServices = (mcAccessToken: string, accessToken: string | undefined) => async (dispatch: any) => {
-
+    console.log('mmmhhh', mcAccessToken)
     dispatch(getMinecraftProfileRequest())
 
     try {

@@ -76,6 +76,7 @@ export interface ShopProduct {
     descriptionDetails: string
     pointsToGive?: number,
     roleToGive?: string,
+    cosmeticToGive?: string,
 }
 
 export interface StripeProduct {

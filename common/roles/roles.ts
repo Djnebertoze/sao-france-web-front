@@ -13,28 +13,28 @@ export const roles: Role[] = [
         name: 'Beater',
         color: '#546E7A',
         textColor: 'white',
-        power: 1.1
+        power: 1.4
     },
     {
         _id: 'legend',
         name: 'Légende',
         color: '#F1C40F',
         textColor: 'white',
-        power: 1.2
+        power: 1.3
     },
     {
         _id: 'conqueror',
         name: 'Conquérant',
         color: '#C27C0E',
         textColor: 'white',
-        power: 1.3
+        power: 1.2
     },
     {
         _id: 'paladin',
         name: 'Paladin',
         color: '#A84300',
         textColor: 'white',
-        power: 1.4
+        power: 1.1
     },
     {
         _id: 'staff',

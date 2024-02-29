@@ -150,9 +150,9 @@ const ProductPage: NextPage = () => {
                             {shopProduct && shopProduct?.name} - {shopProduct && categories.filter((category) => category._id === shopProduct.categorieId)[0].name}
                         </Text>
                         <Box h={'1px'} w={'full'} my={5} background={'rgb(255,255,255,.3)'}/>
-                        <Text color={'white'} fontSize={16}>
-                            {shopProduct && transformDescription(shopProduct?.descriptionDetails)}
-                        </Text>
+                        {
+                            shopProduct && <Text color={'white'} dangerouslySetInnerHTML={{ __html: shopProduct?.descriptionDetails }}/>
+                        }
                         <Box h={'1px'} w={'full'} my={5} background={'rgb(255,255,255,.3)'}/>
 
                         <Center>

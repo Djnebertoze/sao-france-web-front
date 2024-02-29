@@ -1,11 +1,11 @@
 import {NextPage} from "next";
 import {NextRouter, useRouter} from "next/router";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {getUserState,} from "../../../../store/user/userSlice";
 import {useDispatch, useSelector} from "../../../../store/store";
 import AdminNavbar from "../../../../components/molecules/AdminNavbar/AdminNavbar";
-import {Box, Button, Flex, Heading, Input, InputGroup, Select, Text, useToast} from "@chakra-ui/react";
+import {Box, Button, Flex, Heading, Input, InputGroup, Select, Text, Textarea, useToast} from "@chakra-ui/react";
 import {ShopCategorie} from "../../../../common/types/types";
 import {shopCategories} from "../../../../common/shop/shopCategories";
 import ShopProductCard from "../../../../components/molecules/ShopProductCard/ShopProductCard";
@@ -17,6 +17,11 @@ import {CreateShopProductDto} from "../../../../store/shop/dtos/createShopProduc
 import {getActiveStripePrices, getStripeProducts} from "../../../../store/stripe/stripeActions";
 import {roles} from "../../../../common/roles/roles";
 import {getMaxPowerFromUserRoles} from "../../../../store/helper";
+
+import { Editor } from '@tinymce/tinymce-react';
+
+
+
 
 
 const ShopManagerEditPage: NextPage = () => {
@@ -65,6 +70,7 @@ const ShopManagerEditPage: NextPage = () => {
     const [productStripeLink, setProductStripeLink] = useState<string>()
     const [productPointsToGive, setProductPointsToGive] = useState<number>()
     const [productRoleToGive, setProductRoleToGive] = useState<string>()
+    const [productCosmeticToGive, setProductCosmeticToGive] = useState<string>()
     const [errorMessage, setErrorMessage] = useState<string>()
 
     const handleChangeProductName = (event: any) => setProductName(event.target.value);
@@ -83,9 +89,12 @@ const ShopManagerEditPage: NextPage = () => {
 
     const handleChangeProductPointsToGive = (event: any) => setProductPointsToGive(event.target.value);
     const handleChangeProductRoleToGive = (event: any) => setProductRoleToGive(event.target.value);
+    const handleChangeProductCosmeticToGive = (event: any) => setProductCosmeticToGive(event.target.value);
 
 
     const productUrlId = router.query.id;
+
+    const editorRef = useRef<Editor>(null);
 
     const toastError = (error : string) => {
         setErrorMessage(error)
@@ -140,6 +149,16 @@ const ShopManagerEditPage: NextPage = () => {
             return;
         }
 
+        if (productCategory == 'cosmetiques' && !productCosmeticToGive){
+            toastError('Veuillez renseigner l\'id du cosmétique à donner ingame !')
+            return;
+        }
+
+        if(!editorRef.current){
+            toastError('Erreur tiny. Contactez un développeur web.')
+            return;
+        }
+
         const shopProductDto: CreateShopProductDto = {
             name: productName,
             description: productDescription,
@@ -151,9 +170,10 @@ const ShopManagerEditPage: NextPage = () => {
             isRealMoney:productIsRealMoney,
             imageUrl:productImageUrl,
             stripeLink: productStripeLink,
-            descriptionDetails: productDescriptionDetails,
+            descriptionDetails: editorRef.current.editor?.getContent({ format: "html" }),
             pointsToGive: productPointsToGive,
-            roleToGive: productRoleToGive
+            roleToGive: productRoleToGive,
+            cosmeticToGive: productCosmeticToGive
         }
 
         console.log("a", shopProductDto)
@@ -203,7 +223,7 @@ const ShopManagerEditPage: NextPage = () => {
             if (getStripeProductsError){
                 toast({
                     title: "Erreur",
-                    description: "Les produits stripe n'ont pas été récupérés. Contactez un développeur web. ",
+                    description: "Les produits stripe n'ont pas été récupérés. Contactez un développeur web.",
                     status: 'error',
                     duration: toastDuration,
                     isClosable: true,
@@ -251,7 +271,7 @@ const ShopManagerEditPage: NextPage = () => {
                     isClosable: true,
                     position: 'bottom-right',
                 });
-                router.push('/admin/shop-manager').then(() => {})
+                router.push('/admin/shop-manager').then(() => { router.reload() })
             }
 
             if (editShopProductError) {
@@ -287,6 +307,9 @@ const ShopManagerEditPage: NextPage = () => {
             if(shopProduct.categorieId == 'grades'){
                 setProductRoleToGive(shopProduct.roleToGive)
             }
+            if(shopProduct.categorieId == 'cosmetiques'){
+                setProductCosmeticToGive(shopProduct.cosmeticToGive)
+            }
         }
         if(getShopProductError) {
             toast({
@@ -302,10 +325,9 @@ const ShopManagerEditPage: NextPage = () => {
     }, [shopProduct, getShopProductLoading, getShopProductError, toast])
 
 
-
-
     return (
         <AdminNavbar selected={'/shop-manager'}>
+
             <Flex w={'full'} minH={1000} bgColor={'rgb(76,78,82,1)'} borderRadius={5} color={'white'} p={10} direction={'column'}>
                 <Heading fontSize={21} mb={3} textTransform={'uppercase'}>Éditer un Produit</Heading>
                 <Box>
@@ -324,7 +346,7 @@ const ShopManagerEditPage: NextPage = () => {
                                     productIsRealMoney ?
                                         !productStripeLink ? 0 :
                                             // @ts-ignore
-                                            activeStripePrices?.filter((stripePrice) => stripePrice.id === stripeProducts?.filter((stripeProduct) => stripeProduct.id === productStripeLink)[0].default_price)[0]?.unit_amount / 100
+                                            activeStripePrices?.filter((stripePrice) => stripePrice.id === stripeProducts?.filter((stripeProduct) => stripeProduct.id === productStripeLink)[0]?.default_price)[0]?.unit_amount / 100
                                         : productPrice}
                                        onChange={handleChangeProductPrice}></Input>
                             </InputGroup>
@@ -360,17 +382,22 @@ const ShopManagerEditPage: NextPage = () => {
                     <Box>
                         <Box >
                             <Text fontSize={19} mb={2} mt={5}>Description</Text>
-                            <InputGroup w={'full'}>
-                                <Input w={'full'} placeholder={'Description du produit'} variant={'flushed'} type={'text'} value={productDescription} onChange={handleChangeProductDescription}></Input>
-                            </InputGroup>
+                            <Textarea minH={150} w={295} placeholder={'Description du produit'} variant={'outline'} value={productDescription} onChange={handleChangeProductDescription}></Textarea>
                         </Box>
                     </Box>
                     <Box>
                         <Box >
                             <Text fontSize={19} mb={2} mt={5}>Description détaillée</Text>
-                            <InputGroup w={'full'}>
-                                <Input w={'full'} placeholder={'Description du produit détaillée'} variant={'flushed'} type={'text'} value={productDescriptionDetails} onChange={handleChangeProductDescriptionDetails}></Input>
-                            </InputGroup>
+                            <Editor
+                                ref={editorRef}
+                                apiKey='ditt62sm5hx43cifojam7fe5s5uyvos6s0kp07iwh95t6xrs'
+                                init={{
+                                    plugins: 'advlist link image lists table',
+                                    toolbar: 'undo redo | fontsize | styles | bold italic | alignleft aligncenter alignright alignjustify | outdent indent',
+                                    menubar: 'edit insert format table'
+                                }}
+                                initialValue={productDescriptionDetails}
+                            />
                         </Box>
                     </Box>
                     {productCategory == 'points' && (
@@ -379,6 +406,16 @@ const ShopManagerEditPage: NextPage = () => {
                                 <Text fontSize={19} mb={2} mt={5}>Points à donner</Text>
                                 <InputGroup w={'full'}>
                                     <Input w={'full'} maxW={300} placeholder={'Points à donner après paiement'} variant={'flushed'} type={"number"} value={productPointsToGive} onChange={handleChangeProductPointsToGive}></Input>
+                                </InputGroup>
+                            </Box>
+                        </Box>
+                    )}
+                    {productCategory == 'cosmetiques' && (
+                        <Box>
+                            <Box >
+                                <Text fontSize={19} mb={2} mt={5}>Id du cosmétique</Text>
+                                <InputGroup w={'full'}>
+                                    <Input w={'full'} maxW={300} placeholder={'Id du cosmétique à donner après paiement'} variant={'flushed'} type={"text"} value={productCosmeticToGive} onChange={handleChangeProductCosmeticToGive}></Input>
                                 </InputGroup>
                             </Box>
                         </Box>

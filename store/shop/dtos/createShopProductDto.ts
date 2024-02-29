@@ -9,4 +9,5 @@ export class CreateShopProductDto {
     descriptionDetails?: string;
     pointsToGive?: number;
     roleToGive?: string;
+    cosmeticToGive?: string;
 }

@@ -87,7 +87,7 @@ const ShopProductCard: FC<ShopProductCardProps> = (props) => {
                     <Stack mt={1} spacing={3}>
                         <Heading size={'md'}>{product.name}</Heading>
                         <Text py={2} mt={-4}>
-                            {transformDescription(product.description)}
+                            {transformDescription(product.description.replaceAll('\n', '\\n'))}
 
                         </Text>
                     </Stack>
