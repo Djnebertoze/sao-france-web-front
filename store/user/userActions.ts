@@ -3,6 +3,9 @@ import {
     addRoleError,
     addRoleRequest,
     addRoleSuccess,
+    addShopPointsError,
+    addShopPointsRequest,
+    addShopPointsSuccess,
     getMinecraftProfileError,
     getMinecraftProfileRequest,
     getMinecraftProfileSuccess,
@@ -14,8 +17,16 @@ import {
     getUserProfileSuccess,
     getUsersListError,
     getUsersListRequest,
-    getUsersListSuccess, removeRoleError,
-    removeRoleRequest, removeRoleSuccess,
+    getUsersListSuccess,
+    getUserTransactionsError,
+    getUserTransactionsRequest,
+    getUserTransactionsSuccess,
+    removeRoleError,
+    removeRoleRequest,
+    removeRoleSuccess,
+    removeShopPointsError,
+    removeShopPointsRequest,
+    removeShopPointsSuccess,
     resetPasswordError,
     resetPasswordRequest,
     resetPasswordSuccess,
@@ -230,6 +241,23 @@ export const getUsersList = (accessToken: string | null | undefined) => async (d
     }
 };
 
+
+export const getUserTransactions = (accessToken: string | null | undefined) => async (dispatch: any) => {
+    dispatch(getUserTransactionsRequest());
+    try {
+        const response = await axios.get(`${getAPIUrl()}/transactions`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+        dispatch(getUserTransactionsSuccess(response.data));
+        console.log(response.data)
+    } catch (error: any) {
+        dispatch(getUserTransactionsError(error.message));
+        console.log(error)
+    }
+};
+
 export const updateUserProfile = (accessToken: string | undefined, updateUserProfileDto: UpdateUserDto) => async (dispatch: any) => {
     dispatch(updateUserProfileRequest());
     try {
@@ -341,6 +369,59 @@ export const removeRole = (accessToken: string | undefined, roleId: string | und
         }
     } catch (error: any) {
         dispatch(removeRoleError(error.message));
+    }
+};
+
+
+export const addShopPoints = (accessToken: string | undefined, userId: string | string[] | undefined, numberOfPoints: number) => async (dispatch: any) => {
+    dispatch(addShopPointsRequest());
+    try {
+
+        const response = await axios.post(`${getAPIUrl()}/shop/addShopPoints/`+userId,
+            {
+                points: numberOfPoints
+            },
+            {
+                headers: { Authorization: `Bearer ${accessToken}` },
+            });
+
+        if (response.status === HttpStatusCode.Created){
+            if (response.data.statusCode === HttpStatusCode.Created){
+                dispatch(addShopPointsSuccess('Success'));
+            } else {
+                dispatch(addShopPointsError(response.data.message));
+            }
+        } else {
+            dispatch(addShopPointsError('Status: ' + response.status));
+        }
+    } catch (error: any) {
+        dispatch(addShopPointsError(error.message));
+    }
+};
+
+export const removeShopPoints = (accessToken: string | undefined, userId: string | string[] | undefined, numberOfPoints: number) => async (dispatch: any) => {
+    dispatch(removeShopPointsRequest());
+    try {
+
+        const response = await axios.post(`${getAPIUrl()}/shop/removeShopPoints/`+userId,
+            {
+                points: numberOfPoints
+            },
+            {
+                headers: { Authorization: `Bearer ${accessToken}` },
+            });
+
+        if (response.status === HttpStatusCode.Created){
+            if (response.data.statusCode === HttpStatusCode.Created){
+                dispatch(removeShopPointsSuccess('Success'));
+            } else {
+                dispatch(removeShopPointsError(response.data.message));
+            }
+        } else {
+            dispatch(removeShopPointsError('Status: ' + response.status));
+        }
+    } catch (error: any) {
+        dispatch(removeShopPointsError(error.message));
     }
 };
 

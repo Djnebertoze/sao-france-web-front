@@ -28,6 +28,23 @@ export interface UserPrivateProfile {
     status: number
 }
 
+export interface Transaction {
+    author: User,
+    status: string,
+    mcProfile?: McProfile,
+    isRealMoney: boolean,
+    cost: number,
+    productName: string,
+    shopProductId: string,
+    createdBy?: User,
+    mode?: string,
+    session_id?: string,
+    stripeProductId?: string,
+    shopProduct?: ShopProduct,
+    createdAt: number,
+    _id: string
+}
+
 export interface UsersList {
     users: User[];
     mcProfiles: McProfile[]

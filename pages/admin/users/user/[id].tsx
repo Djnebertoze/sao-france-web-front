@@ -12,20 +12,35 @@ import {
 import React, {FC, useEffect, useState} from "react";
 import {
     Button,
-    Flex, Icon, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select,
-    Text, useDisclosure,
+    Flex,
+    Icon,
+    Image, Input,
+    InputGroup,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    Select,
+    Text,
+    useDisclosure,
     useToast,
 } from "@chakra-ui/react";
 import AdminNavbar from "../../../../components/molecules/AdminNavbar/AdminNavbar";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {addRole, getUserPrivateProfile, removeRole, sendPasswordReset} from "../../../../store/user/userActions";
+import {
+    addRole,
+    addShopPoints,
+    getUserPrivateProfile,
+    removeRole, removeShopPoints,
+    sendPasswordReset
+} from "../../../../store/user/userActions";
 import {getRoleById, roles} from "../../../../common/roles/roles";
 import {getMaxPowerFromUserRoles} from "../../../../store/helper";
 import {Tags} from "../../../../components/atoms/Tags/Tags";
-import {Role, ShopProduct} from "../../../../common/types/types";
-import {getShopState} from "../../../../store/shop/shopSlice";
-import {removeShopProduct} from "../../../../store/shop/shopActions";
-import {FiTrash2} from "react-icons/fi";
+import {Role} from "../../../../common/types/types";
 import {MainButton} from "../../../../components/atoms/Buttons/Buttons";
 
 const AdminUserManagerPage: NextPage = () => {
@@ -39,6 +54,9 @@ const AdminUserManagerPage: NextPage = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [isAddRole, setIsAddRole] = useState<boolean>(false)
     const [roleIdToChange, setRoleIdToChange] = useState<string>()
+    
+    const [addShopPointsAmount, setAddShopPointsAmount] = useState<number>(0)
+    const [removeShopPointsAmount, setRemoveShopPointsAmount] = useState<number>(0)
 
     const {
         auth,
@@ -56,7 +74,13 @@ const AdminUserManagerPage: NextPage = () => {
         addRoleError,
         sendPasswordResetLoading,
         sendPasswordResetError,
-        sendPasswordResetSuccess
+        sendPasswordResetSuccess,
+        addShopPointsLoading,
+        addShopPointsSuccess,
+        addShopPointsError,
+        removeShopPointsLoading,
+        removeShopPointsSuccess,
+        removeShopPointsError
     } = useSelector(getUserState)
 
     const handleDelete = (roleId: string | undefined, email: string) => {
@@ -71,8 +95,43 @@ const AdminUserManagerPage: NextPage = () => {
         dispatch(sendPasswordReset(getUserPrivateProfileSuccess?.user?.email))
     }
 
+    const handleAddShopPoints = () => {
+        if (addShopPointsAmount <= 0){
+            toastError("Impossible d'ajouter un nombre de points boutiques inférieur ou égal à 0.")
+            return;
+        }
+        dispatch(addShopPoints(auth?.accessToken, userId, addShopPointsAmount))
+        router.reload()
+    }
+
+
+    const handleRemoveShopPoints = () => {
+        if (removeShopPointsAmount <= 0){
+            toastError("Impossible de retirer un nombre de points boutiques inférieur ou égal à 0.")
+            return;
+        }
+        dispatch(removeShopPoints(auth?.accessToken, userId, removeShopPointsAmount))
+        router.reload()
+    }
+
+    const handleChangeAddShopPointsAmount = (event: any) => setAddShopPointsAmount(event.target.value);
+    const handleChangeRemoveShopPointsAmount = (event: any) => setRemoveShopPointsAmount(event.target.value);
+
     const toast = useToast();
     const toastDuration = 3000;
+
+
+    const toastError = (error : string) => {
+        toast({
+            title: "Erreur",
+            description: error,
+            status: 'error',
+            duration: toastDuration,
+            isClosable: true,
+            position: 'bottom-right',
+        });
+    }
+
 
     useEffect(() => {
         if(auth?.accessToken && userInfos && getMaxPowerFromUserRoles(userInfos.roles) < 3){
@@ -298,43 +357,71 @@ const AdminUserManagerPage: NextPage = () => {
                                     </ModalBody>
                                 </ModalContent>
                             </Modal>
-                            <Text fontSize={20} mb={0} lineHeight={10}>
-                                Email: {getUserPrivateProfileSuccess.user.email}
-                                {
-                                    userPower >= 5 ? (
-                                        <>
-                                            <br/>
-                                            Prénom: {getUserPrivateProfileSuccess.user.firstName ?? '/'}
-                                            <br/>
-                                            Nom: {getUserPrivateProfileSuccess.user.lastName ?? '/'}
-                                            <br/>
-                                            Numéro de téléphone: {getUserPrivateProfileSuccess.user.phoneNumber ?? '/'}
-                                        </>
-                                    ) : (
-                                        <>
-                                            <br/>
-                                            Prénom: <Text as={'i'} fontSize={15}>#############</Text>
-                                            <br/>
-                                            Nom: <Text as={'i'} fontSize={15}>#############</Text>
-                                            <br/>
-                                            Numéro de téléphone: <Text as={'i'} fontSize={15}>#############</Text>
-                                        </>
-                                    )
-                                }
-                                <br/>
-                                Date de naissance: {getUserPrivateProfileSuccess.user.birthday ?? '/'}
-                                <br/>
-                                Emails commerciaux: {getUserPrivateProfileSuccess.user.acceptEmails ? <Text color={'green.300'} as={'span'}>Oui</Text> : <Text color={'red.300'} as={'span'}>Non</Text>}
-                                <br/>
-                                Date de création: {new Date(getUserPrivateProfileSuccess.user.createdAt).toLocaleString()} (
-                                {((new Date().setHours(0,0,0,0) - new Date(getUserPrivateProfileSuccess.user.createdAt).setHours(0,0,0,0)) / (24*60*60*1000)).toString().split('.')[0]
-                                    + ' jours' })
-                                <br/>
-                                Points boutique: {getUserPrivateProfileSuccess.user.shopPoints}
-                            </Text>
-                            <Button colorScheme={'blue'} maxW={500} isLoading={sendPasswordResetLoading} onClick={handleResetPassword}>
-                                Envoyer le mail de réinitialisation du mot de passe
-                            </Button>
+                            <Flex>
+                                <Flex flexDirection={"column"}>
+                                    <Text fontSize={18} mb={0} lineHeight={10}>
+                                        Email: {getUserPrivateProfileSuccess.user.email}
+                                        {
+                                            userPower >= 5 ? (
+                                                <>
+                                                    <br/>
+                                                    Prénom: {getUserPrivateProfileSuccess.user.firstName ?? '/'}
+                                                    <br/>
+                                                    Nom: {getUserPrivateProfileSuccess.user.lastName ?? '/'}
+                                                    <br/>
+                                                    Numéro de téléphone: {getUserPrivateProfileSuccess.user.phoneNumber ?? '/'}
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <br/>
+                                                    Prénom: <Text as={'i'} fontSize={15}>#############</Text>
+                                                    <br/>
+                                                    Nom: <Text as={'i'} fontSize={15}>#############</Text>
+                                                    <br/>
+                                                    Numéro de téléphone: <Text as={'i'} fontSize={15}>#############</Text>
+                                                </>
+                                            )
+                                        }
+                                        <br/>
+                                        Date de naissance: {getUserPrivateProfileSuccess.user.birthday ?? '/'}
+                                        <br/>
+                                        Emails commerciaux: {getUserPrivateProfileSuccess.user.acceptEmails ? <Text color={'green.300'} as={'span'}>Oui</Text> : <Text color={'red.300'} as={'span'}>Non</Text>}
+                                        <br/>
+                                        Date de création: {new Date(getUserPrivateProfileSuccess.user.createdAt).toLocaleString()} (
+                                        {((new Date().setHours(0,0,0,0) - new Date(getUserPrivateProfileSuccess.user.createdAt).setHours(0,0,0,0)) / (24*60*60*1000)).toString().split('.')[0]
+                                            + ' jours' })
+                                        <br/>
+                                        Points boutique: {getUserPrivateProfileSuccess.user.shopPoints}
+                                    </Text>
+                                    <Button colorScheme={'blue'} maxW={500} isLoading={sendPasswordResetLoading} onClick={handleResetPassword}>
+                                        Envoyer le mail de réinitialisation du mot de passe
+                                    </Button>
+                                </Flex>
+                                <Flex flexDirection={"column"} fontSize={18} borderLeft={"1px solid rgb(255,255,255,.3)"} ml={5} pl={5}>
+                                    <Text borderBottom={'1px solid rgb(255,255,255,.3)'} pb={3} mb={3}>Gérer les points boutiques</Text>
+                                    <Flex>
+                                        <Flex flexDirection={"column"}>
+                                            <Text>Ajouter: </Text>
+                                            <InputGroup>
+                                                <Input type={'number'} textAlign={'center'} value={addShopPointsAmount} onChange={handleChangeAddShopPointsAmount}></Input>
+                                            </InputGroup>
+                                            <Button colorScheme={'green'} mt={1} onClick={handleAddShopPoints}>
+                                                Ajouter
+                                            </Button>
+                                        </Flex>
+                                        <Flex flexDirection={"column"} ml={5} pl={5} borderLeft={"1px solid rgb(255,255,255,.3)"}>
+                                            <Text>Retirer: </Text>
+                                            <InputGroup>
+                                                <Input type={'number'} textAlign={'center'} value={removeShopPointsAmount} onChange={handleChangeRemoveShopPointsAmount}></Input>
+                                            </InputGroup>
+                                            <Button colorScheme={'red'} mt={1} onClick={handleRemoveShopPoints}>
+                                                Retirer
+                                            </Button>
+                                        </Flex>
+                                    </Flex>
+                                </Flex>
+                            </Flex>
+
                         </Flex>
                     </Flex>
                 )

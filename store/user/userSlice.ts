@@ -1,5 +1,5 @@
 import { createSlice, Draft } from "@reduxjs/toolkit";
-import {Auth, MinecraftProfile, User, UserPrivateProfile, UsersList} from "../../common/types/types";
+import {Auth, MinecraftProfile, Transaction, User, UserPrivateProfile, UsersList} from "../../common/types/types";
 
 export interface UserState {
     userLoginLoading: boolean;
@@ -49,6 +49,18 @@ export interface UserState {
     removeRoleLoading: boolean;
     removeRoleSuccess?: string;
     removeRoleError?: string;
+
+    addShopPointsLoading: boolean;
+    addShopPointsSuccess?: string;
+    addShopPointsError?: string;
+
+    removeShopPointsLoading: boolean;
+    removeShopPointsSuccess?: string;
+    removeShopPointsError?: string;
+
+    getUserTransactionsLoading: boolean;
+    userTransactions?: Transaction[];
+    getUserTransactionsError?: string;
 }
 
 const initialState: UserState = {
@@ -99,6 +111,18 @@ const initialState: UserState = {
     removeRoleLoading: false,
     removeRoleSuccess: undefined,
     removeRoleError: undefined,
+
+    addShopPointsLoading: false,
+    addShopPointsSuccess: undefined,
+    addShopPointsError: undefined,
+
+    removeShopPointsLoading: false,
+    removeShopPointsSuccess: undefined,
+    removeShopPointsError: undefined,
+
+    getUserTransactionsLoading: false,
+    userTransactions: undefined,
+    getUserTransactionsError: undefined,
 }
 
 export const userSlice = createSlice({
@@ -330,6 +354,71 @@ export const userSlice = createSlice({
             state.removeRoleSuccess = undefined;
             state.removeRoleError = undefined;
         },
+
+
+        addShopPointsRequest: (state: Draft<typeof initialState>) => {
+            state.addShopPointsLoading = true;
+            state.addShopPointsSuccess = undefined;
+            state.addShopPointsError = undefined;
+        },
+        addShopPointsSuccess: (state: Draft<typeof initialState>, { payload }) => {
+            state.addShopPointsLoading = false;
+            state.addShopPointsSuccess = payload;
+            state.addShopPointsError = undefined;
+        },
+        addShopPointsError: (state: Draft<typeof initialState>, { payload }) => {
+            state.addShopPointsLoading = false;
+            state.addShopPointsSuccess = undefined;
+            state.addShopPointsError = payload;
+        },
+        resetAddShopPoints: (state: Draft<typeof initialState>) => {
+            state.addShopPointsLoading = false;
+            state.addShopPointsSuccess = undefined;
+            state.addShopPointsError = undefined;
+        },
+
+
+        removeShopPointsRequest: (state: Draft<typeof initialState>) => {
+            state.removeShopPointsLoading = true;
+            state.removeShopPointsSuccess = undefined;
+            state.removeShopPointsError = undefined;
+        },
+        removeShopPointsSuccess: (state: Draft<typeof initialState>, { payload }) => {
+            state.removeShopPointsLoading = false;
+            state.removeShopPointsSuccess = payload;
+            state.removeShopPointsError = undefined;
+        },
+        removeShopPointsError: (state: Draft<typeof initialState>, { payload }) => {
+            state.removeShopPointsLoading = false;
+            state.removeShopPointsSuccess = undefined;
+            state.removeShopPointsError = payload;
+        },
+        resetRemoveShopPoints: (state: Draft<typeof initialState>) => {
+            state.removeShopPointsLoading = false;
+            state.removeShopPointsSuccess = undefined;
+            state.removeShopPointsError = undefined;
+        },
+
+
+        getUserTransactionsRequest: (state: Draft<typeof initialState>) => {
+            state.getUserTransactionsLoading = true;
+            state.getUserTransactionsError = undefined;
+        },
+        getUserTransactionsSuccess: (state: Draft<typeof initialState>, { payload }) => {
+            state.getUserTransactionsLoading = false;
+            state.userTransactions = payload;
+            state.getUserTransactionsError = undefined;
+        },
+        getUserTransactionsError: (state: Draft<typeof initialState>, { payload }) => {
+            state.getUserTransactionsLoading = false;
+            state.userTransactions = undefined;
+            state.getUserTransactionsError = payload;
+        },
+        resetUserTransactionsRequest: (state: Draft<typeof initialState>) => {
+            state.getUserTransactionsLoading = false;
+            state.userTransactions = undefined;
+            state.getUserTransactionsError = undefined;
+        },
     }
 });
 
@@ -382,6 +471,20 @@ export const {
     removeRoleSuccess,
     removeRoleError,
     resetRemoveRole,
+    
+    addShopPointsRequest,
+    addShopPointsSuccess,
+    addShopPointsError,
+    resetAddShopPoints,
+
+    removeShopPointsRequest,
+    removeShopPointsSuccess,
+    removeShopPointsError,
+    resetRemoveShopPoints,
+
+    getUserTransactionsRequest,
+    getUserTransactionsSuccess,
+    getUserTransactionsError
 } = userSlice.actions;
 
 export default userSlice.reducer;

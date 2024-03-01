@@ -363,7 +363,7 @@ const ProfilePage: NextPage = () => {
                                        isDisabled={!isEditing} placeholder={'-'} type={'date'}
                                        onChange={handleBirthdayChange}></Input>
                             </InputGroup>
-
+                            <Button colorScheme={'blue'} mt={5} onClick={() => router.push('/profile/transactions')}>Voir mes transaction</Button>
                         </Box>
                         <Box ml={41} mr={150} mt={30}>
                             <Text fontSize={30} as={'i'}>Applications externes:</Text>
