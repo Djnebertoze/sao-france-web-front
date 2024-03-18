@@ -126,7 +126,7 @@ const ShopManagerEditPage: NextPage = () => {
             toastError('La description du produit est obligatoire !')
             return;
         }
-        if(!productDescriptionDetails){
+        if(!editorRef.current || !editorRef.current.editor?.getContent({ format: "html" })){
             toastError('La description détaillée du produit est obligatoire !')
             return;
         }

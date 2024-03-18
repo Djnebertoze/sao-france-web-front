@@ -5,11 +5,13 @@ import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useTranslation} from "next-i18next";
 
 import {getCDNUrl} from "../store/helper";
+import {NextRouter, useRouter} from "next/router";
 
 
 const HomePage: NextPage = () => {
 
     const { t } = useTranslation();
+    const router: NextRouter = useRouter();
 
     return (
         <Container maxW={'full'} margin={0} padding={0}>
@@ -61,8 +63,10 @@ const HomePage: NextPage = () => {
                                 fontFamily={'Bebas Neue'}
                                 letterSpacing={{sm:7, vsm: 5, base: 3}}
                                 fontSize={{md:30, sm:20, vsm: 18, base:13}}
+                                onClick={event => router.push("https://www.technicpack.net/modpack/saofrance-ex-v2.1985170")}
                                 py={{md:8, sm:7, vsm:6, base:0}}
                                 px={{md:70, sm:61, vsm: 50, base: 35}}>
+
                             {t('home.HOME_PLAY_NOW')}
                         </Button>
 
