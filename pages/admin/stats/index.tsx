@@ -6,7 +6,7 @@ import {getUserState} from "../../../store/user/userSlice";
 import {useEffect} from "react";
 import AdminNavbar from "../../../components/molecules/AdminNavbar/AdminNavbar";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {Box, Flex, Spacer, Text} from "@chakra-ui/react";
+import {Box, Flex, Spacer, Text, useToast} from "@chakra-ui/react";
 import {getMaxPowerFromUserRoles} from "../../../store/helper";
 import Chart from 'chart.js/auto';
 import {getActiveStripePrices} from "../../../store/stripe/stripeActions";
@@ -28,12 +28,23 @@ const AdminStatsPage: NextPage = () => {
         getAdminStatsError
     } = useSelector(getUserState)
 
+    const toast = useToast();
+    const toastDuration = 10000;
+
+    const toastError = (error : string) => {
+        toast({
+            title: "Erreur",
+            description: error,
+            status: 'error',
+            duration: toastDuration,
+            isClosable: true,
+            position: 'bottom-right',
+        });
+    }
+
     useEffect(() => {
         if (adminStats){
-            // @ts-ignore
-            if (adminStats['registers']){
-                // @ts-ignore
-                console.log(adminStats['registers'])
+            if (adminStats.registers){
                 const registerChart = Chart.getChart('registers')
                 if (registerChart){
                     registerChart.destroy()
@@ -46,8 +57,7 @@ const AdminStatsPage: NextPage = () => {
                     data: {
                         datasets: [{
                             label: 'Inscriptions',
-                            // @ts-ignore
-                            data: adminStats['registers'].data
+                            data: adminStats.registers.data
                         }],
                     },
                     options: {
@@ -79,7 +89,7 @@ const AdminStatsPage: NextPage = () => {
                             delay: (context) => {
                                 let delay = 0;
                                 if (context.type === 'data' && context.mode === 'default' && !delayed) {
-                                    delay = context.dataIndex * 100 + context.datasetIndex * 100;
+                                    delay = context.dataIndex * 5 + context.datasetIndex * 5;
                                 }
                                 return delay;
                             },
@@ -88,7 +98,14 @@ const AdminStatsPage: NextPage = () => {
                 })
             }
         } else {
-            dispatch(getAdminStats(auth?.accessToken))
+            if(!getAdminStatsLoading && auth?.accessToken) {
+                dispatch(getAdminStats(auth?.accessToken))
+            }
+        }
+
+        if (getAdminStatsError){
+            toastError('Impossible de récupérer les données des inscriptions')
+            console.log(getAdminStatsError)
         }
 
 
@@ -119,11 +136,19 @@ const AdminStatsPage: NextPage = () => {
             </Flex>
             <Box h={'1px'} w={'full'} backgroundColor={'rgb(255,255,255,.2)'} mb={5}/>
             <Box w={'full'}>
-                <Flex maxW={1000} flexDirection={"column"}>
+                <Flex w={'full'} flexDirection={"column"}>
                     <Text fontSize={18} marginBottom={2}>Inscriptions (60 jours)</Text>
                     <Box w={'full'} h={'1px'} backgroundColor={'rgb(255,255,255,.2)'} marginBottom={3}/>
-                    <canvas id={"registers"}/>
-                    <Box w={'full'} h={'1px'} backgroundColor={'rgb(255,255,255,.2)'} marginTop={0}/>
+                    <Flex w={'full'}>
+                        <Flex w={3000}>
+                            <canvas id={"registers"} />
+                        </Flex>
+                        <Flex w={'full'} borderLeft={'1px solid rgb(255,255,255,.2)'} px={3} textAlign={'center'} flexDirection={"column"}>
+                            <Text fontSize={40} w={'full'}>{adminStats?.numbers.users}</Text>
+                            <Text fontSize={15} w={'full'}>Utilisateurs</Text>
+                        </Flex>
+                    </Flex>
+                    <Box w={'full'} h={'1px'} backgroundColor={'rgb(255,255,255,.2)'} marginTop={3}/>
                 </Flex>
             </Box>
         </AdminNavbar>

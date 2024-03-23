@@ -1,6 +1,6 @@
 import { createSlice, Draft } from "@reduxjs/toolkit";
 import {
-    AdminStatistic,
+    AdminStatistics,
     Auth,
     MinecraftProfile,
     Transaction,
@@ -71,7 +71,7 @@ export interface UserState {
     getUserTransactionsError?: string;
 
     getAdminStatsLoading: boolean;
-    adminStats?: {};
+    adminStats?: AdminStatistics;
     getAdminStatsError?: string;
 }
 

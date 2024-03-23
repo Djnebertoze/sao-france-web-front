@@ -251,7 +251,6 @@ export const getAdminStats = (accessToken: string | null | undefined) => async (
             },
         });
         dispatch(getAdminStatsSuccess(response.data));
-        console.log(response.data)
     } catch (error: any) {
         dispatch(getAdminStatsError(error.message));
         console.log(error)

@@ -50,8 +50,13 @@ export interface UsersList {
     mcProfiles: McProfile[]
 }
 
-export interface AdminStatistic {
-    data: {}
+export interface AdminStatistics {
+    registers: {
+        data: {}
+    },
+    numbers: {
+        users: number
+    }
 }
 
 
