@@ -5,7 +5,7 @@ import {
     addRoleSuccess,
     addShopPointsError,
     addShopPointsRequest,
-    addShopPointsSuccess,
+    addShopPointsSuccess, getAdminStatsError, getAdminStatsRequest, getAdminStatsSuccess,
     getMinecraftProfileError,
     getMinecraftProfileRequest,
     getMinecraftProfileSuccess,
@@ -237,6 +237,23 @@ export const getUsersList = (accessToken: string | null | undefined) => async (d
         console.log(response.data)
     } catch (error: any) {
         dispatch(getUsersListError(error.message));
+        console.log(error)
+    }
+};
+
+
+export const getAdminStats = (accessToken: string | null | undefined) => async (dispatch: any) => {
+    dispatch(getAdminStatsRequest());
+    try {
+        const response = await axios.get(`${getAPIUrl()}/users/stats`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+        dispatch(getAdminStatsSuccess(response.data));
+        console.log(response.data)
+    } catch (error: any) {
+        dispatch(getAdminStatsError(error.message));
         console.log(error)
     }
 };

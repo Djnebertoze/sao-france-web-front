@@ -8,6 +8,9 @@ import AdminNavbar from "../../../components/molecules/AdminNavbar/AdminNavbar";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {Box, Flex, Spacer, Text} from "@chakra-ui/react";
 import {getMaxPowerFromUserRoles} from "../../../store/helper";
+import Chart from 'chart.js/auto';
+import {getActiveStripePrices} from "../../../store/stripe/stripeActions";
+import {getAdminStats} from "../../../store/user/userActions";
 
 
 const AdminStatsPage: NextPage = () => {
@@ -19,8 +22,77 @@ const AdminStatsPage: NextPage = () => {
         auth,
         userInfos,
         userLoginError,
-        getUserInfosError
+        getUserInfosError,
+        getAdminStatsLoading,
+        adminStats,
+        getAdminStatsError
     } = useSelector(getUserState)
+
+    useEffect(() => {
+        if (adminStats){
+            // @ts-ignore
+            if (adminStats['registers']){
+                // @ts-ignore
+                console.log(adminStats['registers'])
+                const registerChart = Chart.getChart('registers')
+                if (registerChart){
+                    registerChart.destroy()
+                }
+
+                let delayed: boolean;
+
+                new Chart('registers', {
+                    type: 'line',
+                    data: {
+                        datasets: [{
+                            label: 'Inscriptions',
+                            // @ts-ignore
+                            data: adminStats['registers'].data
+                        }],
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Nombre d\'inscriptions',
+                                position: "bottom"
+                            },
+                            legend: {
+                                display: true,
+                                position: "bottom"
+                            }
+                        },
+                        scales:{
+                            y: {
+                                min: 0,
+                                ticks: {
+                                    stepSize: 1
+                                },
+                                suggestedMax: 10
+                            }
+                        },
+                        animation: {
+                            onComplete: () => {
+                                delayed = true;
+                            },
+                            delay: (context) => {
+                                let delay = 0;
+                                if (context.type === 'data' && context.mode === 'default' && !delayed) {
+                                    delay = context.dataIndex * 100 + context.datasetIndex * 100;
+                                }
+                                return delay;
+                            },
+                        },
+                    }
+                })
+            }
+        } else {
+            dispatch(getAdminStats(auth?.accessToken))
+        }
+
+
+    }, [dispatch, auth?.accessToken, getAdminStatsLoading, adminStats, getAdminStatsError])
 
     useEffect(() => {
         console.log('1')
@@ -46,7 +118,14 @@ const AdminStatsPage: NextPage = () => {
                 <Spacer/>
             </Flex>
             <Box h={'1px'} w={'full'} backgroundColor={'rgb(255,255,255,.2)'} mb={5}/>
-            En cours de dev...
+            <Box w={'full'}>
+                <Flex maxW={1000} flexDirection={"column"}>
+                    <Text fontSize={18} marginBottom={2}>Inscriptions (60 jours)</Text>
+                    <Box w={'full'} h={'1px'} backgroundColor={'rgb(255,255,255,.2)'} marginBottom={3}/>
+                    <canvas id={"registers"}/>
+                    <Box w={'full'} h={'1px'} backgroundColor={'rgb(255,255,255,.2)'} marginTop={0}/>
+                </Flex>
+            </Box>
         </AdminNavbar>
     );
 }

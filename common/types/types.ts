@@ -50,6 +50,10 @@ export interface UsersList {
     mcProfiles: McProfile[]
 }
 
+export interface AdminStatistic {
+    data: {}
+}
+
 
 export interface McProfile {
     uuid: string;
@@ -94,6 +98,7 @@ export interface ShopProduct {
     pointsToGive?: number,
     roleToGive?: string,
     cosmeticToGive?: string,
+    bonusShopPoints?: number
 }
 
 export interface StripeProduct {

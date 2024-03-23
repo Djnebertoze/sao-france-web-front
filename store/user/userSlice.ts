@@ -1,5 +1,13 @@
 import { createSlice, Draft } from "@reduxjs/toolkit";
-import {Auth, MinecraftProfile, Transaction, User, UserPrivateProfile, UsersList} from "../../common/types/types";
+import {
+    AdminStatistic,
+    Auth,
+    MinecraftProfile,
+    Transaction,
+    User,
+    UserPrivateProfile,
+    UsersList
+} from "../../common/types/types";
 
 export interface UserState {
     userLoginLoading: boolean;
@@ -61,6 +69,10 @@ export interface UserState {
     getUserTransactionsLoading: boolean;
     userTransactions?: Transaction[];
     getUserTransactionsError?: string;
+
+    getAdminStatsLoading: boolean;
+    adminStats?: {};
+    getAdminStatsError?: string;
 }
 
 const initialState: UserState = {
@@ -123,6 +135,10 @@ const initialState: UserState = {
     getUserTransactionsLoading: false,
     userTransactions: undefined,
     getUserTransactionsError: undefined,
+
+    getAdminStatsLoading: false,
+    adminStats: undefined,
+    getAdminStatsError: undefined,
 }
 
 export const userSlice = createSlice({
@@ -419,6 +435,22 @@ export const userSlice = createSlice({
             state.userTransactions = undefined;
             state.getUserTransactionsError = undefined;
         },
+
+
+        getAdminStatsRequest: (state: Draft<typeof initialState>) => {
+            state.getAdminStatsLoading = true;
+            state.getAdminStatsError = undefined;
+        },
+        getAdminStatsSuccess: (state: Draft<typeof initialState>, { payload }) => {
+            state.getAdminStatsLoading = false;
+            state.adminStats = payload;
+            state.getAdminStatsError = undefined;
+        },
+        getAdminStatsError: (state: Draft<typeof initialState>, { payload }) => {
+            state.getAdminStatsLoading = false;
+            state.adminStats = undefined;
+            state.getAdminStatsError = payload;
+        },
     }
 });
 
@@ -484,7 +516,11 @@ export const {
 
     getUserTransactionsRequest,
     getUserTransactionsSuccess,
-    getUserTransactionsError
+    getUserTransactionsError,
+
+    getAdminStatsRequest,
+    getAdminStatsSuccess,
+    getAdminStatsError
 } = userSlice.actions;
 
 export default userSlice.reducer;

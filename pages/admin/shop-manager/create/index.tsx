@@ -64,6 +64,7 @@ const ShopManagerCreatePage: NextPage = () => {
     const [productPointsToGive, setProductPointsToGive] = useState<number>()
     const [productRoleToGive, setProductRoleToGive] = useState<string>()
     const [productCosmeticToGive, setProductCosmeticToGive] = useState<string>()
+    const [productBonusShopPoints, setProductBonusShopPoints] = useState<number>(0)
     const [errorMessage, setErrorMessage] = useState<string>()
 
 
@@ -74,6 +75,7 @@ const ShopManagerCreatePage: NextPage = () => {
     const handleChangeProductImageUrl = (event: any) => setProductImageUrl(event.target.value);
     const handleChangeProductMonneyType = (event: any) => event.target.value === "true" ? setProductIsRealPrice(true) : setProductIsRealPrice(false);
     const handleChangeProductCategorie = (event: any) => setProductCategorie(event.target.value);
+    const handleChangeProductBonusShopPoints = (event: any) => setProductBonusShopPoints(event.target.value);
     const handleChangeProductStripeLink = (event: any) => {
         setProductStripeLink(event.target.value);
         if (activeStripePrices) {
@@ -160,7 +162,8 @@ const ShopManagerCreatePage: NextPage = () => {
             descriptionDetails: editorRef.current.editor?.getContent({ format: "html" }),
             pointsToGive: productPointsToGive,
             roleToGive: productRoleToGive,
-            cosmeticToGive: productCosmeticToGive
+            cosmeticToGive: productCosmeticToGive,
+            bonusShopPoints: productBonusShopPoints
         }
         dispatch(createShopProduct(auth?.accessToken, shopProductDto));
     }
@@ -370,6 +373,14 @@ const ShopManagerCreatePage: NextPage = () => {
                             </Box>
                         </Box>
                     )}
+                    <Box>
+                        <Box>
+                            <Text fontSize={19} mb={2} mt={5}>Points boutique bonus (facultatif)</Text>
+                            <InputGroup w={'full'}>
+                                <Input w={'full'} placeholder={'Points boutique bonus'} variant={'flushed'} type={'number'} value={productBonusShopPoints} onChange={handleChangeProductBonusShopPoints}></Input>
+                            </InputGroup>
+                        </Box>
+                    </Box>
                     <Box >
                         <Box >
                             <Text fontSize={19} mb={2} mt={5}>URL image (temporaire) - priviligier les images basse résolution</Text>

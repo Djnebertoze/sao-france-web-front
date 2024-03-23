@@ -71,6 +71,8 @@ const ShopManagerEditPage: NextPage = () => {
     const [productPointsToGive, setProductPointsToGive] = useState<number>()
     const [productRoleToGive, setProductRoleToGive] = useState<string>()
     const [productCosmeticToGive, setProductCosmeticToGive] = useState<string>()
+    const [productBonusShopPoints, setProductBonusShopPoints] = useState<number>(0)
+
     const [errorMessage, setErrorMessage] = useState<string>()
 
     const handleChangeProductName = (event: any) => setProductName(event.target.value);
@@ -80,6 +82,8 @@ const ShopManagerEditPage: NextPage = () => {
     const handleChangeProductImageUrl = (event: any) => setProductImageUrl(event.target.value);
     const handleChangeProductMoneyType = (event: any) => event.target.value === "true" ? setProductIsRealPrice(true) : setProductIsRealPrice(false);
     const handleChangeProductCategorie = (event: any) => setProductCategory(event.target.value);
+    const handleChangeProductBonusShopPoints = (event: any) => setProductBonusShopPoints(event.target.value);
+
     const handleChangeProductStripeLink = (event: any) => {
         setProductStripeLink(event.target.value);
         if (activeStripePrices) {
@@ -173,7 +177,8 @@ const ShopManagerEditPage: NextPage = () => {
             descriptionDetails: editorRef.current.editor?.getContent({ format: "html" }),
             pointsToGive: productPointsToGive,
             roleToGive: productRoleToGive,
-            cosmeticToGive: productCosmeticToGive
+            cosmeticToGive: productCosmeticToGive,
+            bonusShopPoints: productBonusShopPoints
         }
 
         console.log("a", shopProductDto)
@@ -292,7 +297,6 @@ const ShopManagerEditPage: NextPage = () => {
 
     useEffect(() => {
         if(shopProduct){
-            console.log("SHOP P", shopProduct)
             setProductName(shopProduct.name);
             setProductDescription(shopProduct.description);
             setProductCategory(shopProduct.categorieId);
@@ -309,6 +313,11 @@ const ShopManagerEditPage: NextPage = () => {
             }
             if(shopProduct.categorieId == 'cosmetiques'){
                 setProductCosmeticToGive(shopProduct.cosmeticToGive)
+            }
+            if (shopProduct.bonusShopPoints) {
+                setProductBonusShopPoints(shopProduct.bonusShopPoints)
+            } else {
+                setProductBonusShopPoints(0)
             }
         }
         if(getShopProductError) {
@@ -434,6 +443,14 @@ const ShopManagerEditPage: NextPage = () => {
                             </Box>
                         </Box>
                     )}
+                    <Box>
+                        <Box>
+                            <Text fontSize={19} mb={2} mt={5}>Points boutique bonus (facultatif)</Text>
+                            <InputGroup w={'full'}>
+                                <Input w={'full'} placeholder={'Points boutique bonus'} variant={'flushed'} type={'number'} value={productBonusShopPoints} onChange={handleChangeProductBonusShopPoints}></Input>
+                            </InputGroup>
+                        </Box>
+                    </Box>
                     <Box >
                         <Box >
                             <Text fontSize={19} mb={2} mt={5}>URL image (temporaire) - privilégier les images basse résolution</Text>
