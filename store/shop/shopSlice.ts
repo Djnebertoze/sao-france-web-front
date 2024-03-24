@@ -148,6 +148,11 @@ export const shopSlice = createSlice({
             state.shopProduct = undefined;
             state.getShopProductError = payload;
         },
+        resetShopProduct: (state: Draft<typeof initialState>) => {
+            state.getShopProductLoading = false;
+            state.shopProduct = undefined;
+            state.getShopProductError = undefined;
+        },
 
         getPayProductWithShopPointsRequest: (state: Draft<typeof initialState>) => {
             state.payProductWithShopPointsLoading = true;
@@ -215,6 +220,7 @@ export const {
     getShopProductRequest,
     getShopProductSuccess,
     getShopProductError,
+    resetShopProduct,
 
     getPayProductWithShopPointsRequest,
     getPayProductWithShopPointsSuccess,

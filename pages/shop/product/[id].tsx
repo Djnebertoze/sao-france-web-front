@@ -2,18 +2,19 @@ import {NextPage} from "next";
 import {NextRouter, useRouter} from "next/router";
 import {Box, Button, Center, Container, Flex, Image, Spacer, Text, useToast,} from "@chakra-ui/react";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {getUserState,} from "../../../store/user/userSlice";
 import {getUserProfile} from "../../../store/user/userActions";
 import {useDispatch, useSelector} from "../../../store/store";
 import {ShopCategorie} from "../../../common/types/types";
 import {shopCategories} from "../../../common/shop/shopCategories";
-import {getPayProductWithShopPointsReset, getShopState} from "../../../store/shop/shopSlice";
+import {getPayProductWithShopPointsReset, getShopState, resetShopProduct} from "../../../store/shop/shopSlice";
 import {getShopProduct, payProductWithShopPoints} from "../../../store/shop/shopActions";
-import {transformDescription} from "../../../store/helper";
+import {getMaxPowerUserGradesFromUserRoles, transformDescription} from "../../../store/helper";
 import ImageSecured from "../../../public/images/shop/securised.png"
 import {getStripeState} from "../../../store/stripe/stripeSlice";
 import {getStripePaymentLink} from "../../../store/stripe/stripeActions";
+import {getRoleById} from "../../../common/roles/roles";
 
 
 const ProductPage: NextPage = () => {
@@ -46,6 +47,10 @@ const ProductPage: NextPage = () => {
     const toast = useToast();
     const toastDuration = 5000;
 
+    const [canBuyRole, setCanBuyRole] = useState<boolean>()
+
+    let rolePower: number | undefined = 0;
+
 
     useEffect(() => {
         if (auth?.accessToken && !userInfos) {
@@ -55,9 +60,25 @@ const ProductPage: NextPage = () => {
             }
         }
 
-        if(auth?.accessToken && (!shopProduct || (shopProduct && shopProduct._id !== router.query.id))){
-            dispatch(getShopProduct(auth.accessToken, router.query.id))
+        if(shopProduct && shopProduct.roleToGive && shopProduct.categorieId == 'grades'){
+            rolePower = getRoleById(shopProduct.roleToGive)?.power;
+        } else {
+            rolePower = 0;
+        }
 
+        if(shopProduct && userInfos && rolePower != undefined) {
+            //console.log("rp", rolePower)
+            // @ts-ignore
+            /*console.log('mp ', getMaxPowerUserGradesFromUserRoles(userInfos.roles))
+            console.log('mm ', userInfos.roles.includes(shopProduct.roleToGive))
+            console.log('jj ', rolePower < getMaxPowerUserGradesFromUserRoles(userInfos.roles))*/
+
+            setCanBuyRole(!(userInfos && shopProduct?.categorieId == 'grades' && shopProduct?.roleToGive != undefined && (userInfos.roles.includes(shopProduct.roleToGive) || rolePower < getMaxPowerUserGradesFromUserRoles(userInfos.roles))))
+
+        }
+        if(auth?.accessToken && (!shopProduct || (shopProduct && shopProduct._id !== router.query.id))){
+            dispatch(resetShopProduct())
+            dispatch(getShopProduct(auth.accessToken, router.query.id))
         }
 
         if (!auth?.accessToken && userLoginError !== undefined) {
@@ -141,6 +162,7 @@ const ProductPage: NextPage = () => {
         }
     }, [payProductWithShopPointsSuccess, payProductWithShopPointsError, auth?.accessToken, dispatch, shopProduct?.name, toast, router])
 
+
     return (
         <Container maxW={'full'} margin={0} padding={0}>
             <Flex maxW={'full'} py={10} px={50} mx={0} className={'main-background'} minH={1000} w={'full'} flexDirection={"column"} pt={120}>
@@ -165,8 +187,9 @@ const ProductPage: NextPage = () => {
                             <Text color={'rgb(255,255,255,.7)'}>Compte Minecraft connecté: {userInfos?.mcProfile?.name ? userInfos?.mcProfile?.name : 'NON CONNECTÉ'}</Text>
                         </Center>
 
-                        <Button variant={'solid'} colorScheme={'blue'} onClick={() => userInfos?.mcProfile?.name ? handleBuy() : router.push('/profile')} mt={11} isLoading={getStripePaymentLinkLoading || payProductWithShopPointsLoading}>
-                            {userInfos?.mcProfile?.name ? 'Acheter' : 'Connecter mon compte Minecraft'}
+
+                        <Button variant={'solid'} colorScheme={'blue'} isDisabled={!canBuyRole} onClick={() => userInfos?.mcProfile?.name ? handleBuy() : router.push('/profile')} mt={11} isLoading={getStripePaymentLinkLoading || payProductWithShopPointsLoading}>
+                            {userInfos?.mcProfile?.name ? canBuyRole ? 'Acheter' : 'Grade déjà possédé' : 'Connecter mon compte Minecraft'}
                         </Button>
                     </Flex>
                     <Spacer/>

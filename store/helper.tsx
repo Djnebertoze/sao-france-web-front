@@ -30,6 +30,19 @@ export function getMaxPowerFromUserRoles(userRoles: string[]): number {
     return maxPower;
 }
 
+export function getMaxPowerUserGradesFromUserRoles(userRoles: string[]): number {
+    let maxPower = 0;
+
+    userRoles.forEach(roleId => {
+        const role = getRoleById(roleId);
+        if (role && role.power > maxPower && role.power < 2) {
+            maxPower = role.power;
+        }
+    });
+
+    return maxPower;
+}
+
 export function occurrences(string: string, subString: string, allowOverlapping: boolean) {
 
     string += "";

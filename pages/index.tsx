@@ -93,9 +93,10 @@ const HomePage: NextPage = () => {
                 <Flex color={'white'} m={10} mt={{vsm:61, base:35}} flexDirection={{lg: 'row', base: 'column', }}>
                     <Flex>
                         <Spacer/>
-                        <Image src={getCDNUrl()+'/images/wallpaper/plan4.png'}
+                        <Image src={getCDNUrl()+'/images/wallpaper/plan4_.png'}
                                h={{sm:400, vsm: 200}}
                                minW={{base:200}}
+                               maxW={700}
                                 alt={'Wal paper image'}
                                boxShadow={'10px 10px 30px 0px rgb(255,255,255,.1)'}
                                objectFit={'cover'}
@@ -115,10 +116,8 @@ const HomePage: NextPage = () => {
                               pb={{lg:0, base: 50}}>
                             <Text fontSize={{vsm:25, base:21}} fontWeight={'bold'} mb={8}>Commencez votre Aventure !</Text>
                             <Text fontSize={{vsm:20, base:15}}>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                Nisl purus in mollis nunc sed id semper risus. </Text>
-                            <Button colorScheme={'blue'} w={{vsm:200, base:150}} mt={50} h={{vsm:45, base:35}} fontSize={{vsm:15, base:12}}>Commencer à jouer</Button>
+                                {t('home.FIRST_PARAGRAPH')}</Text>
+                            <Button colorScheme={'blue'} w={{vsm:200, base:150}} mt={50} h={{vsm:45, base:35}} fontSize={{vsm:15, base:12}} onClick={() => router.push("https://www.technicpack.net/modpack/saofrance-ex-v2.1985170")}>Commencer à jouer</Button>
                         </Flex>
                         <Spacer/>
                     </Flex>
@@ -135,12 +134,10 @@ const HomePage: NextPage = () => {
                               mt={{lg:0, base:5}}
                               borderBottom={{lg: 'none', base: '2px solid rgb(255,255,255,.6)'}}
                               pb={{lg:0, base: 50}}>
-                            <Text fontSize={{vsm:25, base:21}} fontWeight={'bold'} mb={8}>Lorem ipsum dolor sit amet !</Text>
+                            <Text fontSize={{vsm:25, base:21}} fontWeight={'bold'} mb={8}>Venez nous aider !</Text>
                             <Text fontSize={{vsm:20, base:15}}>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                Nisl purus in mollis nunc sed id semper risus. </Text>
-                            <Button colorScheme={'blue'} w={200} mt={50} h={45}>Lorem ipsum</Button>
+                                {t('home.SECOND_PARAGRAPH')}</Text>
+                            <Button colorScheme={'blue'} w={200} mt={50} h={45} onClick={() => router.push('/shop')}>Voir la boutique</Button>
                         </Flex>
                         <Spacer/>
                     </Flex>
