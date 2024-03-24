@@ -54,8 +54,21 @@ export interface AdminStatistics {
     registers: {
         data: {}
     },
+    transactions: {
+        data: {},
+        types: {
+            data: {
+                grades: number,
+                points: number,
+                cosmetiques: number,
+            }
+        },
+        revenues: number,
+        shopPointsUsed: number
+    },
     numbers: {
-        users: number
+        users: number,
+        newUsers60d: number
     }
 }
 

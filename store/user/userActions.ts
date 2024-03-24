@@ -245,7 +245,7 @@ export const getUsersList = (accessToken: string | null | undefined) => async (d
 export const getAdminStats = (accessToken: string | null | undefined) => async (dispatch: any) => {
     dispatch(getAdminStatsRequest());
     try {
-        const response = await axios.get(`${getAPIUrl()}/users/stats`, {
+        const response = await axios.get(`${getAPIUrl()}/statistics/admin`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
             },

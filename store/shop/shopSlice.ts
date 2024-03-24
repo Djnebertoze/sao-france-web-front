@@ -1,5 +1,5 @@
 import { createSlice, Draft } from "@reduxjs/toolkit";
-import {ShopProduct} from "../../common/types/types";
+import {ShopProduct, Transaction, UsersList} from "../../common/types/types";
 
 export interface ShopState {
     createShopProductLoading: boolean;
@@ -25,6 +25,10 @@ export interface ShopState {
     payProductWithShopPointsLoading: boolean;
     payProductWithShopPointsSuccess?: string;
     payProductWithShopPointsError?: string;
+
+    getTransactionsListLoading: boolean;
+    transactionsList?: Transaction[];
+    getTransactionsListError?: string;
 }
 
 const initialState: ShopState = {
@@ -51,6 +55,10 @@ const initialState: ShopState = {
     payProductWithShopPointsLoading: false,
     payProductWithShopPointsSuccess: undefined,
     payProductWithShopPointsError: undefined,
+
+    getTransactionsListLoading: false,
+    transactionsList: undefined,
+    getTransactionsListError: undefined,
 }
 
 export const shopSlice = createSlice({
@@ -160,7 +168,28 @@ export const shopSlice = createSlice({
             state.payProductWithShopPointsLoading = false;
             state.payProductWithShopPointsSuccess = undefined;
             state.payProductWithShopPointsError = undefined;
-        }
+        },
+
+        getTransactionsListRequest: (state: Draft<typeof initialState>) => {
+            state.getTransactionsListLoading = true;
+            state.transactionsList = undefined;
+            state.getTransactionsListError = undefined;
+        },
+        getTransactionsListSuccess: (state: Draft<typeof initialState>, { payload }) => {
+            state.getTransactionsListLoading = false;
+            state.transactionsList = payload;
+            state.getTransactionsListError = undefined;
+        },
+        getTransactionsListError: (state: Draft<typeof initialState>, { payload }) => {
+            state.getTransactionsListLoading = false;
+            state.transactionsList = undefined;
+            state.getTransactionsListError = payload;
+        },
+        resetTransactionsList: (state: Draft<typeof initialState>, { payload }) => {
+            state.getTransactionsListLoading = false;
+            state.transactionsList = undefined;
+            state.getTransactionsListError = undefined;
+        },
     }
 })
 
@@ -190,7 +219,14 @@ export const {
     getPayProductWithShopPointsRequest,
     getPayProductWithShopPointsSuccess,
     getPayProductWithShopPointsError,
-    getPayProductWithShopPointsReset
+    getPayProductWithShopPointsReset,
+
+    getTransactionsListRequest,
+    getTransactionsListSuccess,
+    getTransactionsListError,
+    resetTransactionsList
+
+
 } = shopSlice.actions;
 
 export default shopSlice.reducer;

@@ -33,6 +33,7 @@ import {
     FiShoppingCart,
     FiTrendingUp,
     FiUsers,
+    FiDollarSign
 } from 'react-icons/fi'
 import {IconType} from 'react-icons'
 import React from "react";
@@ -77,6 +78,7 @@ const LinkItems: Array<LinkItemProps> = [
     { name: 'Statistiques', icon: FiTrendingUp, href: '/stats', powerRequired: 3 },
     { name: 'Utilisateurs', icon: FiUsers, href: '/users', powerRequired: 3},
     { name: 'Recrutements', icon: FiBriefcase, href: '/apply-manager', powerRequired: 5},
+    { name: 'Transactions', icon: FiDollarSign, href: '/transactions', powerRequired: 5},
     { name: 'Boutique', icon: FiShoppingCart, href: '/shop-manager', powerRequired: 6},
     { name: 'Paramètres', icon: FiSettings, href: '/settings', powerRequired: 6},
 ]

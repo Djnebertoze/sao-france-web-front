@@ -323,7 +323,7 @@ const ProfilePage: NextPage = () => {
                         </Flex>
                         <Box ml={41} mr={150} mt={30}>
                             <Text fontSize={30} as={'i'}>Informations personnelles:</Text>
-                            <Box w={'full'} h={'1px'} bgColor={'black'} mt={2}/>
+                            <Box w={'full'} h={'1px'} bgColor={'rgb(255,255,255,.2)'} mt={2}/>
                             <InputGroup border={'transparent'} mt={5}>
                                 <InputLeftAddon fontSize={21} w={100}
                                                 bgColor={'transparent'}>Email:</InputLeftAddon>
@@ -367,7 +367,7 @@ const ProfilePage: NextPage = () => {
                         </Box>
                         <Box ml={41} mr={150} mt={30}>
                             <Text fontSize={30} as={'i'}>Applications externes:</Text>
-                            <Box w={'full'} h={'1px'} bgColor={'black'} mt={2}/>
+                            <Box w={'full'} h={'1px'} bgColor={'rgb(255,255,255,.2)'} mt={2}/>
                             <Button colorScheme={'blue'}
                                     mt={10}
                                     borderRadius={2}
@@ -383,8 +383,8 @@ const ProfilePage: NextPage = () => {
                         </Box>
                         <Box ml={41} mr={150} mt={30}>
                             <Text fontSize={30} as={'i'}>Utilitaires:</Text>
-                            <Box w={'full'} h={'1px'} bgColor={'black'} mt={2}/>
-                            <Button colorScheme={'red'} mt={10} onClick={logout}>
+                            <Box w={'full'} h={'1px'} bgColor={'rgb(255,255,255,.2)'} mt={2}/>
+                            <Button colorScheme={'red'} mt={5} mb={5} onClick={logout}>
                                 Me déconnecter
                             </Button>
                         </Box>

@@ -6,11 +6,14 @@ import {getUserState} from "../../../store/user/userSlice";
 import {useEffect} from "react";
 import AdminNavbar from "../../../components/molecules/AdminNavbar/AdminNavbar";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {Box, Flex, Spacer, Text, useToast} from "@chakra-ui/react";
+import {Box, Button, Flex, Spacer, Text, useToast} from "@chakra-ui/react";
 import {getMaxPowerFromUserRoles} from "../../../store/helper";
 import Chart from 'chart.js/auto';
 import {getActiveStripePrices} from "../../../store/stripe/stripeActions";
 import {getAdminStats} from "../../../store/user/userActions";
+import {Span} from "next/dist/server/lib/trace/tracer";
+import {getTransactionsList} from "../../../store/shop/shopActions";
+import {FiRefreshCcw} from "react-icons/fi";
 
 
 const AdminStatsPage: NextPage = () => {
@@ -55,10 +58,16 @@ const AdminStatsPage: NextPage = () => {
                 new Chart('registers', {
                     type: 'line',
                     data: {
-                        datasets: [{
-                            label: 'Inscriptions',
-                            data: adminStats.registers.data
-                        }],
+                        datasets: [
+                            {
+                                label: 'Inscriptions',
+                                data: adminStats.registers.data
+                            },
+                            {
+                                label: 'Transactions',
+                                data: adminStats.transactions.data
+                            },
+                        ],
                     },
                     options: {
                         responsive: true,
@@ -96,6 +105,24 @@ const AdminStatsPage: NextPage = () => {
                         },
                     }
                 })
+                if (adminStats.transactions.types) {
+                    const transactionTypesChart = Chart.getChart('transactionsType')
+                    if (transactionTypesChart) {
+                        transactionTypesChart.destroy()
+                    }
+
+                    let delayed: boolean;
+
+                    new Chart('transactionsType', {
+                        type: 'pie',
+                        data: {
+                            labels: ['Grades', 'Points Boutique', 'Cosmétiques'],
+                            datasets: [{
+                                data: [adminStats.transactions.types.data.grades, adminStats.transactions.types.data.points, adminStats.transactions.types.data.cosmetiques]
+                            }]
+                        },
+                    })
+                }
             }
         } else {
             if(!getAdminStatsLoading && auth?.accessToken) {
@@ -133,11 +160,14 @@ const AdminStatsPage: NextPage = () => {
                     <Text fontSize={16} color={'rgb(255,255,255,.5)'}>Vous retrouverez ici différentes statistiques auxquelles vous avez accès selon votre degré d&apos;accréditation.</Text>
                 </Flex>
                 <Spacer/>
+                {auth?.accessToken && (
+                    <Button p={0} colorScheme={'blue'} onClick={() => dispatch(getAdminStats(auth.accessToken))}><FiRefreshCcw/></Button>
+                )}
             </Flex>
             <Box h={'1px'} w={'full'} backgroundColor={'rgb(255,255,255,.2)'} mb={5}/>
             <Box w={'full'}>
                 <Flex w={'full'} flexDirection={"column"}>
-                    <Text fontSize={18} marginBottom={2}>Inscriptions (60 jours)</Text>
+                    <Text fontSize={18} marginBottom={2}>Inscriptions & Transactions (60 jours)</Text>
                     <Box w={'full'} h={'1px'} backgroundColor={'rgb(255,255,255,.2)'} marginBottom={3}/>
                     <Flex w={'full'}>
                         <Flex w={3000}>
@@ -145,7 +175,24 @@ const AdminStatsPage: NextPage = () => {
                         </Flex>
                         <Flex w={'full'} borderLeft={'1px solid rgb(255,255,255,.2)'} px={3} textAlign={'center'} flexDirection={"column"}>
                             <Text fontSize={40} w={'full'}>{adminStats?.numbers.users}</Text>
-                            <Text fontSize={15} w={'full'}>Utilisateurs</Text>
+                            <Text fontSize={15} w={'full'}>utilisateurs au total</Text>
+                            <Text fontSize={40} marginTop={5} w={'full'}><span style={{fontSize: 20}}>+</span>{adminStats?.numbers.newUsers60d}</Text>
+                            <Text fontSize={15} w={'full'}>utilisateurs ces derniers 60 jours</Text>
+                        </Flex>
+                    </Flex>
+                    <Box w={'full'} h={'1px'} backgroundColor={'rgb(255,255,255,.2)'} marginTop={3}/>
+
+                    <Text fontSize={18} mt={10} marginBottom={2}>Types d&apos;achats</Text>
+                    <Box w={'full'} h={'1px'} backgroundColor={'rgb(255,255,255,.2)'} marginBottom={3}/>
+                    <Flex w={'full'}>
+                        <Flex w={1000} pr={5}>
+                            <canvas id={"transactionsType"} />
+                        </Flex>
+                        <Flex w={'full'} borderLeft={'1px solid rgb(255,255,255,.2)'} px={3} textAlign={'center'} flexDirection={"column"}>
+                            <Text fontSize={40} w={'full'}>{adminStats?.transactions.revenues}€</Text>
+                            <Text fontSize={15} w={'full'}>récoltés ces 60 derniers jours</Text>
+                            <Text fontSize={40} marginTop={5} w={'full'}>{adminStats?.transactions.shopPointsUsed} PB</Text>
+                            <Text fontSize={15} w={'full'}>utilisés ces 60 derniers jours</Text>
                         </Flex>
                     </Flex>
                     <Box w={'full'} h={'1px'} backgroundColor={'rgb(255,255,255,.2)'} marginTop={3}/>

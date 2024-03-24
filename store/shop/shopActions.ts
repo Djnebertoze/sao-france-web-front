@@ -16,11 +16,12 @@ import {
     getShopProductsError,
     getShopProductsRequest,
     getShopProductsSuccess,
-    getShopProductSuccess,
+    getShopProductSuccess, getTransactionsListError, getTransactionsListRequest, getTransactionsListSuccess,
     removeShopProductError,
     removeShopProductRequest,
     removeShopProductSuccess
 } from "./shopSlice";
+import {getUsersListError, getUsersListRequest, getUsersListSuccess} from "../user/userSlice";
 
 export const createShopProduct = (accessToken: string | undefined, createShopProductDto : CreateShopProductDto) => async (dispatch: any) => {
     dispatch(createShopProductRequest())
@@ -156,3 +157,19 @@ export const payProductWithShopPoints = (accessToken: string | undefined, produc
         dispatch(getPayProductWithShopPointsError(error.code))
     }
 }
+
+export const getTransactionsList = (accessToken: string | null | undefined) => async (dispatch: any) => {
+    dispatch(getTransactionsListRequest());
+    try {
+        const response = await axios.get(`${getAPIUrl()}/transactions/all`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+        dispatch(getTransactionsListSuccess(response.data));
+        console.log(response.data)
+    } catch (error: any) {
+        dispatch(getTransactionsListError(error.message));
+        console.log(error)
+    }
+};

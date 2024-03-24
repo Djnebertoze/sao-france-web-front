@@ -93,14 +93,14 @@ const TransactionsPage: NextPage = () => {
             <Container bg={'rgb(55,56,58,1)'} minH={1000} maxW={'full'} color={'white'} pt={5} px={0} mt={'77px'}>
                 <Flex>
                     <Flex flexDirection={'column'} minW={200} mx={5}>
-                        <Button mt={2} colorScheme={'red'}>Retour</Button>
+                        <Button mt={2} colorScheme={'red'} onClick={() => router.push('/profile').then()}>Retour</Button>
                     </Flex>
                     <Flex flexDirection={'column'} w={'full'} borderLeft={'1px solid rgb(255,255,255,.3)'} px={5}>
-                        <Text fontSize={28} w={'full'} borderBottom={'1px solid rgb(255,255,255,.3)'}  pb={4}>Mes Transactions</Text>
-                        <Flex flexDirection={"column-reverse"}>
+                        <Text fontSize={28} w={'full'} borderBottom={'1px solid rgb(255,255,255,.3)'} pb={4}>Mes Transactions</Text>
+                        <Flex flexDirection={"column-reverse"} pt={5}>
                             {userTransactions && userTransactions.map((transaction) => {
                                 return (
-                                    <Flex key={transaction._id} flexDirection={"column"} w={'full'} backgroundColor={'rgb(255,255,255,.04)'} borderRadius={5} mt={5} py={3} px={10}>
+                                    <Flex key={transaction._id} flexDirection={"column"} w={'full'} backgroundColor={'rgb(255,255,255,.04)'} borderRadius={5} mb={5} py={3} px={10}>
                                         <Flex>
                                             <Text fontSize={20}>{transaction.productName}</Text>
                                             <Spacer/>
