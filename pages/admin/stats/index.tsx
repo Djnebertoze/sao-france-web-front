@@ -136,7 +136,7 @@ const AdminStatsPage: NextPage = () => {
         }
 
 
-    }, [dispatch, auth?.accessToken, getAdminStatsLoading, adminStats, getAdminStatsError])
+    }, [dispatch, auth?.accessToken, getAdminStatsLoading, adminStats, getAdminStatsError, toastError])
 
     useEffect(() => {
         console.log('1')
