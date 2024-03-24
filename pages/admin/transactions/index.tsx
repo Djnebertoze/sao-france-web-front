@@ -75,10 +75,17 @@ const TransactionsPage: NextPage = () => {
         }
 
         if (getTransactionsListError){
-            toastError('Impossible de récupérer la liste des transactions')
+            toast({
+                title: "Erreur",
+                description: 'Impossible de récupérer la liste des transactions',
+                status: 'error',
+                duration: toastDuration,
+                isClosable: true,
+                position: 'bottom-right',
+            });
         }
 
-    }, [dispatch, auth?.accessToken, router, userInfos, userLoginError, getUserInfosError, transactionsList, getTransactionsListLoading, getTransactionsListError, toastError]);
+    }, [dispatch, auth?.accessToken, router, userInfos, userLoginError, getUserInfosError, transactionsList, getTransactionsListLoading, getTransactionsListError, toast]);
 
 
     return (
@@ -86,7 +93,7 @@ const TransactionsPage: NextPage = () => {
             <Text fontSize={25} mb={0}>Bienvenue sur votre onglet &apos;<Text color={'cyan.400'} as={'span'}>Historique des transactions</Text>&apos; !</Text>
             <Flex mb={5}>
                 <Flex direction={"column"}>
-                    <Text fontSize={16} color={'rgb(255,255,255,.5)'}>Vous retrouverez ici l'&apos;historique des transactions effectuées sur le site.</Text>
+                    <Text fontSize={16} color={'rgb(255,255,255,.5)'}>Vous retrouverez ici l&apos;historique des transactions effectuées sur le site.</Text>
                 </Flex>
                 <Spacer/>
                 {auth?.accessToken && (

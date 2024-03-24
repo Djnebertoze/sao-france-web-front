@@ -131,12 +131,19 @@ const AdminStatsPage: NextPage = () => {
         }
 
         if (getAdminStatsError){
-            toastError('Impossible de récupérer les données des inscriptions')
+            toast({
+                title: "Erreur",
+                description: 'Impossible de récupérer les données des inscriptions',
+                status: 'error',
+                duration: toastDuration,
+                isClosable: true,
+                position: 'bottom-right',
+            });
             console.log(getAdminStatsError)
         }
 
 
-    }, [dispatch, auth?.accessToken, getAdminStatsLoading, adminStats, getAdminStatsError, toastError])
+    }, [dispatch, auth?.accessToken, getAdminStatsLoading, adminStats, getAdminStatsError, toast])
 
     useEffect(() => {
         console.log('1')
