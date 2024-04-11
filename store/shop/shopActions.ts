@@ -173,3 +173,20 @@ export const getTransactionsList = (accessToken: string | null | undefined) => a
         console.log(error)
     }
 };
+
+export const getTransactionsSizedList = (accessToken: string | null | undefined, pageNumber: number, pageSize: number, filters:any) => async (dispatch: any) => {
+    dispatch(getTransactionsListRequest());
+    console.log(JSON.stringify(filters))
+    try {
+        const response = await axios.get(`${getAPIUrl()}/transactions/some/${pageNumber}/${pageSize}/${JSON.stringify(filters)}`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+        dispatch(getTransactionsListSuccess(response.data));
+        console.log(response.data)
+    } catch (error: any) {
+        dispatch(getTransactionsListError(error.message));
+        console.log(error)
+    }
+};

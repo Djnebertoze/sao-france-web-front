@@ -3,7 +3,7 @@ import {NextRouter, useRouter} from "next/router";
 import {useDispatch} from "../../../store/store";
 import {useSelector} from "react-redux";
 import {getUserState} from "../../../store/user/userSlice";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import AdminNavbar from "../../../components/molecules/AdminNavbar/AdminNavbar";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {Box, Button, Flex, Spacer, Text, useToast} from "@chakra-ui/react";
@@ -20,6 +20,8 @@ const AdminStatsPage: NextPage = () => {
 
     const router: NextRouter = useRouter();
     const dispatch = useDispatch();
+
+    const [userPower, setUserPower] = useState<number>(0)
 
     const {
         auth,
@@ -46,6 +48,9 @@ const AdminStatsPage: NextPage = () => {
     }
 
     useEffect(() => {
+        if(userInfos){
+            setUserPower(getMaxPowerFromUserRoles(userInfos.roles));
+        }
         if (adminStats){
             if (adminStats.registers){
                 const registerChart = Chart.getChart('registers')
@@ -143,7 +148,7 @@ const AdminStatsPage: NextPage = () => {
         }
 
 
-    }, [dispatch, auth?.accessToken, getAdminStatsLoading, adminStats, getAdminStatsError, toast])
+    }, [dispatch, auth?.accessToken, getAdminStatsLoading, adminStats, getAdminStatsError, toast, userInfos])
 
     useEffect(() => {
         console.log('1')
@@ -174,6 +179,10 @@ const AdminStatsPage: NextPage = () => {
             <Box h={'1px'} w={'full'} backgroundColor={'rgb(255,255,255,.2)'} mb={5}/>
             <Box w={'full'}>
                 <Flex w={'full'} flexDirection={"column"}>
+                    {
+                        // Inscription & number of transactions stats (from modo)
+                    }
+
                     <Text fontSize={18} marginBottom={2}>Inscriptions & Transactions (60 jours)</Text>
                     <Box w={'full'} h={'1px'} backgroundColor={'rgb(255,255,255,.2)'} marginBottom={3}/>
                     <Flex w={'full'}>
@@ -189,20 +198,28 @@ const AdminStatsPage: NextPage = () => {
                     </Flex>
                     <Box w={'full'} h={'1px'} backgroundColor={'rgb(255,255,255,.2)'} marginTop={3}/>
 
-                    <Text fontSize={18} mt={10} marginBottom={2}>Types d&apos;achats</Text>
-                    <Box w={'full'} h={'1px'} backgroundColor={'rgb(255,255,255,.2)'} marginBottom={3}/>
-                    <Flex w={'full'}>
-                        <Flex w={1000} pr={5}>
-                            <canvas id={"transactionsType"} />
-                        </Flex>
-                        <Flex w={'full'} borderLeft={'1px solid rgb(255,255,255,.2)'} px={3} textAlign={'center'} flexDirection={"column"}>
-                            <Text fontSize={40} w={'full'}>{adminStats?.transactions.revenues}€</Text>
-                            <Text fontSize={15} w={'full'}>récoltés ces 60 derniers jours</Text>
-                            <Text fontSize={40} marginTop={5} w={'full'}>{adminStats?.transactions.shopPointsUsed} PB</Text>
-                            <Text fontSize={15} w={'full'}>utilisés ces 60 derniers jours</Text>
-                        </Flex>
-                    </Flex>
-                    <Box w={'full'} h={'1px'} backgroundColor={'rgb(255,255,255,.2)'} marginTop={3}/>
+                    {
+                        // Type of transactions (only admins)
+                        userPower >= 6 && (
+                            <>
+                                <Text fontSize={18} mt={10} marginBottom={2}>Types d&apos;achats</Text>
+                                <Box w={'full'} h={'1px'} backgroundColor={'rgb(255,255,255,.2)'} marginBottom={3}/>
+                                <Flex w={'full'}>
+                                    <Flex w={1000} pr={5}>
+                                        <canvas id={"transactionsType"} />
+                                    </Flex>
+                                    <Flex w={'full'} borderLeft={'1px solid rgb(255,255,255,.2)'} px={3} textAlign={'center'} flexDirection={"column"}>
+                                        <Text fontSize={40} w={'full'}>{adminStats?.transactions.revenues}€</Text>
+                                        <Text fontSize={15} w={'full'}>récoltés ces 60 derniers jours</Text>
+                                        <Text fontSize={40} marginTop={5} w={'full'}>{adminStats?.transactions.shopPointsUsed} PB</Text>
+                                        <Text fontSize={15} w={'full'}>utilisés ces 60 derniers jours</Text>
+                                    </Flex>
+                                </Flex>
+                                <Box w={'full'} h={'1px'} backgroundColor={'rgb(255,255,255,.2)'} marginTop={3}/>
+                            </>
+                        )
+                    }
+
                 </Flex>
             </Box>
         </AdminNavbar>

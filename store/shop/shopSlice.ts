@@ -27,7 +27,7 @@ export interface ShopState {
     payProductWithShopPointsError?: string;
 
     getTransactionsListLoading: boolean;
-    transactionsList?: Transaction[];
+    transactionsList?: { list: Transaction[], total: number };
     getTransactionsListError?: string;
 }
 

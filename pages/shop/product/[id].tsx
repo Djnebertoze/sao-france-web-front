@@ -49,10 +49,11 @@ const ProductPage: NextPage = () => {
 
     const [canBuyRole, setCanBuyRole] = useState<boolean>()
 
-    let rolePower: number | undefined = 0;
+
 
 
     useEffect(() => {
+        let rolePower: number | undefined = 0;
         if (auth?.accessToken && !userInfos) {
             dispatch(getUserProfile(auth.accessToken))
             if (userInfos) {
