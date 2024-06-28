@@ -115,35 +115,11 @@ const CGVPage: NextPage = () => {
                             {/* eslint-disable-next-line react/no-unescaped-entities */}
                             Tout achat entraîne l'acceptation des conditions générales de vente de ces sociétés :<br/><br/>
 
-
-                            Paypal<br/><br/>
-
-                            PayPal (Europe) S.à r.l. & Cie, S.C.A. (« PayPal Europe »)<br/><br/>
-
-                            5e étage<br/><br/>
-
-                            22-24 Boulevard Royal<br/><br/>
-
-                            L-2449, Luxembourg<br/><br/>
-
-                            (+352) 27 302 143<br/><br/>
-
-                            https://www.paypal.com<br/><br/>
-
-
-                            PaysafeCard<br/><br/>
-
-                            Paysafe Prepaid Services Limited<br/><br/>
-
-                            Grand Canal House<br/><br/>
-
-                            Grand Canal Street Upper<br/><br/>
-
-                            Dublin 4, D04 Y7R5<br/><br/>
-
-                            Irlande<br/><br/>
-
-                            https://www.paysafecard.com<br/><br/>
+                            Stripe<br/><br/>
+                            Stripe Payments Europe, Ltd. (SPEL)<br/><br/>
+                            10 Boulevard Haussmann, 75009 Paris, France<br/><br/>
+                            Téléphone (numéro vert) : +33 805 11 19 67<br/><br/>
+                            https://stripe.com/<br/><br/>
 
                         </Text>
                     </Box>
@@ -232,7 +208,7 @@ const CGVPage: NextPage = () => {
                             service commandé ne lui a pas encore été livré alors que son paiement
                             est effectif.<br/>
 
-                            Dans ce cas, il contactera SaoFrance (email: saofrancev2candid@gmail.com)
+                            Dans ce cas, il contactera SaoFrance (email: wahsarcraft@arakeri.net)
                             en fournissant l’ensemble des indications nécessaires
                             (compte utilisateur, date et heure du paiement, etc.).
                             SaoFrance procédera au remboursement en point virtuel
