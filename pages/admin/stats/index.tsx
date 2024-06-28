@@ -14,6 +14,7 @@ import {getAdminStats} from "../../../store/user/userActions";
 import {Span} from "next/dist/server/lib/trace/tracer";
 import {getTransactionsList} from "../../../store/shop/shopActions";
 import {FiRefreshCcw} from "react-icons/fi";
+import {roundNumber} from '../../../store/helper';
 
 
 const AdminStatsPage: NextPage = () => {
@@ -164,6 +165,8 @@ const AdminStatsPage: NextPage = () => {
     }, [dispatch, auth?.accessToken, router, userInfos, userLoginError, getUserInfosError]);
 
 
+
+
     return (
         <AdminNavbar selected={'/stats'}>
             <Text fontSize={25} mb={0}>Bienvenue sur votre onglet &apos;<Text color={'cyan.400'} as={'span'}>Statistiques</Text>&apos;  !</Text>
@@ -209,7 +212,7 @@ const AdminStatsPage: NextPage = () => {
                                         <canvas id={"transactionsType"} />
                                     </Flex>
                                     <Flex w={'full'} borderLeft={'1px solid rgb(255,255,255,.2)'} px={3} textAlign={'center'} flexDirection={"column"}>
-                                        <Text fontSize={40} w={'full'}>{adminStats?.transactions.revenues}€</Text>
+                                        <Text fontSize={40} w={'full'}>{roundNumber(adminStats?.transactions.revenues as number, 2)}€</Text>
                                         <Text fontSize={15} w={'full'}>récoltés ces 60 derniers jours</Text>
                                         <Text fontSize={40} marginTop={5} w={'full'}>{adminStats?.transactions.shopPointsUsed} PB</Text>
                                         <Text fontSize={15} w={'full'}>utilisés ces 60 derniers jours</Text>

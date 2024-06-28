@@ -1,5 +1,6 @@
 import React, {FC, useEffect} from "react";
 import {
+    Box,
     Button,
     Card,
     CardBody,
@@ -34,42 +35,16 @@ import {transformDescription} from "../../../store/helper";
 
 interface ShopProductCardProps{
     product: ShopProduct
-    isEditing: boolean
-    isPreview?: boolean
 }
 
 
-const ShopProductCard: FC<ShopProductCardProps> = (props) => {
+const CosmeticShopProductCard: FC<ShopProductCardProps> = (props) => {
     const product = props.product;
     const router: NextRouter = useRouter();
 
 
     const toast = useToast();
     const toastDuration = 10000;
-
-    const handleUp = () => {
-        toast({
-            title: "En cours de dev",
-            description: "Fonctionnalité en cours de développement. Contactez un développeur web.",
-            status: 'info',
-            duration: toastDuration,
-            isClosable: true,
-            position: 'bottom-right',
-        });
-    }
-
-    const handleDown = () => {
-        toast({
-            title: "En cours de dev",
-            description: "Fonctionnalité en cours de développement. Contactez un développeur web.",
-            status: 'info',
-            duration: toastDuration,
-            isClosable: true,
-            position: 'bottom-right',
-        });
-    }
-
-
 
     const handleBuy = () => {
         router.push('/shop/product/'+product._id).then(() => {});
@@ -81,35 +56,48 @@ const ShopProductCard: FC<ShopProductCardProps> = (props) => {
 
     return(
         <>
-            <Card direction={'column'} variant={'outline'} marginBottom={10} marginRight={15} maxW={300}>
-                <Image objectFit={'cover'} minW={'280px'} maxH={180} src={product.imageUrl != "" ? product.imageUrl : MainLogo.src} alt={'Shop product image'}/>
-                <CardBody>
-                    <Stack mt={1} spacing={3}>
-                        <Heading size={'md'}>{product.name}</Heading>
-                        <Text py={2} mt={-4}>
-                            {transformDescription(product.description.replaceAll('\n', '\\n'))}
-
+            <Box
+                background={'linear-gradient(30deg, #69A00F, #E4E750)'}
+                marginBottom={10}
+                marginRight={15}
+                py={1.5}
+                px={1.5}
+                boxShadow={'1px 1px 20px rgb(0, 0, 0, .3)'}
+                borderTopLeftRadius={30}>
+                <Card direction={'column'} variant={'outline'}  maxW={300} borderRadius={0} borderTopLeftRadius={30}>
+                    <Image borderTopLeftRadius={30} objectFit={'cover'} minW={'280px'} maxH={130}
+                           src={product.imageUrl != "" ? product.imageUrl : MainLogo.src} alt={'Shop product image'}/>
+                    <CardBody>
+                        <Stack spacing={3} px={5}>
+                            <Text fontWeight={'bold'} fontSize={'18px'}>{product.name}</Text>
+                            <Text py={2} mt={-4} fontSize={'16px'} lineHeight={1.2}>
+                                {transformDescription(product.description.replaceAll('\n', '\\n'))}
+                            </Text>
+                        </Stack>
+                    </CardBody>
+                    <CardFooter flexDirection={'column'} mt={-5}>
+                        <Text mb={3}  fontWeight={'bold'} textAlign={'center'} px={6}>
+                            {product.isRealMoney ? product.price.toLocaleString(undefined) + "€" : product.price.toLocaleString(undefined) + " Points Boutiques"}
                         </Text>
-                    </Stack>
-                </CardBody>
-                <CardFooter flexDirection={'column'}>
-                    <Text mb={3}  fontWeight={'bold'} textAlign={'center'} px={6}>{product.isRealMoney ? product.price.toLocaleString(undefined) + "€" : product.price.toLocaleString(undefined) + " PB"}</Text>
-                    <Button variant={'solid'} colorScheme={'blue'} onClick={props.isEditing ? handleModify : handleBuy} isDisabled={props.isPreview}>
-                        {props.isEditing ? 'Modifier' : 'Acheter'}
-                    </Button>
+                        <Box mx={5}
+                             onClick={handleBuy}
+                             color={'rgb(0, 0, 0, .5)'}
+                             fontWeight={'bold'}
+                             textAlign={'center'}
+                             borderTop={'1px solid rgb(0,0,0,.3)'}
+                             pt={2}
+                             cursor={'pointer'}
+                             transition={'.1s ease-out'}
+                             _hover={{
+                                 color: 'rgb(0, 0, 0, 1)',
+                                 borderTop: '1px solid rgb(0,0,0,1)'
+                             }}>
+                            JE LE VEUX
+                        </Box>
 
-                </CardFooter>
-                {props.isEditing && (
-                    <CardFooter flexDirection={'row'} flex={3} w={'full'}>
-                        <Icon as={FiArrowLeft}  _hover={{bgColor: 'rgb(0,0,0,.1)'}} padding={'5px'} fontSize={25} borderRadius={5} cursor={'pointer'} onClick={handleUp}/>
-                        <Spacer/>
-                        <RemoveProductModal product={product}/>
-                        <Spacer/>
-                        <Icon as={FiArrowRight} _hover={{bgColor: 'rgb(0,0,0,.1)'}} padding={'5px'} fontSize={25} borderRadius={5} cursor={'pointer'} onClick={handleDown}/>
                     </CardFooter>
-                )}
-
-            </Card>
+                </Card>
+            </Box>
         </>
     );
 }
@@ -167,4 +155,4 @@ const RemoveProductModal: FC<RemoveProductModalProps> = (props) => {
 }
 
 
-export default ShopProductCard;
+export default CosmeticShopProductCard;

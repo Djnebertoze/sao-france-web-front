@@ -12,18 +12,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import {useDispatch, useSelector} from "../../../store/store";
 import {getUserState} from "../../../store/user/userSlice";
-import {getUserProfile} from "../../../store/user/userActions";
+import {emptyAct, getUserProfile} from "../../../store/user/userActions";
 
 const DesktopNavbar: FC<GenericNavbarProps> = (props) => {
     const router: NextRouter = useRouter();
 
     const dispatch = useDispatch();
 
-    const { auth , userInfos} = useSelector(getUserState);
+    const { auth ,
+        userInfos,
+        getUserInfosLoading,
+        getUserInfosError} = useSelector(getUserState);
 
     useEffect(() => {
-        if(auth?.accessToken && !userInfos){
+        if(auth?.accessToken && !userInfos && !getUserInfosLoading){
             dispatch(getUserProfile(auth.accessToken));
+        }
+        if((!getUserInfosLoading && getUserInfosError) || localStorage.getItem('act') == undefined){
+            dispatch(emptyAct())
         }
     }, [auth?.accessToken, dispatch, userInfos])
 
@@ -34,7 +40,7 @@ const DesktopNavbar: FC<GenericNavbarProps> = (props) => {
                     return (
                             <Box key={navItem.numberKey} mx={{xl:41, lg:21}}>
                                 {navItem.label !== "LOGO" ? (
-                                    <Link onClick={() => router.push(navItem.href)} className={navItem.href === "/shop" ? "navItem shop-label" : "navItem"} fontSize={20} id={'navItem'}>
+                                    <Link onClick={navItem.href === "/shop" ? () => router.push(navItem.href).then(() => router.reload()) : () => router.push(navItem.href)} className={navItem.href === "/shop" ? "navItem shop-label" : "navItem"} fontSize={20} id={'navItem'}>
                                         {navItem.label}
                                     </Link>
                                 ) : (

@@ -96,8 +96,7 @@ const Navbar: FC = () => {
     return(
         <>
             <Flex
-                bg={/*useColorModeValue('white', 'gray.800')*/'rgb(255,255,255,1)'}
-                boxShadow={'0 0px 50px rgb(255,255,255,.3)'}
+                bg={'rgb(255,255,255,1)'}
                 color={useColorModeValue('gray.600', 'white')}
                 minH={{lg:'80px',base: '45px'}}
                 py={{ base: 2 }}

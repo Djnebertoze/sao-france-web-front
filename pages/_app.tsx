@@ -17,6 +17,7 @@ import {loadStripe} from "@stripe/stripe-js";
 import {Elements} from "@stripe/react-stripe-js";
 import Footer from "../components/molecules/Footer/Footer";
 import NextTopLoader from "nextjs-toploader";
+import { motion } from 'framer-motion';
 
 
 config.autoAddCss = false;
@@ -27,7 +28,7 @@ const stripePromise = loadStripe(
     process.env.STRIPE_PUBLIC_KEY ? process.env.STRIPE_PUBLIC_KEY : "error"
 );
 
-function MyApp({Component, pageProps}: AppProps) {
+function MyApp({Component, pageProps, router}: AppProps) {
 
 
     return (
@@ -38,7 +39,18 @@ function MyApp({Component, pageProps}: AppProps) {
                         <ErrorBoundary>
                             <NextTopLoader height={10}/>
                             <Navbar/>
-                            <Component {...pageProps}/>
+                            <motion.div initial="pageInitial" key={router.route} animate="pageAnimate" variants={{
+                                pageInitial: {
+
+                                },
+                                pageAnimate: {
+
+                                },
+                            }}>
+
+                                <Component {...pageProps}/>
+
+                            </motion.div>
                             <Footer/>
                         </ErrorBoundary>
                     </Elements>

@@ -18,6 +18,7 @@ export interface User {
     username: string;
     bio?: string;
     birthday?: string;
+    showBirthday: boolean;
     shopPoints: number;
     mcProfile?: McProfile
 }
@@ -117,6 +118,7 @@ export interface ShopProduct {
     roleToGive?: string,
     cosmeticToGive?: string,
     bonusShopPoints?: number
+    active: boolean
 }
 
 export interface StripeProduct {

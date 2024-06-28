@@ -5,10 +5,22 @@ import {useEffect, useRef, useState} from "react";
 import {getUserState,} from "../../../../store/user/userSlice";
 import {useDispatch, useSelector} from "../../../../store/store";
 import AdminNavbar from "../../../../components/molecules/AdminNavbar/AdminNavbar";
-import {Box, Button, Flex, Heading, Input, InputGroup, Select, Text, Textarea, useToast} from "@chakra-ui/react";
+import {
+    Box,
+    Button,
+    Flex,
+    Heading,
+    Input,
+    InputGroup,
+    Select,
+    Switch,
+    Text,
+    Textarea,
+    useToast
+} from "@chakra-ui/react";
 import {ShopCategorie} from "../../../../common/types/types";
 import {shopCategories} from "../../../../common/shop/shopCategories";
-import ShopProductCard from "../../../../components/molecules/ShopProductCard/ShopProductCard";
+import AdminShopProductCard from "../../../../components/molecules/ShopProductCard/AdminShopProductCard";
 import MainLogo from '../../../../public/images/MainLogo.png';
 import {createShopProduct} from "../../../../store/shop/shopActions";
 import {getShopState} from "../../../../store/shop/shopSlice";
@@ -66,6 +78,8 @@ const ShopManagerCreatePage: NextPage = () => {
     const [productCosmeticToGive, setProductCosmeticToGive] = useState<string>()
     const [productBonusShopPoints, setProductBonusShopPoints] = useState<number>(0)
     const [errorMessage, setErrorMessage] = useState<string>()
+    const [productActive, setProductActive] = useState<boolean>(false)
+
 
 
     const handleChangeProductName = (event: any) => setProductName(event.target.value);
@@ -163,7 +177,8 @@ const ShopManagerCreatePage: NextPage = () => {
             pointsToGive: productPointsToGive,
             roleToGive: productRoleToGive,
             cosmeticToGive: productCosmeticToGive,
-            bonusShopPoints: productBonusShopPoints
+            bonusShopPoints: productBonusShopPoints,
+            active: productActive
         }
         dispatch(createShopProduct(auth?.accessToken, shopProductDto));
     }
@@ -316,6 +331,10 @@ const ShopManagerCreatePage: NextPage = () => {
                                 }
                             </Select>
                         </Box>
+                        <Box marginLeft={5}>
+                            <Text fontSize={19} mb={2} mt={5}>Actif</Text>
+                            <Switch isChecked={productActive} colorScheme={'green'} onChange={() => setProductActive(!productActive)}></Switch>
+                        </Box>
                     </Flex>
                     <Box>
                         <Box >
@@ -392,7 +411,7 @@ const ShopManagerCreatePage: NextPage = () => {
                     <Text color={'red'} marginTop={4} marginBottom={-10} display={errorMessage ? 'block' : 'none'}>{errorMessage}</Text>
                     <Button colorScheme={'blue'} variant={'solid'} marginBottom={50} marginTop={41} px={100} onClick={handleCreate} isLoading={createShopProductLoading}>Créer</Button>
                     <Text marginBottom={2} >Preview:</Text>
-                    <ShopProductCard
+                    <AdminShopProductCard
                         product={{
                             _id: "tempId",
                             name: productName ? productName : "Nom du produit",
@@ -402,7 +421,8 @@ const ShopManagerCreatePage: NextPage = () => {
                             categorieId:"points",
                             imageUrl: productImageUrl ? productImageUrl : MainLogo.src,
                             place:0,
-                            descriptionDetails: productDescriptionDetails ? productDescriptionDetails : ""
+                            descriptionDetails: productDescriptionDetails ? productDescriptionDetails : "",
+                            active: productActive
                         }}
                         isEditing={false} isPreview={true}/>
                 </Box>
