@@ -148,7 +148,7 @@ const ShopPage: NextPage = () => {
                                 }
                             }}>
                             <GridItem w='100%' mt={0} h={560} bg={'linear-gradient(#ffffff, #BC7A27 90%)'} border={'2px solid rgb(255,255,255,.1)'}  borderRadius={10}>
-                                <Image src={"https://cdn.saofrance.net/images/Market/VIP_Madera.png"} w={131} mt={5} mx={'auto'} />
+                                <Image src={"https://cdn.saofrance.net/images/Market/VIP_Madera.png"} w={131} mt={5} mx={'auto'} alt={'Product image'}/>
                                 <Text w={'100%'}
                                       textAlign={'center'}
                                       textTransform={'uppercase'}
@@ -161,9 +161,9 @@ const ShopPage: NextPage = () => {
                                 </Text>
                                 {paladin_advantages.map((advantage) => {
                                     return (
-                                        <Flex mb={4} ml={7} pr={9}>
+                                        <Flex mb={4} ml={7} pr={9} key={advantage}>
                                             <Box w={21} h={21} bg={'#BC7A27'} mr={2} borderRadius={4}>
-                                                <Image mt={'6px'} ml={'5px'} src={'https://cdn.saofrance.net/images/components/white_check.png'}/>
+                                                <Image mt={'6px'} ml={'5px'} src={'https://cdn.saofrance.net/images/components/white_check.png'} alt={'White check'}/>
                                             </Box>
                                             <Text mt={-1} fontSize={16}>{advantage}</Text>
                                         </Flex>
@@ -212,7 +212,7 @@ const ShopPage: NextPage = () => {
                                       mt={4}>
                                     Le plus vendu
                                 </Text>
-                                <Image src={"https://cdn.saofrance.net/images/Market/VIP_Obsidiana.png"} w={131} mt={2} mx={'auto'} />
+                                <Image src={"https://cdn.saofrance.net/images/Market/VIP_Obsidiana.png"} w={131} mt={2} mx={'auto'} alt={'Product image'}/>
                                 <Text w={'100%'}
                                       textAlign={'center'}
                                       textTransform={'uppercase'}
@@ -225,9 +225,9 @@ const ShopPage: NextPage = () => {
                                 </Text>
                                 {beater_advantages_short.map((advantage) => {
                                     return (
-                                        <Flex mb={4} ml={7}>
+                                        <Flex mb={4} ml={7} key={advantage}>
                                             <Box w={21} h={21} bg={'#422A39'} mr={2} borderRadius={4}>
-                                                <Image mt={'6px'} ml={'5px'} src={'https://cdn.saofrance.net/images/components/white_check.png'}/>
+                                                <Image mt={'6px'} ml={'5px'} src={'https://cdn.saofrance.net/images/components/white_check.png'} alt={'White check'}/>
                                             </Box>
                                             <Text mt={-1} fontSize={16}>{advantage}</Text>
                                         </Flex>
@@ -268,7 +268,7 @@ const ShopPage: NextPage = () => {
                                 }
                             }}>
                             <GridItem w='100%' h={622} bg={'linear-gradient(#ffffff, #143688 90%)'} border={'2px solid rgb(255,255,255,.1)'}  borderRadius={10}>
-                                <Image src={"https://cdn.saofrance.net/images/Market/VIP_Oro.png"} w={131} mt={5} mx={'auto'} />
+                                <Image src={"https://cdn.saofrance.net/images/Market/VIP_Oro.png"} w={131} mt={5} mx={'auto'} alt={'Product image'}/>
                                 <Text w={'100%'}
                                       textAlign={'center'}
                                       textTransform={'uppercase'}
@@ -281,9 +281,9 @@ const ShopPage: NextPage = () => {
                                 </Text>
                                 {conqueror_advantages.map((advantage) => {
                                     return (
-                                        <Flex mb={4} ml={7} pr={9}>
+                                        <Flex mb={4} ml={7} pr={9} key={advantage}>
                                             <Box w={21} h={21} bg={'#143688'} mr={2} borderRadius={4}>
-                                                <Image mt={'6px'} ml={'5px'} src={'https://cdn.saofrance.net/images/components/white_check.png'}/>
+                                                <Image mt={'6px'} ml={'5px'} src={'https://cdn.saofrance.net/images/components/white_check.png'} alt={'White check'}/>
                                             </Box>
                                             <Text mt={-1} fontSize={16}>{advantage}</Text>
                                         </Flex>
@@ -324,7 +324,7 @@ const ShopPage: NextPage = () => {
                                         }
                                     }}>
                                         <GridItem w='100%' mt={0} h={647} bg={'linear-gradient(#ffffff, #136F81 90%)'} border={'2px solid rgb(255,255,255,.1)'}  borderRadius={13}>
-                                            <Image src={"https://cdn.saofrance.net/images/Market/VIP_Diamante.png"} w={131} mt={5} mx={'auto'} />
+                                            <Image src={"https://cdn.saofrance.net/images/Market/VIP_Diamante.png"} w={131} mt={5} mx={'auto'} alt={'Product image'}/>
                                             <Text w={'100%'}
                                                   textAlign={'center'}
                                                   textTransform={'uppercase'}
@@ -337,9 +337,9 @@ const ShopPage: NextPage = () => {
                                             </Text>
                                             {legende_advantages.map((advantage) => {
                                                 return (
-                                                    <Flex mb={4} ml={7} pr={9}>
+                                                    <Flex mb={4} ml={7} pr={9} key={advantage}>
                                                         <Box w={21} h={21} bg={'#136F81'} mr={2} borderRadius={4}>
-                                                            <Image mt={'6px'} ml={'5px'} src={'https://cdn.saofrance.net/images/components/white_check.png'}/>
+                                                            <Image mt={'6px'} ml={'5px'} src={'https://cdn.saofrance.net/images/components/white_check.png'} alt={'White check'}/>
                                                         </Box>
                                                         <Text mt={-1} fontSize={16}>{advantage}</Text>
                                                     </Flex>

@@ -217,7 +217,7 @@ const ProductPage: NextPage = () => {
 
                 </Box>
                 <Box borderLeft={'1px solid white'} h={150} pl={5}>
-                    <Image maxH={150} borderRadius={10} src={shopProduct?.imageUrl}/>
+                    <Image maxH={150} borderRadius={10} src={shopProduct?.imageUrl} alt={'Product image'}/>
                 </Box>
                 <Spacer/>
             </Flex>

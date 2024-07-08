@@ -225,7 +225,7 @@ const ProfilePage: NextPage = () => {
             dispatch(resetUpdateUserProfileRequest())
             dispatch(getUserProfile(auth?.accessToken))
         }
-    }, [updateUserProfileSuccess, updateUserProfileError, t, toast]);
+    }, [updateUserProfileSuccess, updateUserProfileError, t, toast, auth?.accessToken, dispatch]);
 
     useEffect(() => {
         if(!sendPasswordResetLoading){
@@ -332,6 +332,7 @@ const ProfilePage: NextPage = () => {
                                 SettingsItems.map((setting) => {
                                     return (
                                         <Flex px={3}
+                                              key={setting.param}
                                               py={2}
                                               mb={1}
                                               bg={selectedSetting == setting.param ? 'rgb(255,255,255,.09)' : ''}
@@ -393,7 +394,7 @@ const ProfilePage: NextPage = () => {
                                                    onChange={(e) => setBirthdayValue(e.target.value)}
                                                    borderBottom={'1px solid white'}/>
                                             <Flex>
-                                                <Text fontSize={15} mt={2} color={'rgb(255,255,255,.9)'}>Afficher ma date d'anniversaire</Text>
+                                                <Text fontSize={15} mt={2} color={'rgb(255,255,255,.9)'}>Afficher ma date d&apos;anniversaire</Text>
                                                 <Switch mt={3} ml={5} colorScheme={'blue'} isChecked={showBirthdayValue} onChange={handleShowBirthdayChange}/>
                                             </Flex>
                                         </Box>

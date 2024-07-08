@@ -31,7 +31,7 @@ const DesktopNavbar: FC<GenericNavbarProps> = (props) => {
         if((!getUserInfosLoading && getUserInfosError) || localStorage.getItem('act') == undefined){
             dispatch(emptyAct())
         }
-    }, [auth?.accessToken, dispatch, userInfos])
+    }, [auth?.accessToken, dispatch, userInfos, getUserInfosError, getUserInfosLoading])
 
     return (
         <>
