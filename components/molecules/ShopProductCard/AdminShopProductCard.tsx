@@ -79,9 +79,10 @@ const AdminShopProductCard: FC<ShopProductCardProps> = (props) => {
         router.push('/admin/shop-manager/edit/'+product._id).then(() => {});
     }
 
+
     return(
         <>
-            <Card direction={'column'} variant={'outline'} marginBottom={10} marginRight={15} maxW={300}>
+            <Card direction={'column'} variant={'outline'} marginBottom={10} marginRight={15} maxW={300} border={props.isPreview ? 'none' : product.active ? '8px green solid' : '8px red solid'}>
                 <Image objectFit={'cover'} minW={'280px'} maxH={180} src={product.imageUrl != "" ? product.imageUrl : MainLogo.src} alt={'Shop product image'}/>
                 <CardBody>
                     <Stack mt={1} spacing={3}>
@@ -152,11 +153,13 @@ const RemoveProductModal: FC<RemoveProductModalProps> = (props) => {
         }
     }, [removeShopProductLoading, auth?.accessToken, onClose])
 
+    const isDeletable = props.product.categorieId !== "points" && props.product.categorieId !== "grades" && props.product.categorieId !== 'upgrades';
+
 
     return (
         <>
-            <Icon as={FiTrash2} color={'red'} _hover={{bgColor: 'rgb(255,0,0,.2)'}} padding={'5px'} w={100} fontSize={25} borderRadius={5} cursor={'pointer'} onClick={onOpen}/>
-            <Modal isOpen={isOpen} onClose={onClose}>
+            <Icon as={FiTrash2} color={isDeletable ? 'red' : 'rgb(255,0,0,.3)'} _hover={{bgColor: isDeletable ? 'rgb(255,0,0,.2)' : 'rgb(255,0,0,0)'}} padding={'5px'} w={100} fontSize={25} borderRadius={5} cursor={isDeletable ? 'pointer' : 'not-allowed'} onClick={isDeletable ? onOpen : undefined}/>
+            <Modal isOpen={isOpen && isDeletable} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent bg={'white'}>
                     <ModalHeader>Voulez-vous supprimer cette offre ?</ModalHeader>

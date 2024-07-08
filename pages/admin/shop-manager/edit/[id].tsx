@@ -82,6 +82,8 @@ const ShopManagerEditPage: NextPage = () => {
     const [productStripeLink, setProductStripeLink] = useState<string>()
     const [productPointsToGive, setProductPointsToGive] = useState<number>()
     const [productRoleToGive, setProductRoleToGive] = useState<string>()
+    const [productRoleInitial, setProductRoleInitial] = useState<string>()
+    const [productRoleFinal, setProductRoleFinal] = useState<string>()
     const [productCosmeticToGive, setProductCosmeticToGive] = useState<string>()
     const [productBonusShopPoints, setProductBonusShopPoints] = useState<number>(0)
     const [productActive, setProductActive] = useState<boolean>(false)
@@ -95,6 +97,8 @@ const ShopManagerEditPage: NextPage = () => {
     const handleChangeProductImageUrl = (event: any) => setProductImageUrl(event.target.value);
     const handleChangeProductMoneyType = (event: any) => event.target.value === "true" ? setProductIsRealPrice(true) : setProductIsRealPrice(false);
     const handleChangeProductCategorie = (event: any) => setProductCategory(event.target.value);
+    const handleChangeProductRoleInitial = (event: any) => setProductRoleInitial(event.target.value);
+    const handleChangeProductRoleFinal = (event: any) => setProductRoleFinal(event.target.value);
     const handleChangeProductBonusShopPoints = (event: any) => setProductBonusShopPoints(event.target.value);
 
     const handleChangeProductStripeLink = (event: any) => {
@@ -176,6 +180,17 @@ const ShopManagerEditPage: NextPage = () => {
             return;
         }
 
+        if (productCategory == 'upgrades' && !productRoleFinal){
+            toastError('Veuillez renseigner le role final !')
+            return;
+        }
+
+        if (productCategory == 'upgrades' && !productRoleInitial){
+            toastError('Veuillez renseigner le role initial !')
+            return;
+        }
+
+
         const shopProductDto: CreateShopProductDto = {
             name: productName,
             description: productDescription,
@@ -192,7 +207,9 @@ const ShopManagerEditPage: NextPage = () => {
             roleToGive: productRoleToGive,
             cosmeticToGive: productCosmeticToGive,
             bonusShopPoints: productBonusShopPoints,
-            active: productActive
+            active: productActive,
+            roleInitial: productRoleInitial,
+            roleFinal: productRoleFinal
         }
 
         console.log("a", shopProductDto)
@@ -329,6 +346,10 @@ const ShopManagerEditPage: NextPage = () => {
             if(shopProduct.categorieId == 'cosmetiques'){
                 setProductCosmeticToGive(shopProduct.cosmeticToGive)
             }
+            if(shopProduct.categorieId == 'upgrades'){
+                setProductRoleInitial(shopProduct.roleInitial)
+                setProductRoleFinal(shopProduct.roleFinal)
+            }
             if (shopProduct.bonusShopPoints) {
                 setProductBonusShopPoints(shopProduct.bonusShopPoints)
             } else {
@@ -453,6 +474,30 @@ const ShopManagerEditPage: NextPage = () => {
                             <Box >
                                 <Text fontSize={19} mb={2} mt={5}>Grade à donner</Text>
                                 <Select placeholder='- Grade à donner -' cursor={'pointer'} bgColor={'rgb(76,78,82,1)'} value={productRoleToGive} onChange={handleChangeProductRoleToGive}>
+                                    {
+                                        roles?.map((role) => {
+                                            return <option value={role._id} key={role._id}>{role.name}</option>
+                                        })
+                                    }
+                                </Select>
+                            </Box>
+                        </Box>
+                    )}
+                    {productCategory == 'upgrades' && (
+                        <Box>
+                            <Box >
+                                <Text fontSize={19} mb={2} mt={5}>Grade initial</Text>
+                                <Select placeholder='- Grade initial -' cursor={'pointer'} bgColor={'rgb(76,78,82,1)'} value={productRoleInitial} onChange={handleChangeProductRoleInitial}>
+                                    {
+                                        roles?.map((role) => {
+                                            return <option value={role._id} key={role._id}>{role.name}</option>
+                                        })
+                                    }
+                                </Select>
+                            </Box>
+                            <Box >
+                                <Text fontSize={19} mb={2} mt={5}>Grade final</Text>
+                                <Select placeholder='- Grade final -' cursor={'pointer'} bgColor={'rgb(76,78,82,1)'} value={productRoleFinal} onChange={handleChangeProductRoleFinal}>
                                     {
                                         roles?.map((role) => {
                                             return <option value={role._id} key={role._id}>{role.name}</option>

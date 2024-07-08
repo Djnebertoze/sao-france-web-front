@@ -75,6 +75,8 @@ const ShopManagerCreatePage: NextPage = () => {
     const [productCategorie, setProductCategorie] = useState<string>()
     const [productPointsToGive, setProductPointsToGive] = useState<number>()
     const [productRoleToGive, setProductRoleToGive] = useState<string>()
+    const [productRoleInitial, setProductRoleInitial] = useState<string>()
+    const [productRoleFinal, setProductRoleFinal] = useState<string>()
     const [productCosmeticToGive, setProductCosmeticToGive] = useState<string>()
     const [productBonusShopPoints, setProductBonusShopPoints] = useState<number>(0)
     const [errorMessage, setErrorMessage] = useState<string>()
@@ -98,6 +100,8 @@ const ShopManagerCreatePage: NextPage = () => {
     };
     const handleChangeProductPointsToGive = (event: any) => setProductPointsToGive(event.target.value);
     const handleChangeProductRoleToGive = (event: any) => setProductRoleToGive(event.target.value);
+    const handleChangeProductRoleInitial = (event: any) => setProductRoleInitial(event.target.value);
+    const handleChangeProductRoleFinal = (event: any) => setProductRoleFinal(event.target.value);
     const handleChangeProductCosmeticToGive = (event: any) => setProductCosmeticToGive(event.target.value);
 
     const editorRef = useRef<Editor>(null);
@@ -160,6 +164,16 @@ const ShopManagerCreatePage: NextPage = () => {
             return;
         }
 
+        if (productCategorie == 'upgrades' && !productRoleInitial){
+            toastError('Veuillez renseigner le role initial !')
+            return;
+        }
+
+        if (productCategorie == 'upgrades' && !productRoleFinal){
+            toastError('Veuillez renseigner le role final !')
+            return;
+        }
+
         if(!editorRef.current){
             toastError('Erreur tiny. Contactez un développeur web.')
             return;
@@ -178,7 +192,9 @@ const ShopManagerCreatePage: NextPage = () => {
             roleToGive: productRoleToGive,
             cosmeticToGive: productCosmeticToGive,
             bonusShopPoints: productBonusShopPoints,
-            active: productActive
+            active: productActive,
+            roleInitial: productRoleInitial,
+            roleFinal: productRoleFinal
         }
         dispatch(createShopProduct(auth?.accessToken, shopProductDto));
     }
@@ -383,6 +399,30 @@ const ShopManagerCreatePage: NextPage = () => {
                             <Box >
                                 <Text fontSize={19} mb={2} mt={5}>Grade à donner</Text>
                                 <Select placeholder='- Grade à donner -' cursor={'pointer'} bgColor={'rgb(76,78,82,1)'} value={productRoleToGive} onChange={handleChangeProductRoleToGive}>
+                                    {
+                                        roles?.map((role) => {
+                                            return <option value={role._id} key={role._id}>{role.name}</option>
+                                        })
+                                    }
+                                </Select>
+                            </Box>
+                        </Box>
+                    )}
+                    {productCategorie == 'upgrades' && (
+                        <Box>
+                            <Box >
+                                <Text fontSize={19} mb={2} mt={5}>Grade initial</Text>
+                                <Select placeholder='- Grade initial -' cursor={'pointer'} bgColor={'rgb(76,78,82,1)'} value={productRoleInitial} onChange={handleChangeProductRoleInitial}>
+                                    {
+                                        roles?.map((role) => {
+                                            return <option value={role._id} key={role._id}>{role.name}</option>
+                                        })
+                                    }
+                                </Select>
+                            </Box>
+                            <Box >
+                                <Text fontSize={19} mb={2} mt={5}>Grade final</Text>
+                                <Select placeholder='- Grade final -' cursor={'pointer'} bgColor={'rgb(76,78,82,1)'} value={productRoleFinal} onChange={handleChangeProductRoleFinal}>
                                     {
                                         roles?.map((role) => {
                                             return <option value={role._id} key={role._id}>{role.name}</option>

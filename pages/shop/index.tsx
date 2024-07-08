@@ -11,6 +11,23 @@ import {getShopState} from "../../store/shop/shopSlice";
 import {getShopActiveProducts, getShopProducts} from "../../store/shop/shopActions";
 import { motion } from 'framer-motion';
 import CosmeticShopProductCard from "../../components/molecules/ShopProductCard/ComsticShopProductCard";
+import PointsShopProductCard from "../../components/molecules/ShopProductCard/PointsShopProductCard";
+import UpgradesShopProductCard from "../../components/molecules/ShopProductCard/UpgradesShopProductCard";
+import {getRoleById} from "../../common/roles/roles";
+
+import {
+    paladin_advantages,
+    paladin_price,
+    beater_advantages_short,
+    beater_price,
+    beater_product_id,
+    conqueror_advantages,
+    conqueror_price,
+    conqueror_product_id,
+    legende_advantages,
+    legende_price,
+    legende_product_id,
+    paladin_product_id} from '../../common/shop/ranksAdvantages'
 
 
 
@@ -35,6 +52,8 @@ const ShopPage: NextPage = () => {
     const toast = useToast();
 
     const [cosmeticsProducts, setCosmeticsProducts] = useState<Array<ShopProduct>>()
+    const [pointsProducts, setPointsProducts] = useState<Array<ShopProduct>>()
+    const [upgradesProducts, setUpgradesProducts] = useState<Array<ShopProduct>>()
     const [displayAllRanks, setDisplayAllRanks] = useState<boolean>(false)
 
     useEffect(() => {
@@ -52,7 +71,7 @@ const ShopPage: NextPage = () => {
         if(/*auth?.accessToken && */shopProducts && !getShopProductsLoading){
             /*console.log('usss1')
             console.log(shopProducts)*/
-            console.log('Got products')
+            console.log('Got products');
             temporaryCategories.sort((a, b) => a.place - b.place);
 
 
@@ -62,66 +81,27 @@ const ShopPage: NextPage = () => {
                 categorieProducts.sort((a, b) => a.place - b.place)*/
 
                 const tempCosmeticsProducts = shopProducts.filter(product => product.categorieId === 'cosmetiques');
-                tempCosmeticsProducts.sort((a, b) => a.place - b.place)
-                setCosmeticsProducts(tempCosmeticsProducts)
+                tempCosmeticsProducts.sort((a, b) => a.place - b.place);
+                setCosmeticsProducts(tempCosmeticsProducts);
+
+                const tempPointsProducts = shopProducts.filter(product => product.categorieId === 'points');
+                tempPointsProducts.sort((a, b) => a.place - b.place);
+                setPointsProducts(tempPointsProducts);
+
+                const tempUpgradesProducts = shopProducts.filter(product => product.categorieId === 'upgrades');
+                // @ts-ignore
+                tempUpgradesProducts.sort((a, b) => getRoleById(a.roleFinal)?.power - getRoleById(b.roleFinal)?.power);
+                setUpgradesProducts(tempUpgradesProducts);
             }
         }
 
         if(!shopProducts && !getShopProductsLoading){
-            console.log('Getting products')
             dispatch(getShopActiveProducts())
         }
 
     }, [dispatch,toast, router,  shopProducts, temporaryCategories, getShopProductsLoading]);
 
-    const paladin_advantages = [
-        'Accès au /ping',
-        'Accès au /feed',
-        '1 extension de banque',
-        'Accès anticipé (30mn) officiel',
-        'Salon écrit et vocal dédié',
-        '50 points boutiques offerts (4,99€)'
-    ]
-    const paladin_price = '9,99 EUR'
-    const paladin_product_id = '658f2e8b088a027c09d87614'
 
-    const conqueror_advantages = [
-        'Accès au /ec',
-        'Accès au /feed',
-        'Spoils & sondages exclusifs',
-        '2 extensions de banque',
-        'Accès anticipé (1h) officiel',
-        'Salon écrit et vocal dédié',
-        '100 points boutiques offerts (9,99€)'
-    ]
-    const conqueror_price = '24,99 EUR'
-    const conqueror_product_id = '662c314d19e89ab261b85a35'
-
-    const beater_advantages = [
-        'Accès au /repair',
-        'Accès au /hat',
-        'Accès à la bêta fermée',
-        '6 extensions de banque',
-        'Accès anticipé (6h) officiel',
-        'Couleur dans le tchat inGame',
-        'Salon écrit et vocal dédié',
-        'Spoils & sondages exclusifs'
-    ]
-    const beater_price = '89,99 EUR'
-    const beater_product_id = '658ed9896951f4d3240420cf'
-
-    const legende_advantages = [
-        'Accès au /ec',
-        'Accès au /hat',
-        'Accès à la bêta mi-close',
-        '4 extensions de banque',
-        'Accès anticipé (2h30) officiel',
-        'Couleur dans le tchat inGame',
-        'Salon écrit et vocal dédié',
-        'Spoils & sondages exclusifs'
-    ]
-    const legende_price = '29,99 EUR'
-    const legende_product_id = '662c316f19e89ab261b85a4c'
 
     return (
         <Container maxW={'full'} margin={0} padding={0} color={'white'}>
@@ -167,7 +147,7 @@ const ShopPage: NextPage = () => {
                                     }
                                 }
                             }}>
-                            <GridItem w='100%' mt={0} h={560} bg={'linear-gradient(#ffffff, #BC7A27 90%)'} border={'2px solid rgb(255,255,255,.1)'}  borderRadius={13}>
+                            <GridItem w='100%' mt={0} h={560} bg={'linear-gradient(#ffffff, #BC7A27 90%)'} border={'2px solid rgb(255,255,255,.1)'}  borderRadius={10}>
                                 <Image src={"https://cdn.saofrance.net/images/Market/VIP_Madera.png"} w={131} mt={5} mx={'auto'} />
                                 <Text w={'100%'}
                                       textAlign={'center'}
@@ -223,7 +203,7 @@ const ShopPage: NextPage = () => {
                                     }
                                 }
                             }}>
-                            <GridItem w='100%' h={670} bg={'linear-gradient(#ffffff, #422A39 90%)'} border={'2px solid rgb(255,255,255,.1)'} borderRadius={13}>
+                            <GridItem w='100%' h={670} bg={'linear-gradient(#ffffff, #422A39 90%)'} border={'2px solid rgb(255,255,255,.1)'} borderRadius={10}>
                                 <Text w={'100%'}
                                       textAlign={'center'}
                                       bg={'linear-gradient(to right, #CC0000, #660000)'}
@@ -243,11 +223,11 @@ const ShopPage: NextPage = () => {
                                       fontSize={19}>
                                     Grade <Text as={'span'} color={'#422A39'}>Beater</Text>
                                 </Text>
-                                {beater_advantages.map((advantage) => {
+                                {beater_advantages_short.map((advantage) => {
                                     return (
                                         <Flex mb={4} ml={7}>
                                             <Box w={21} h={21} bg={'#422A39'} mr={2} borderRadius={4}>
-                                                <Image mt={'6px'} ml={'4px'} src={'https://cdn.saofrance.net/images/components/white_check.png'}/>
+                                                <Image mt={'6px'} ml={'5px'} src={'https://cdn.saofrance.net/images/components/white_check.png'}/>
                                             </Box>
                                             <Text mt={-1} fontSize={16}>{advantage}</Text>
                                         </Flex>
@@ -287,7 +267,7 @@ const ShopPage: NextPage = () => {
                                     }
                                 }
                             }}>
-                            <GridItem w='100%' h={622} bg={'linear-gradient(#ffffff, #143688 90%)'} border={'2px solid rgb(255,255,255,.1)'}  borderRadius={13}>
+                            <GridItem w='100%' h={622} bg={'linear-gradient(#ffffff, #143688 90%)'} border={'2px solid rgb(255,255,255,.1)'}  borderRadius={10}>
                                 <Image src={"https://cdn.saofrance.net/images/Market/VIP_Oro.png"} w={131} mt={5} mx={'auto'} />
                                 <Text w={'100%'}
                                       textAlign={'center'}
@@ -443,7 +423,70 @@ const ShopPage: NextPage = () => {
                                 Les incontournables
                             </Text>
                         </Center>
-
+                        <Wrap justify={'center'} spacing={50} mt={35} gap={50} mx={'auto'} maxW={1200}>
+                            { pointsProducts?.map((product) => {
+                                return (
+                                    <WrapItem key={product._id}>
+                                        <PointsShopProductCard product={product}/>
+                                    </WrapItem>
+                                );
+                            })}
+                        </Wrap>
+                    </section>
+                    <section id={'upgrades'}>
+                        <Box w={'full'} mt={10} bgColor={'white'}>
+                            <motion.div initial="hidden" animate="visible" variants={{
+                                hidden: {
+                                    opacity: 0
+                                },
+                                visible: {
+                                    opacity: 1,
+                                    transition: {
+                                        duration: 1
+                                    }
+                                },}}>
+                                <Center >
+                                    <Text textTransform={"uppercase"}
+                                          fontSize={25}
+                                          mt={5}
+                                          color={'black'}
+                                          textAlign={'center'}
+                                          letterSpacing={2}
+                                          fontWeight={'bold'}
+                                          borderLeft={'1px solid rgb(0,0,0,.7)'}
+                                          borderRight={'1px solid rgb(0,0,0,.7)'}
+                                          w={900}>
+                                        Passer à la vitesse <Text as={'u'}>supérieure</Text>
+                                    </Text>
+                                </Center>
+                            </motion.div>
+                            <Flex justify={'center'} flexDirection={'column'} pb={10} mt={35} gap={5} mx={'auto'} maxW={1200}>
+                                <Text textAlign={'center'} color={'#BB7927'} fontWeight={'bold'} fontSize={'23'} textDecoration={'underline'}>Paladin</Text>
+                                { upgradesProducts?.filter((product) => product.roleInitial === 'paladin').map((product) =>{
+                                    return (
+                                        <Box key={product._id}>
+                                            <UpgradesShopProductCard product={product}/>
+                                        </Box>
+                                    );
+                                })}
+                                <Text textAlign={'center'} color={'#143688'} fontWeight={'bold'} fontSize={'23'} textDecoration={'underline'}>Conquérant</Text>
+                                { upgradesProducts?.filter((product) => product.roleInitial === 'conqueror').map((product) =>{
+                                    return (
+                                        <Box key={product._id}>
+                                            <UpgradesShopProductCard product={product}/>
+                                        </Box>
+                                    );
+                                })}
+                                <Text textAlign={'center'} color={'#136F81'} fontWeight={'bold'} fontSize={'23'} textDecoration={'underline'}>Légende</Text>
+                                { upgradesProducts?.filter((product) => product.roleInitial === 'legend').map((product) =>{
+                                    return (
+                                        <Box key={product._id}>
+                                            <UpgradesShopProductCard product={product}/>
+                                        </Box>
+                                    );
+                                })}
+                            </Flex>
+                        </Box>
                     </section>
                 </Flex>
 

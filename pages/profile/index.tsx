@@ -321,7 +321,7 @@ const ProfilePage: NextPage = () => {
                             </Box>
                         )}
                         <Box>
-                            <Button fontSize={16} disabled={true}>
+                            <Button fontSize={16} isDisabled={true}>
                                 Voir mon profil public
                             </Button>
                         </Box>

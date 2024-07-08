@@ -114,11 +114,13 @@ export interface ShopProduct {
     place:number
     stripeLink?: string
     descriptionDetails: string
-    pointsToGive?: number,
-    roleToGive?: string,
+    pointsToGive?: number
+    roleToGive?: string
     cosmeticToGive?: string,
     bonusShopPoints?: number
-    active: boolean
+    active: boolean,
+    roleInitial?: string
+    roleFinal?: string
 }
 
 export interface StripeProduct {
