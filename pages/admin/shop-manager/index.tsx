@@ -10,7 +10,7 @@ import {useEffect, useState} from "react";
 import {Box, Button, Flex, Text, useToast, Wrap} from "@chakra-ui/react";
 import {getShopProducts} from "../../../store/shop/shopActions";
 import AdminNavbar from "../../../components/molecules/AdminNavbar/AdminNavbar";
-import ShopProductCard from "../../../components/molecules/ShopProductCard/ShopProductCard";
+import AdminShopProductCard from "../../../components/molecules/ShopProductCard/AdminShopProductCard";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {getMaxPowerFromUserRoles} from "../../../store/helper";
 
@@ -134,7 +134,7 @@ const ShopManager: NextPage = () => {
     return (
         <AdminNavbar selected={'/shop-manager'}>
             <Flex w={'full'} h={800}>
-                <Flex h={'auto'} bgColor={'rgb(76,78,82,1)'} borderTop={'1px solid rgb(0,0,0,.2)'} borderRadius={5} flex={1} align={'center'}
+                <Flex h={'auto'} /*bgColor={'rgb(76,78,82,1)'} borderTop={'1px solid rgb(0,0,0,.2)'}*/ borderRadius={5} flex={1} align={'center'}
                       flexDirection={'column'}>
                     <Text color={'white'} fontWeight={'bold'} fontSize={17} textTransform={'uppercase'} marginTop={3}>Éditeur de boutique</Text>
                     <Text color={'red'} fontSize={12}>(admin)</Text>
@@ -164,7 +164,7 @@ const ShopManager: NextPage = () => {
                         })
                     }
                 </Flex>
-                <Flex w={'full'} h={800} bgColor={'rgb(76,78,82,.85)'} borderTop={'1px solid rgb(0,0,0,.2)'} borderRadius={5} flexDirection={'column'} px={7} pt={5} overflow={"auto"}>
+                <Flex w={'full'} h={900} /*bgColor={'rgb(76,78,82,.85)'} borderTop={'1px solid rgb(0,0,0,.2)'}*/ borderRadius={5} flexDirection={'column'} px={7} pt={5} overflow={"auto"}>
                     <Button colorScheme={'blue'} variant={'solid'} marginBottom={3} py={4} onClick={() => router.push('/admin/shop-manager/create')}>
                         + Créer
                     </Button>
@@ -172,7 +172,7 @@ const ShopManager: NextPage = () => {
                     <Wrap>
                     {
                         selectedProducts?.map((product) => {
-                            return (<li key={product._id}><ShopProductCard product={product} isEditing={true}/></li>)
+                            return (<li key={product._id}><AdminShopProductCard product={product} isEditing={true}/></li>)
                         })
                     }
                     </Wrap>

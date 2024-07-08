@@ -46,6 +46,8 @@ interface LinkItemProps {
     powerRequired: number
 }
 
+
+
 interface NavItemProps extends FlexProps {
     icon: IconType
     children: React.ReactNode
@@ -113,7 +115,7 @@ const SidebarContent = ({ onClose, userPower, selected, ...rest }: SidebarProps)
         LinkItems.map((link) => {
             if (userPower >= link.powerRequired) {
                 return (
-                    <NavItem key={link.name} icon={link.icon} onClick={() => router.push('/admin' + link.href)} bgColor={selected === link.href ? 'rgb(0,0,0,.3)' : ''}>
+                    <NavItem key={link.name} icon={link.icon} onClick={() => router.push('/admin' + link.href).then(() => router.reload())} bgColor={selected === link.href ? 'rgb(0,0,0,.3)' : ''}>
                         {selected === link.href ? '- ' : ''}{link.name}
                     </NavItem>
                 );
@@ -224,7 +226,7 @@ const MobileNav = ({ onOpen, name, role,imageUrl, ...rest }: MobileProps) => {
     borderColor={'whiteAlpha.300'}>
     <MenuItem bg={'rgb(38,39,41,1)'} _hover={{bg: 'rgb(48,49,51,1)'}} borderRadius={10} >Profile</MenuItem>
     <MenuDivider />
-    <MenuItem bg={'rgb(38,39,41,1)'} _hover={{bg: 'rgb(48,49,51,1)'}} borderRadius={10} color={'red'} onClick={() => router.push('/profile')}>Revenir au site</MenuItem>
+    <MenuItem bg={'rgb(38,39,41,1)'} _hover={{bg: 'rgb(48,49,51,1)'}} borderRadius={10} color={'red'} onClick={() => router.push('/profile').then(() => router.reload())}>Revenir au site</MenuItem>
     </MenuList>
     </Menu>
     </Flex>

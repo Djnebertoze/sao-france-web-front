@@ -110,6 +110,24 @@ export const getShopProducts = () => async (dispatch: any) => {
     }
 }
 
+export const getShopActiveProducts = () => async (dispatch: any) => {
+    dispatch(getShopProductsRequest())
+
+    try {
+        const response = await axios.get(
+            `${getAPIUrl()}/shop/products/active`,{}
+        );
+        if (response.data.success){
+            console.log("data",response.data)
+            dispatch(getShopProductsSuccess(response.data.products))
+        } else (
+            dispatch(getShopProductsError(response.data))
+        )
+    } catch (error: any) {
+        dispatch(getShopProductsError({error: error}))
+    }
+}
+
 export const getShopProduct = (accessToken: string | undefined, productId: string | string[] | undefined) => async (dispatch: any) => {
     dispatch(getShopProductRequest())
 

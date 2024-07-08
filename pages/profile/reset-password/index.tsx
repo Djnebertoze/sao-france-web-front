@@ -82,20 +82,17 @@ const LoginPage: NextPage = () => {
 
     return (
         <Container maxW={'full'} margin={0} padding={0}>
-            <Container maxW={'full'} py={5} mx={0} className={'secondary-background'}>
+            <Container maxW={'full'} py={5} mx={0} className={'main-background'}>
                 <Flex flex={1} justify={'center'} w={'full'} align={'center'}>
                     <Box
                          mt={140}
                          mx={18}
+                         w={900}
                          mb={150}>
                         <Text maxW={'full'} textAlign={'center'} fontFamily={'Bebas Neue'} fontSize={30} letterSpacing={3} color={'white'}>
                             Réinitialisation mot de passe
                         </Text>
                         <Box h={'1px'} w={'full'} bgColor={'rgb(255,255,255,.2)'} mx={0} my={3}/>
-                        <Flex flex={1} justify={'center'} w={'full'} align={'center'}>
-                            <Link className={'clickable-link'} color={'rgb(255,255,255,.8)!important'} onClick={() => router.push('/login')}>J&apos;ai déjà un compte</Link>
-                        </Flex>
-
                         <Box w={'full'} px={10}>
                             <Box borderLeft={!passwordIsInvalid ? 'rgb(255,255,255,.5) 1px solid' : 'red 2px solid'} pl={5}>
                                 <Text fontSize={19} mb={2} mt={5} color={'white'}>Nouveau mot de passe<Text color={'red'} fontSize={15} as={'a'}>{passwordIsInvalid ? "Le mot de passe doit contenir au moins 8 caractères !":""}</Text></Text>
@@ -123,8 +120,6 @@ const LoginPage: NextPage = () => {
                                 </Button>
                             </Flex>
                         </Box>
-                        <Box h={'1px'} w={'full'} bgColor={'rgb(255,255,255,.2)'} mx={0} my={10} />
-                        <Text fontSize={12} textAlign={'justify'} maxW={900} color={'rgb(255,255,255,.5)'}>{t('register.REGISTER_LAW_TEXT')}</Text>
                     </Box>
                 </Flex>
             </Container>

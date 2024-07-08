@@ -3,9 +3,9 @@ import {NextRouter, useRouter} from "next/router";
 import {useTranslation} from "next-i18next";
 import {
     Box,
-    Button,
+    Button, Center,
     Container,
-    Flex,
+    Flex, Icon,
     Image,
     Input,
     InputGroup,
@@ -14,22 +14,32 @@ import {
     InputRightElement,
     Spacer,
     Text,
+    Switch,
     useToast
 } from "@chakra-ui/react";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useEffect, useState} from "react";
-import {getUserState} from "../../store/user/userSlice";
-import {emptyAct, getUserProfile, requestXboxServices, updateUserProfile} from "../../store/user/userActions";
+import {getUserState, resetSendPasswordResetRequest, resetUpdateUserProfileRequest} from "../../store/user/userSlice";
+import {
+    emptyAct,
+    getUserProfile, getUserTransactions,
+    requestXboxServices,
+    sendPasswordReset,
+    updateUserProfile
+} from "../../store/user/userActions";
 import {useDispatch, useSelector} from "../../store/store";
 import {Tags} from "../../components/atoms/Tags/Tags";
 
 import {getRoleById} from '../../common/roles/roles'
 
-import {faCheck, faEdit} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCheck, faEdit, faUser, faSliders, faGlobe, faBook, faSackDollar} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon, FontAwesomeIconProps} from "@fortawesome/react-fontawesome";
 import {useIsAuthenticated, useMsal} from "@azure/msal-react";
 import {loginRequest} from "../../store/authConfig";
 import {Role} from "../../common/types/types";
+import {IconType} from "react-icons";
+import {FiBriefcase, FiDollarSign, FiHome, FiSettings, FiShoppingCart, FiTrendingUp, FiUsers} from "react-icons/fi";
+import {IconDefinition} from "@fortawesome/fontawesome-svg-core";
 
 
 const ProfilePage: NextPage = () => {
@@ -40,60 +50,44 @@ const ProfilePage: NextPage = () => {
     const {
         auth,
         userInfos,
-        getUserInfosLoading, updateUserProfileSuccess, updateUserProfileError,
-        getMinecraftProfileLoading, minecraftProfile, getMinecraftProfileError,
-        getUserInfosError
+        getUserInfosLoading,
+        updateUserProfileSuccess,
+        updateUserProfileError,
+        getMinecraftProfileLoading,
+        minecraftProfile,
+        getMinecraftProfileError,
+        getUserInfosError,
+        updateUserProfileLoading,
+        sendPasswordResetLoading,
+        sendPasswordResetSuccess,
+        sendPasswordResetError,
+        getUserTransactionsLoading,
+        getUserTransactionsError,
+        getUserPrivateProfileSuccess,
+        userTransactions
     } = useSelector(getUserState)
 
     const {t} = useTranslation();
 
-    const [isEditing, setEditing] = useState<boolean>(false)
-
-    const handleEditing = () => {
-        if(emailIsInvalid){
-            toast({
-                title: 'Impossible de modifier votre profil',
-                description: 'Email non valide',
-                status: 'error',
-                duration: toastDuration,
-                isClosable: true,
-                position: 'bottom-right',
-            });
-            return;
-        }
-        console.log('editing', isEditing)
-        if (isEditing) {
-            dispatch(updateUserProfile(auth?.accessToken, {
-                username: usernameValue,
-                email: emailValue,
-                firstName: firstNameValue,
-                lastName: lastNameValue,
-                phoneNumber: phoneNumberValue,
-                birthday: birthdayValue,
-                bio: bioValue
-            }))
-            router.reload();
-        }
-        setEditing(!isEditing);
-    }
-
     const [usernameValue, setUsernameValue] = useState<string>("")
-    const handleUsernameChange = (event: any) => {
-        setUsernameValue(event.target.value);
-    }
 
     const [bioValue, setBioValue] = useState<string>("")
-    const handleBioChange = (event: any) => {
-        setBioValue(event.target.value);
-    }
 
     const [phoneNumberValue, setPhoneNumberValue] = useState<string>("");
-    const handlePhoneNumberChange = (event: any) => setPhoneNumberValue(event.target.value);
 
     const [shopPointsValue, setShopPointsValue] = useState<number>();
 
     const [birthdayValue, setBirthdayValue] = useState<string>('');
-    const handleBirthdayChange = (event: any) => setBirthdayValue(event.target.value);
+
+    const [showBirthdayValue, setShowBirthdayValue] = useState<boolean>(false)
+    const handleShowBirthdayChange = () => {
+        setShowBirthdayValue(!showBirthdayValue);
+    }
+
+    const [acceptEmailValue, setAcceptEmailValue] = useState<boolean>()
+    const handleAcceptEmailChange = () => {
+        setAcceptEmailValue(!acceptEmailValue);
+    }
 
     const [emailIsInvalid, setEmailIsInvalid] = useState(false);
     const regexpEmail = new RegExp(
@@ -137,6 +131,8 @@ const ProfilePage: NextPage = () => {
     const handleLastNameChange = (event: any) => setLastNameValue(event.target.value);
 
     const [firstNameValue, setFirstNameValue] = useState<string|undefined>();
+
+    const [selectedSetting, setSelectedSetting] = useState<string>('profile');
     const handleFirstNameChange = (event: any) => setFirstNameValue(event.target.value);
 
     const {instance, accounts} = useMsal();
@@ -160,6 +156,9 @@ const ProfilePage: NextPage = () => {
                 setBirthdayValue(userInfos.birthday ? userInfos.birthday : "");
                 setPhoneNumberValue(userInfos.phoneNumber ? userInfos.phoneNumber : "");
                 setShopPointsValue(userInfos.shopPoints ? userInfos.shopPoints : 0)
+                setAcceptEmailValue(userInfos.acceptEmails ? userInfos.acceptEmails : false)
+                setShowBirthdayValue(userInfos.showBirthday ? userInfos.showBirthday : false)
+
                 if(userInfos.roles) {
                     const roles_filtered: Role[] = [];
                     userInfos.roles.map((role_id) => {
@@ -198,11 +197,11 @@ const ProfilePage: NextPage = () => {
             });
         }
 
-    }, [dispatch, auth, toast, router, userInfos, isEditing, isAuthenticated, minecraftProfile,
+    }, [dispatch, auth, toast, router, userInfos, /*isEditing, */isAuthenticated, minecraftProfile,
         accounts, instance, getUserInfosError, getUserInfosLoading]);
 
     useEffect(() => {
-        if (updateUserProfileSuccess && !isEditing) {
+        if (updateUserProfileSuccess) {
             toast({
                 title: t('profile.UPDATE_USER_SUCCESS_TOAST_TITLE'),
                 description: t('profile.UPDATE_USER_SUCCESS_TOAST_DESCRIPTION'),
@@ -211,18 +210,49 @@ const ProfilePage: NextPage = () => {
                 isClosable: true,
                 position: 'bottom-right',
             });
+            dispatch(resetUpdateUserProfileRequest())
+            dispatch(getUserProfile(auth?.accessToken))
         }
-        if (updateUserProfileError && !isEditing) {
+        if (updateUserProfileError) {
             toast({
-                title: 'Impossible de modifier votre profil',
+                title: 'Erreur lors de la modification de votre profil',
                 description: updateUserProfileError,
                 status: 'error',
                 duration: toastDuration,
                 isClosable: true,
                 position: 'bottom-right',
             });
+            dispatch(resetUpdateUserProfileRequest())
+            dispatch(getUserProfile(auth?.accessToken))
         }
-    }, [updateUserProfileSuccess, updateUserProfileError, isEditing, t, toast]);
+    }, [updateUserProfileSuccess, updateUserProfileError, t, toast]);
+
+    useEffect(() => {
+        if(!sendPasswordResetLoading){
+            if(sendPasswordResetSuccess){
+                toast({
+                    title: 'Email envoyé',
+                    description: 'L\'email de réinitialisation a bien été envoyé',
+                    status: 'success',
+                    duration: toastDuration,
+                    isClosable: true,
+                    position: 'bottom-right',
+                });
+                dispatch(resetSendPasswordResetRequest())
+            }
+            if(sendPasswordResetError){
+                toast({
+                    title: 'Email non envoyé',
+                    description: 'L\'email de réinitialisation n\' a pas été envoyé',
+                    status: 'error',
+                    duration: toastDuration,
+                    isClosable: true,
+                    position: 'bottom-right',
+                });
+                dispatch(resetSendPasswordResetRequest())
+            }
+        }
+    }, [dispatch, sendPasswordResetLoading, sendPasswordResetError, sendPasswordResetSuccess, toast])
 
     useEffect(() => {
         if(getMinecraftProfileError !== undefined){
@@ -237,158 +267,265 @@ const ProfilePage: NextPage = () => {
         }
     }, [getMinecraftProfileError, toast])
 
+    interface SettingsItemProps {
+        name: string
+        icon: IconDefinition
+        param: string
+    }
+
+    const SettingsItems: Array<SettingsItemProps> = [
+        { name: 'Profil public', icon: faUser, param: 'profile' },
+        { name: 'Mes préférences', icon: faSliders, param: 'preferences' },
+        { name: 'Données personnelles', icon: faGlobe, param: 'personals-data' },
+        { name: 'Applications connectées', icon: faBook, param: 'connected-apps' },
+        { name: 'Mes transactions', icon: faSackDollar, param: 'transactions' },
+    ]
+
     let tagsMargin = 4;
 
     return (
         <Container maxW={'full'} margin={0} padding={0}>
-            <Container bg={'rgb(55,56,58,1)'} minH={1000} maxW={'full'} color={'white'} p={0}>
-                <Flex w={'full'} pt={100}>
-                    <Box marginRight={10} borderRight={'1px solid white'} py={5} px={10}>
-                        <Image src={"https://skins.danielraybone.com/v1/head/"+userInfos?.mcProfile?.name+"?overlay=true"} borderRadius={'50%'} maxW={200} maxH={200}
-                               mx={1} mb={5} border={'5px solid white'} boxShadow={'0px 0px 20px 2px rgb(0,0,0,.15)'} alt={'User image profile'}/>
-                        {userInfos?.mcProfile && (
-                            <>
-                                <Text textAlign={'center'} mt={2} fontStyle={'italic'}>{userInfos.mcProfile.name}</Text>
-                            </>
-                        )}
-                        <Text textAlign={'center'} mt={2}>{shopPointsValue?.toLocaleString(undefined)} Points Boutique</Text>
-
-                    </Box>
-                    <Box w={'full'}>
-                        <Flex w={'full'}>
-                            <Box mt={50}>
-                                <Flex w={'full'}>
-                                    {isEditing ? (
-                                        <InputGroup w={'full'}>
-                                            <Input maxW={290} maxLength={15} fontSize={35} ml={10} mt={2}
-                                                   pb={2} w={'full'} borderBottom={'black 1px solid'}
-                                                   placeholder={t('register.FILL_THE_FIELD_LABEL')}
-                                                   variant='flushed' value={usernameValue}
-                                                   onChange={handleUsernameChange}></Input>
-                                        </InputGroup>
-                                    ) : (
-                                        <Text fontSize={35} ml={10}>{userInfos?.username}</Text>
-                                    )}
-
-                                    {
-                                        userRoles?.map((role) => {
-                                            return <Tags key={role._id} mt={tagsMargin} ml={5}
-                                                         bgColor={role?.color}
-                                                         textColor={role?.textColor}>
-                                                {role?.name}
-                                            </Tags>
-                                        })
-                                    }
-
-                                </Flex>
-                                {isEditing ? (
-                                    <InputGroup w={'full'} ml={10} mr={20} mt={2} pb={5}>
-                                        <InputLeftElement>-</InputLeftElement>
-                                        <Input maxLength={50} fontSize={16} w={'full'}
-                                               borderBottom={'black 1px solid'}
-                                               placeholder={t('register.FILL_THE_FIELD_LABEL')}
-                                               variant='flushed' value={bioValue}
-                                               onChange={handleBioChange}></Input>
-                                    </InputGroup>
-                                ) : (
-                                    <Text w={'full'} fontWeight={''} fontSize={16} ml={10} mr={20} mt={2}
-                                          pb={5} borderBottom={'white 1px solid'}>- {userInfos?.bio}</Text>
-                                )}
-
-                            </Box>
-                            <Spacer/>
-                            {isEditing && (
-                                <Text mt={58} mr={5} fontSize={19}>Veuillez valider...</Text>
-                            )}
-                            {(userInfos?.roles?.includes('admin') || userInfos?.roles?.includes('moderator') || userInfos?.roles?.includes('responsable') || userInfos?.roles?.includes('developer')) && (
-                                <Box>
-                                    <Button h={38} mt={57} colorScheme={'red'} mr={5}
-                                            onClick={() => router.push('/admin')}>
-                                        Accès Admin
-                                    </Button>
-                                </Box>
-                            )}
-
+            <Container className={'main-background'} minH={1000} maxW={'full'} color={'white'} p={0} pt={100}>
+                <Center>
+                    <Text textTransform={"uppercase"}
+                          fontSize={25}
+                          textAlign={'center'}
+                          letterSpacing={2}
+                          borderLeft={'1px solid rgb(255,255,255,.3)'}
+                          borderRight={'1px solid rgb(255,255,255,.3)'}
+                          w={500}>
+                        Mon profil
+                    </Text>
+                </Center>
+                <Flex w={1200} mx={'auto'} mt={61} flexDirection={"column"}>
+                    <Flex borderBottom={'1px solid white'} py={3}>
+                        <Box>
+                            <Image src={"https://skins.danielraybone.com/v1/head/"+userInfos?.mcProfile?.name+"?overlay=true"}
+                                   borderRadius={'50%'}
+                                   maxW={50}
+                                   maxH={50}
+                                   border={'2px solid white'}
+                                   boxShadow={'0px 0px 20px 2px rgb(0,0,0,.15)'} alt={'User image profile'}/>
+                        </Box>
+                        <Flex flexDirection={'column'} ml={4}>
+                            <Text color={'white'} fontSize={20}>{userInfos?.username} <Text as={'span'} color={'rgb(255,255,255,.7)'}>({userInfos?.mcProfile ? userInfos.mcProfile.name : 'Aucun compte Minecraft'})</Text></Text>
+                            <Text color={'rgb(255,255,255,.5)'} fontSize={14}>{shopPointsValue?.toLocaleString(undefined)} Points Boutique</Text>
+                        </Flex>
+                        <Spacer/>
+                        {(userInfos?.roles?.includes('admin') || userInfos?.roles?.includes('moderator') || userInfos?.roles?.includes('responsable') || userInfos?.roles?.includes('developer')) && (
                             <Box>
-                                <Button w={50} h={50} colorScheme={isEditing ? 'green' : 'teal'} mr={50}
-                                        mt={50} onClick={handleEditing}>
-                                    {isEditing ? (
-                                        <FontAwesomeIcon icon={faCheck}/>
-                                    ) : (
-                                        <FontAwesomeIcon icon={faEdit}/>
-                                    )}
-
+                                <Button colorScheme={'red'} mr={5}
+                                        onClick={() => router.push('/admin')}>
+                                    Panel Admin
                                 </Button>
                             </Box>
+                        )}
+                        <Box>
+                            <Button fontSize={16} isDisabled={true}>
+                                Voir mon profil public
+                            </Button>
+                        </Box>
+                    </Flex>
+                    <Flex>
+                        <Flex flexDirection={'column'} w={290} mt={3} pr={2} borderRight={'1px solid rgb(255,255,255,.1)'}>
+                            {
+                                SettingsItems.map((setting) => {
+                                    return (
+                                        <Flex px={3}
+                                              py={2}
+                                              mb={1}
+                                              bg={selectedSetting == setting.param ? 'rgb(255,255,255,.09)' : ''}
+                                              borderRadius={5}
+                                              fontSize={16}
+                                              _hover={{bg: selectedSetting != setting.param ? 'rgb(255,255,255,.05)' : ''}}
+                                              onClick={() => {
+                                                  setSelectedSetting(setting.param)
+                                                  if (setting.param == 'transactions') {
+                                                      dispatch(getUserTransactions(auth?.accessToken))
+                                                  }
+                                              }}
+                                              cursor={'pointer'}>
+                                                <Box mr={2}>
+                                                    <FontAwesomeIcon icon={setting.icon} color={'#767676'}/>
+                                                </Box>
+                                                <Text color={selectedSetting == setting.param ? 'white' : '#767676'}>{setting.name}</Text>
+                                        </Flex>
+                                    )
+                                })
+                            }
                         </Flex>
-                        <Box ml={41} mr={150} mt={30}>
-                            <Text fontSize={30} as={'i'}>Informations personnelles:</Text>
-                            <Box w={'full'} h={'1px'} bgColor={'rgb(255,255,255,.2)'} mt={2}/>
-                            <InputGroup border={'transparent'} mt={5}>
-                                <InputLeftAddon fontSize={21} w={100}
-                                                bgColor={'transparent'}>Email:</InputLeftAddon>
-                                <Input fontSize={21} pr={150} value={emailValue} isDisabled={!isEditing}
-                                       placeholder={'-'} type={'email'}
-                                       onChange={handleEmailChange}></Input>
-                            </InputGroup>
-                            <InputGroup border={'transparent'} mt={5}>
-                                <InputLeftAddon fontSize={21} w={100}
-                                                bgColor={'transparent'}>Prénom:</InputLeftAddon>
-                                <Input fontSize={21} pr={150} value={firstNameValue} isDisabled={!isEditing}
-                                       placeholder={'-'} onChange={handleFirstNameChange}></Input>
-                            </InputGroup>
-                            <InputGroup border={'transparent'} mt={5}>
-                                <InputLeftAddon fontSize={21} w={100}
-                                                bgColor={'transparent'}>Nom:</InputLeftAddon>
-                                <Input fontSize={21} pr={150} value={lastNameValue} isDisabled={!isEditing}
-                                       placeholder={'-'} onChange={handleLastNameChange}></Input>
-                            </InputGroup>
-                            <InputGroup border={'transparent'} mt={5}>
-                                <InputLeftAddon fontSize={21} w={100}
-                                                bgColor={'transparent'}>Tél.</InputLeftAddon>
-                                <Input fontSize={21} pr={150} value={phoneNumberValue}
-                                       isDisabled={!isEditing} placeholder={'-'}
-                                       type={showPhoneNumber ? 'text' : 'password'}
-                                       onChange={handlePhoneNumberChange}></Input>
-                                <InputRightElement width='4.5rem'>
-                                    <Button h='1.75rem' size='sm' onClick={handleShowPhoneNumberChange}>
-                                        {showPhoneNumber ? 'Cacher' : 'Montrer'}
-                                    </Button>
-                                </InputRightElement>
-                            </InputGroup>
-                            <InputGroup border={'transparent'} mt={5}>
-                                <InputLeftAddon fontSize={21} w={100}
-                                                bgColor={'transparent'}>Anniv.</InputLeftAddon>
-                                <Input fontSize={21} pr={150} value={birthdayValue}
-                                       isDisabled={!isEditing} placeholder={'-'} type={'date'}
-                                       onChange={handleBirthdayChange}></Input>
-                            </InputGroup>
-                            <Button colorScheme={'blue'} mt={5} onClick={() => router.push('/profile/transactions')}>Voir mes transaction</Button>
-                        </Box>
-                        <Box ml={41} mr={150} mt={30}>
-                            <Text fontSize={30} as={'i'}>Applications externes:</Text>
-                            <Box w={'full'} h={'1px'} bgColor={'rgb(255,255,255,.2)'} mt={2}/>
-                            <Button colorScheme={'blue'}
-                                    mt={10}
-                                    borderRadius={2}
-                                    onClick={isAuthenticated ? () => {
-                                        instance.logoutPopup({}).then(() => {});
-                                    } : () => {
-                                        instance.loginPopup(loginRequest).catch(e => {
-                                            console.log(e);
-                                        })
-                                    }/*dispatch(linkMicrosoftAccount)*//*() => router.push(urlMicrosoft)*//*openPopupWindow*/} isLoading={getMinecraftProfileLoading}>
-                                {isAuthenticated ? "Microsoft: Connecté" : "Me connecter à Microsoft"}
-                            </Button>
-                        </Box>
-                        <Box ml={41} mr={150} mt={30}>
-                            <Text fontSize={30} as={'i'}>Utilitaires:</Text>
-                            <Box w={'full'} h={'1px'} bgColor={'rgb(255,255,255,.2)'} mt={2}/>
-                            <Button colorScheme={'red'} mt={5} mb={5} onClick={logout}>
-                                Me déconnecter
-                            </Button>
-                        </Box>
-                    </Box>
+                        <Flex px={6} py={4} w={'full'}>
+                            {selectedSetting == 'profile' && (
+                                <Flex flexDirection={"column"} w={'full'}>
+                                    <Text fontSize={22}>Profil public</Text>
+                                    <Box w={'full'} h={'1px'} mt={3} bg={'rgb(255,255,255,.1)'}/>
+                                    <Flex flexDirection={"column"}>
+                                        <Box maxW={250} mt={1}>
+                                            <Text fontSize={20} color={'rgb(255,255,255,.9)'}>Pseudo</Text>
+                                            <Input type={'text'}
+                                                   bg={'rgb(255,255,255,.05)'}
+                                                   mt={2}
+                                                   value={usernameValue}
+                                                   disabled={false}
+                                                   border={'none'}
+                                                   onChange={(e) => setUsernameValue(e.target.value)}
+                                                   borderBottom={'1px solid white'}/>
+                                        </Box>
+                                        <Box mt={5}>
+                                            <Text fontSize={20} color={'rgb(255,255,255,.9)'}>Biographie</Text>
+                                            <Input type={'text'}
+                                                   bg={'rgb(255,255,255,.05)'}
+                                                   mt={2}
+                                                   value={bioValue}
+                                                   disabled={false}
+                                                   border={'none'}
+                                                   onChange={(e) => setBioValue(e.target.value)}
+                                                   borderBottom={'1px solid white'}/>
+                                        </Box>
+                                        <Box mt={5} maxW={280}>
+                                            <Text fontSize={20} color={'rgb(255,255,255,.9)'}>Anniversaire</Text>
+                                            <Input type={'date'}
+                                                   bg={'rgb(255,255,255,.05)'}
+                                                   mt={2}
+                                                   value={birthdayValue}
+                                                   disabled={false}
+                                                   border={'none'}
+                                                   onChange={(e) => setBirthdayValue(e.target.value)}
+                                                   borderBottom={'1px solid white'}/>
+                                            <Flex>
+                                                <Text fontSize={15} mt={2} color={'rgb(255,255,255,.9)'}>Afficher ma date d'anniversaire</Text>
+                                                <Switch mt={3} ml={5} colorScheme={'blue'} isChecked={showBirthdayValue} onChange={handleShowBirthdayChange}/>
+                                            </Flex>
+                                        </Box>
+
+                                        <Button mt={5} maxW={250} colorScheme={'blue'} isLoading={updateUserProfileLoading || getUserInfosLoading} onClick={() => {
+                                            dispatch(updateUserProfile(auth?.accessToken, {
+                                                username: usernameValue,
+                                                birthday: birthdayValue,
+                                                showBirthday: showBirthdayValue,
+                                                bio: bioValue
+                                            }))
+                                        }}>Mettre à jour mon profil</Button>
+                                    </Flex>
+
+                                </Flex>
+                            )}
+
+                            {selectedSetting == 'preferences' && (
+                                <Flex flexDirection={"column"} w={'full'}>
+                                    <Text fontSize={22}>Mes préférences</Text>
+                                    <Box w={'full'} h={'1px'} mt={3} bg={'rgb(255,255,255,.1)'}/>
+
+                                    <Box mt={1}>
+                                        <Flex>
+                                            <Text fontSize={18} mt={2} color={'rgb(255,255,255,.9)'}>Recevoir des e-mails relatifs aux nouveautés et offres commerciales</Text>
+                                            <Switch mt={4} ml={5} colorScheme={'blue'} isChecked={acceptEmailValue} onChange={handleAcceptEmailChange}/>
+                                        </Flex>
+                                    </Box>
+                                    <Button mt={5} maxW={300} colorScheme={'blue'} isLoading={updateUserProfileLoading || getUserInfosLoading} onClick={() => {
+                                        dispatch(updateUserProfile(auth?.accessToken, {
+                                            acceptEmails: acceptEmailValue
+                                        }))
+                                    }}>Mettre à jour mes préférences</Button>
+                                </Flex>
+                            )}
+
+                            {selectedSetting == 'personals-data' && (
+                                <Flex flexDirection={"column"} w={'full'}>
+                                    <Text fontSize={22}>Données personnelles</Text>
+                                    <Box w={'full'} h={'1px'} mt={3} bg={'rgb(255,255,255,.1)'}/>
+                                    <Box mt={1}>
+                                        <Text fontSize={20} color={'rgb(255,255,255,.9)'}>Mot de passe</Text>
+                                        <Button mt={2} maxW={250} colorScheme={'red'} isLoading={sendPasswordResetLoading} onClick={() => {
+                                            dispatch(sendPasswordReset(userInfos?.email))
+                                        }}>Réinitialiser mon mot de passe</Button>
+                                    </Box>
+                                    <Box mt={5}>
+                                        <Text fontSize={20} color={'rgb(255,255,255,.9)'}>Email</Text>
+                                        <Input type={'text'}
+                                               bg={'rgb(255,255,255,.05)'}
+                                               mt={2}
+                                               value={emailValue}
+                                               disabled={false}
+                                               border={'none'}
+                                               onChange={(e) => setEmailValue(e.target.value)}
+                                               borderBottom={'1px solid white'}/>
+                                    </Box>
+                                    <Box mt={5}>
+                                        <Text fontSize={20} color={'rgb(255,255,255,.9)'}>Nméro de téléphone</Text>
+                                        <Input type={'phone'}
+                                               bg={'rgb(255,255,255,.05)'}
+                                               mt={2}
+                                               value={phoneNumberValue}
+                                               disabled={false}
+                                               border={'none'}
+                                               onChange={(e) => setPhoneNumberValue(e.target.value)}
+                                               borderBottom={'1px solid white'}/>
+                                    </Box>
+                                    <Button mt={5} maxW={250} colorScheme={'blue'} isLoading={updateUserProfileLoading || getUserInfosLoading} onClick={() => {
+                                        dispatch(updateUserProfile(auth?.accessToken, {
+                                            email: emailValue,
+                                            phoneNumber: phoneNumberValue,
+                                        }))
+                                    }}>Mettre à jour mes données</Button>
+                                </Flex>
+                            )}
+
+                            {selectedSetting == 'connected-apps' && (
+                                <Flex flexDirection={"column"} w={'full'}>
+                                    <Text fontSize={22}>Applications connectées</Text>
+                                    <Box w={'full'} h={'1px'} mt={3} bg={'rgb(255,255,255,.1)'}/>
+                                    <Box mt={1}>
+                                        <Text fontSize={20} color={'rgb(255,255,255,.9)'}>Microsoft</Text>
+                                        <Button colorScheme={'blue'}
+                                                mt={2}
+                                                borderRadius={2}
+                                                onClick={isAuthenticated ? () => {
+                                                    instance.logoutPopup({}).then(() => {});
+                                                } : () => {
+                                                    instance.loginPopup(loginRequest).catch(e => {
+                                                        console.log(e);
+                                                    })
+                                                }} isLoading={getMinecraftProfileLoading}>
+                                            {isAuthenticated ? "Microsoft: Connecté" : "Me connecter à Microsoft"}
+                                        </Button>
+                                    </Box>
+
+
+                                </Flex>
+                            )}
+
+                            {selectedSetting == 'transactions' && (
+                                <Flex flexDirection={"column"} w={'full'}>
+                                    <Text fontSize={22}>Transactions</Text>
+                                    <Box w={'full'} h={'1px'} mt={3} bg={'rgb(255,255,255,.1)'}/>
+
+                                    <Flex flexDirection={"column-reverse"} pt={5}>
+                                        {userTransactions && userTransactions.map((transaction) => {
+                                            return (
+                                                <Flex key={transaction._id} flexDirection={"column"} w={'full'} backgroundColor={'rgb(255,255,255,.04)'} borderRadius={5} mb={5} py={3} px={10}>
+                                                    <Flex>
+                                                        <Text fontSize={20}>{transaction.productName}</Text>
+                                                        <Spacer/>
+                                                        <Text>{new Date(transaction.createdAt).toLocaleString()}</Text>
+                                                    </Flex>
+                                                    {!transaction.createdBy && (
+                                                        <Text mt={2}>Prix: {transaction.cost}{transaction.isRealMoney ? 'EUR' : ' PB'}</Text>
+                                                    )}
+                                                    {transaction.createdBy && (
+                                                        <Text fontSize={15} mt={1}>Admin: {transaction.createdBy.username}</Text>
+                                                    )}
+                                                </Flex>
+                                            )
+                                        })}
+                                        {(!userTransactions || userTransactions.length == 0) && (
+                                            <Text>Pas encore d&apos;achat effectué !</Text>
+                                        )}
+                                    </Flex>
+                                </Flex>
+                            )}
+                        </Flex>
+                    </Flex>
                 </Flex>
             </Container>
         </Container>

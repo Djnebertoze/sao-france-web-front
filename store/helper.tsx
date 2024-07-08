@@ -30,6 +30,11 @@ export function getMaxPowerFromUserRoles(userRoles: string[]): number {
     return maxPower;
 }
 
+export function roundNumber(number: number, digits: number) {
+    const multiple = Math.pow(10, digits);
+    return Math.round(number * multiple) / multiple;
+}
+
 export function getMaxPowerUserGradesFromUserRoles(userRoles: string[]): number {
     let maxPower = 0;
 

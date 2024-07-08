@@ -7,4 +7,6 @@ export class UpdateUserDto {
 	profilePicture?: string;
 	birthday?: string;
 	bio?: string;
+	showBirthday?: boolean;
+	acceptEmails?: boolean;
 }

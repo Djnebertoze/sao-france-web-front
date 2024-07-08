@@ -11,4 +11,7 @@ export class CreateShopProductDto {
     roleToGive?: string;
     cosmeticToGive?: string;
     bonusShopPoints?: number;
+    active?: boolean;
+    roleInitial?: string;
+    roleFinal?: string;
 }

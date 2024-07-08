@@ -7,7 +7,7 @@ import {
     removeRoleError,
     removeRoleSuccess,
     resetAddRole,
-    resetRemoveRole
+    resetRemoveRole, resetSendPasswordResetRequest
 } from "../../../../store/user/userSlice";
 import React, {FC, useEffect, useState} from "react";
 import {
@@ -189,6 +189,7 @@ const AdminUserManagerPage: NextPage = () => {
                     isClosable: true,
                     position: 'bottom-right',
                 });
+                dispatch(resetSendPasswordResetRequest())
             }
             if(sendPasswordResetError){
                 toast({
@@ -199,6 +200,7 @@ const AdminUserManagerPage: NextPage = () => {
                     isClosable: true,
                     position: 'bottom-right',
                 });
+                dispatch(resetSendPasswordResetRequest())
             }
         }
     }, [dispatch, sendPasswordResetLoading, sendPasswordResetError, sendPasswordResetSuccess, toast])

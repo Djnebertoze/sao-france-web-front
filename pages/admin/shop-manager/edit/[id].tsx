@@ -5,10 +5,22 @@ import {useEffect, useRef, useState} from "react";
 import {getUserState,} from "../../../../store/user/userSlice";
 import {useDispatch, useSelector} from "../../../../store/store";
 import AdminNavbar from "../../../../components/molecules/AdminNavbar/AdminNavbar";
-import {Box, Button, Flex, Heading, Input, InputGroup, Select, Text, Textarea, useToast} from "@chakra-ui/react";
+import {
+    Box,
+    Button,
+    Flex,
+    Heading,
+    Input,
+    InputGroup,
+    Select,
+    Switch,
+    Text,
+    Textarea,
+    useToast
+} from "@chakra-ui/react";
 import {ShopCategorie} from "../../../../common/types/types";
 import {shopCategories} from "../../../../common/shop/shopCategories";
-import ShopProductCard from "../../../../components/molecules/ShopProductCard/ShopProductCard";
+import AdminShopProductCard from "../../../../components/molecules/ShopProductCard/AdminShopProductCard";
 import MainLogo from '../../../../public/images/MainLogo.png';
 import {editShopProduct, getShopProduct} from "../../../../store/shop/shopActions";
 import {getShopState} from "../../../../store/shop/shopSlice";
@@ -70,8 +82,11 @@ const ShopManagerEditPage: NextPage = () => {
     const [productStripeLink, setProductStripeLink] = useState<string>()
     const [productPointsToGive, setProductPointsToGive] = useState<number>()
     const [productRoleToGive, setProductRoleToGive] = useState<string>()
+    const [productRoleInitial, setProductRoleInitial] = useState<string>()
+    const [productRoleFinal, setProductRoleFinal] = useState<string>()
     const [productCosmeticToGive, setProductCosmeticToGive] = useState<string>()
     const [productBonusShopPoints, setProductBonusShopPoints] = useState<number>(0)
+    const [productActive, setProductActive] = useState<boolean>(false)
 
     const [errorMessage, setErrorMessage] = useState<string>()
 
@@ -82,6 +97,8 @@ const ShopManagerEditPage: NextPage = () => {
     const handleChangeProductImageUrl = (event: any) => setProductImageUrl(event.target.value);
     const handleChangeProductMoneyType = (event: any) => event.target.value === "true" ? setProductIsRealPrice(true) : setProductIsRealPrice(false);
     const handleChangeProductCategorie = (event: any) => setProductCategory(event.target.value);
+    const handleChangeProductRoleInitial = (event: any) => setProductRoleInitial(event.target.value);
+    const handleChangeProductRoleFinal = (event: any) => setProductRoleFinal(event.target.value);
     const handleChangeProductBonusShopPoints = (event: any) => setProductBonusShopPoints(event.target.value);
 
     const handleChangeProductStripeLink = (event: any) => {
@@ -163,6 +180,17 @@ const ShopManagerEditPage: NextPage = () => {
             return;
         }
 
+        if (productCategory == 'upgrades' && !productRoleFinal){
+            toastError('Veuillez renseigner le role final !')
+            return;
+        }
+
+        if (productCategory == 'upgrades' && !productRoleInitial){
+            toastError('Veuillez renseigner le role initial !')
+            return;
+        }
+
+
         const shopProductDto: CreateShopProductDto = {
             name: productName,
             description: productDescription,
@@ -178,7 +206,10 @@ const ShopManagerEditPage: NextPage = () => {
             pointsToGive: productPointsToGive,
             roleToGive: productRoleToGive,
             cosmeticToGive: productCosmeticToGive,
-            bonusShopPoints: productBonusShopPoints
+            bonusShopPoints: productBonusShopPoints,
+            active: productActive,
+            roleInitial: productRoleInitial,
+            roleFinal: productRoleFinal
         }
 
         console.log("a", shopProductDto)
@@ -305,6 +336,7 @@ const ShopManagerEditPage: NextPage = () => {
             setProductImageUrl(shopProduct.imageUrl)
             setProductDescriptionDetails(shopProduct.descriptionDetails)
             setProductStripeLink(shopProduct.stripeLink)
+            setProductActive(shopProduct.active)
             if(shopProduct.categorieId == 'points'){
                 setProductPointsToGive(shopProduct.pointsToGive)
             }
@@ -313,6 +345,10 @@ const ShopManagerEditPage: NextPage = () => {
             }
             if(shopProduct.categorieId == 'cosmetiques'){
                 setProductCosmeticToGive(shopProduct.cosmeticToGive)
+            }
+            if(shopProduct.categorieId == 'upgrades'){
+                setProductRoleInitial(shopProduct.roleInitial)
+                setProductRoleFinal(shopProduct.roleFinal)
             }
             if (shopProduct.bonusShopPoints) {
                 setProductBonusShopPoints(shopProduct.bonusShopPoints)
@@ -387,6 +423,10 @@ const ShopManagerEditPage: NextPage = () => {
                                 }
                             </Select>
                         </Box>
+                        <Box marginLeft={5}>
+                            <Text fontSize={19} mb={2} mt={5}>Actif</Text>
+                            <Switch isChecked={productActive} colorScheme={'green'} onChange={() => setProductActive(!productActive)}></Switch>
+                        </Box>
                     </Flex>
                     <Box>
                         <Box >
@@ -443,6 +483,30 @@ const ShopManagerEditPage: NextPage = () => {
                             </Box>
                         </Box>
                     )}
+                    {productCategory == 'upgrades' && (
+                        <Box>
+                            <Box >
+                                <Text fontSize={19} mb={2} mt={5}>Grade initial</Text>
+                                <Select placeholder='- Grade initial -' cursor={'pointer'} bgColor={'rgb(76,78,82,1)'} value={productRoleInitial} onChange={handleChangeProductRoleInitial}>
+                                    {
+                                        roles?.map((role) => {
+                                            return <option value={role._id} key={role._id}>{role.name}</option>
+                                        })
+                                    }
+                                </Select>
+                            </Box>
+                            <Box >
+                                <Text fontSize={19} mb={2} mt={5}>Grade final</Text>
+                                <Select placeholder='- Grade final -' cursor={'pointer'} bgColor={'rgb(76,78,82,1)'} value={productRoleFinal} onChange={handleChangeProductRoleFinal}>
+                                    {
+                                        roles?.map((role) => {
+                                            return <option value={role._id} key={role._id}>{role.name}</option>
+                                        })
+                                    }
+                                </Select>
+                            </Box>
+                        </Box>
+                    )}
                     <Box>
                         <Box>
                             <Text fontSize={19} mb={2} mt={5}>Points boutique bonus (facultatif)</Text>
@@ -460,9 +524,17 @@ const ShopManagerEditPage: NextPage = () => {
                         </Box>
                     </Box>
                     <Text color={'red'} marginTop={4} marginBottom={-10} display={errorMessage ? 'block' : 'none'}>{errorMessage}</Text>
-                    <Button colorScheme={'blue'} variant={'solid'} marginBottom={50} marginTop={41} px={100} onClick={handleEdit} isLoading={editShopProductLoading || getShopProductLoading}>Valider</Button>
+                    <Button colorScheme={'blue'}
+                            variant={'solid'}
+                            marginBottom={50}
+                            marginTop={41}
+                            px={100}
+                            onClick={handleEdit}
+                            isLoading={editShopProductLoading || getShopProductLoading}>
+                        Valider
+                    </Button>
                     <Text marginBottom={2} >Preview:</Text>
-                    <ShopProductCard
+                    <AdminShopProductCard
                         product={{
                             _id: "tempId",
                             name: productName ? productName : "Nom du produit",
@@ -472,7 +544,8 @@ const ShopManagerEditPage: NextPage = () => {
                             categorieId:"points",
                             imageUrl: productImageUrl ? productImageUrl : MainLogo.src,
                             place:0,
-                            descriptionDetails: productDescriptionDetails ? productDescriptionDetails : ""
+                            descriptionDetails: productDescriptionDetails ? productDescriptionDetails : "",
+                            active: productActive
                         }}
                         isEditing={false} isPreview={true}/>
                 </Box>

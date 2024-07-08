@@ -254,6 +254,11 @@ export const userSlice = createSlice({
             state.updateUserProfileSuccess = undefined;
             state.updateUserProfileError = payload;
         },
+        resetUpdateUserProfileRequest: (state: Draft<typeof initialState>) => {
+            state.updateUserProfileLoading = false;
+            state.updateUserProfileSuccess = undefined;
+            state.updateUserProfileError = undefined;
+        },
 
 
         getMinecraftProfileRequest: (state: Draft<typeof initialState>) => {
@@ -287,7 +292,11 @@ export const userSlice = createSlice({
             state.sendPasswordResetSuccess = undefined;
             state.sendPasswordResetError = payload;
         },
-
+        resetSendPasswordResetRequest: (state: Draft<typeof initialState>) => {
+            state.sendPasswordResetLoading = false;
+            state.sendPasswordResetSuccess = undefined;
+            state.sendPasswordResetError = undefined;
+        },
 
         resetPasswordRequest: (state: Draft<typeof initialState>) => {
             state.resetPasswordLoading = true;
@@ -476,6 +485,7 @@ export const {
     updateUserProfileRequest,
     updateUserProfileSuccess,
     updateUserProfileError,
+    resetUpdateUserProfileRequest,
 
     getMinecraftProfileRequest,
     getMinecraftProfileSuccess,
@@ -484,6 +494,7 @@ export const {
     sendPasswordResetRequest,
     sendPasswordResetSuccess,
     sendPasswordResetError,
+    resetSendPasswordResetRequest,
 
     resetPasswordRequest,
     resetPasswordSuccess,

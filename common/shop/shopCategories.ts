@@ -16,5 +16,10 @@ export const shopCategories: ShopCategorie[] = [
         _id: "points",
         name: "Points Boutique",
         place: 0
+    },
+    {
+        _id: "upgrades",
+        name: "Upgrades",
+        place: 3
     }
 ];

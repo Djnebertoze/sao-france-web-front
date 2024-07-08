@@ -1,5 +1,6 @@
 import React, {FC, useEffect} from "react";
 import {
+    Box,
     Button,
     Card,
     CardBody,
@@ -30,46 +31,24 @@ import {MainButton} from "../../atoms/Buttons/Buttons";
 import {getShopState} from "../../../store/shop/shopSlice";
 import {removeShopProduct} from "../../../store/shop/shopActions";
 import {transformDescription} from "../../../store/helper";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faArrowRight} from "@fortawesome/free-solid-svg-icons";
+
+import {paladin_color, conqueror_color, legend_color, beater_color} from "../../../common/shop/ranksAdvantages";
 
 
 interface ShopProductCardProps{
     product: ShopProduct
-    isEditing: boolean
-    isPreview?: boolean
 }
 
 
-const ShopProductCard: FC<ShopProductCardProps> = (props) => {
+const UpgradesShopProductCard: FC<ShopProductCardProps> = (props) => {
     const product = props.product;
     const router: NextRouter = useRouter();
 
 
     const toast = useToast();
     const toastDuration = 10000;
-
-    const handleUp = () => {
-        toast({
-            title: "En cours de dev",
-            description: "Fonctionnalité en cours de développement. Contactez un développeur web.",
-            status: 'info',
-            duration: toastDuration,
-            isClosable: true,
-            position: 'bottom-right',
-        });
-    }
-
-    const handleDown = () => {
-        toast({
-            title: "En cours de dev",
-            description: "Fonctionnalité en cours de développement. Contactez un développeur web.",
-            status: 'info',
-            duration: toastDuration,
-            isClosable: true,
-            position: 'bottom-right',
-        });
-    }
-
-
 
     const handleBuy = () => {
         router.push('/shop/product/'+product._id).then(() => {});
@@ -79,37 +58,42 @@ const ShopProductCard: FC<ShopProductCardProps> = (props) => {
         router.push('/admin/shop-manager/edit/'+product._id).then(() => {});
     }
 
-    return(
+    const initialColor = product.roleInitial === 'paladin' ? paladin_color :
+            product.roleInitial === 'conqueror' ? conqueror_color :
+            product.roleInitial === 'legend' ? legend_color : beater_color
+
+    const finalColor = product.roleFinal === 'paladin' ? paladin_color :
+        product.roleFinal === 'conqueror' ? conqueror_color :
+            product.roleFinal === 'legend' ? legend_color : beater_color
+
+    return (
         <>
-            <Card direction={'column'} variant={'outline'} marginBottom={10} marginRight={15} maxW={300}>
-                <Image objectFit={'cover'} minW={'280px'} maxH={180} src={product.imageUrl != "" ? product.imageUrl : MainLogo.src} alt={'Shop product image'}/>
-                <CardBody>
-                    <Stack mt={1} spacing={3}>
-                        <Heading size={'md'}>{product.name}</Heading>
-                        <Text py={2} mt={-4}>
-                            {transformDescription(product.description.replaceAll('\n', '\\n'))}
+            <Box
+                background={'linear-gradient(90deg, '+initialColor+', '+finalColor+')'}
+                marginBottom={1}
+                marginRight={15}
+                py={1}
+                px={1}
+                mx={5}
+                borderRadius={10}
+                boxShadow={'1px 1px 20px rgb(0, 0, 0, .3)'}>
+                <Card direction={'row'} color={'white'} background={'rgb(255,255,255,.3)'} borderRadius={10}>
+                    <Image borderTopLeftRadius={0} maxH={41} mx={'auto'} my={2} ml={15}
+                           src={product.imageUrl != "" ? product.imageUrl : MainLogo.src} alt={'Shop product image'}/>
 
+                    <CardBody py={0} my={3} ml={125}>
+                        <Text mx={'auto'} textAlign={'center'} fontWeight={'bold'} textTransform={'uppercase'} fontSize={'18px'}>{product.name}</Text>
+                    </CardBody>
+                    <CardFooter flexDirection={'column'} p={0} my={3}>
+                        <Text mb={0}  fontWeight={'bold'} textAlign={'center'} px={6} >
+                            {product.isRealMoney ? product.price.toLocaleString(undefined) + " EUR" : product.price.toLocaleString(undefined) + " PB"}
                         </Text>
-                    </Stack>
-                </CardBody>
-                <CardFooter flexDirection={'column'}>
-                    <Text mb={3}  fontWeight={'bold'} textAlign={'center'} px={6}>{product.isRealMoney ? product.price.toLocaleString(undefined) + "€" : product.price.toLocaleString(undefined) + " PB"}</Text>
-                    <Button variant={'solid'} colorScheme={'blue'} onClick={props.isEditing ? handleModify : handleBuy} isDisabled={props.isPreview}>
-                        {props.isEditing ? 'Modifier' : 'Acheter'}
-                    </Button>
-
-                </CardFooter>
-                {props.isEditing && (
-                    <CardFooter flexDirection={'row'} flex={3} w={'full'}>
-                        <Icon as={FiArrowLeft}  _hover={{bgColor: 'rgb(0,0,0,.1)'}} padding={'5px'} fontSize={25} borderRadius={5} cursor={'pointer'} onClick={handleUp}/>
-                        <Spacer/>
-                        <RemoveProductModal product={product}/>
-                        <Spacer/>
-                        <Icon as={FiArrowRight} _hover={{bgColor: 'rgb(0,0,0,.1)'}} padding={'5px'} fontSize={25} borderRadius={5} cursor={'pointer'} onClick={handleDown}/>
                     </CardFooter>
-                )}
-
-            </Card>
+                    <Button onClick={handleBuy} mt={2} mr={4} background={'transparent'} color={'white'} _hover={{background: 'rgb(255,255, 255,.2)'}}>
+                        <FontAwesomeIcon icon={faArrowRight}/>
+                    </Button>
+                </Card>
+            </Box>
         </>
     );
 }
@@ -167,4 +151,4 @@ const RemoveProductModal: FC<RemoveProductModalProps> = (props) => {
 }
 
 
-export default ShopProductCard;
+export default UpgradesShopProductCard;
